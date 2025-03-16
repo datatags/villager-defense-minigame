@@ -37,22 +37,22 @@ public class EnchantingBook extends ItemStack {
         switch (enchant) {
             case "Knockback": return new EnchantingBook(knockback(), Enchantment.KNOCKBACK);
             case "Sweeping": return new EnchantingBook(sweepingEdge(), Enchantment.SWEEPING_EDGE);
-            case "Smite": return new EnchantingBook(smite(), Enchantment.DAMAGE_UNDEAD);
-            case "Sharpness": return new EnchantingBook(sharpness(), Enchantment.DAMAGE_ALL);
+            case "Smite": return new EnchantingBook(smite(), Enchantment.SMITE);
+            case "Sharpness": return new EnchantingBook(sharpness(), Enchantment.SHARPNESS);
             case "Fire": return new EnchantingBook(fireAspect(), Enchantment.FIRE_ASPECT);
-            case "Punch": return new EnchantingBook(punch(), Enchantment.ARROW_KNOCKBACK);
+            case "Punch": return new EnchantingBook(punch(), Enchantment.PUNCH);
             case "Piercing": return new EnchantingBook(piercing(), Enchantment.PIERCING);
             case "Quick": return new EnchantingBook(quickCharge(), Enchantment.QUICK_CHARGE);
-            case "Power": return new EnchantingBook(power(), Enchantment.ARROW_DAMAGE);
+            case "Power": return new EnchantingBook(power(), Enchantment.POWER);
             case "Loyalty": return new EnchantingBook(loyalty(), Enchantment.LOYALTY);
-            case "Flame": return new EnchantingBook(flame(), Enchantment.ARROW_FIRE);
+            case "Flame": return new EnchantingBook(flame(), Enchantment.FLAME);
             case "Multishot": return new EnchantingBook(multishot(), Enchantment.MULTISHOT);
-            case "Infinity": return new EnchantingBook(infinity(), Enchantment.ARROW_INFINITE);
-            case "Blast": return new EnchantingBook(blastProtection(), Enchantment.PROTECTION_EXPLOSIONS);
+            case "Infinity": return new EnchantingBook(infinity(), Enchantment.INFINITY);
+            case "Blast": return new EnchantingBook(blastProtection(), Enchantment.BLAST_PROTECTION);
             case "Thorns": return new EnchantingBook(thorns(), Enchantment.THORNS);
-            case "Projectile": return new EnchantingBook(projectileProtection(), Enchantment.PROTECTION_PROJECTILE);
-            case "Protection": return new EnchantingBook(protection(), Enchantment.PROTECTION_ENVIRONMENTAL);
-            case "Unbreaking": return new EnchantingBook(unbreaking(), Enchantment.DURABILITY);
+            case "Projectile": return new EnchantingBook(projectileProtection(), Enchantment.PROJECTILE_PROTECTION);
+            case "Protection": return new EnchantingBook(protection(), Enchantment.PROTECTION);
+            case "Unbreaking": return new EnchantingBook(unbreaking(), Enchantment.UNBREAKING);
             case "Mending": return new EnchantingBook(mending(), Enchantment.MENDING);
             default: return null;
         }

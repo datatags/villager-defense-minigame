@@ -11,7 +11,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,7 +71,7 @@ public class GameItems {
 	// Standard game items
 	public static @NotNull ItemStack shop() {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
-		enchants.put(Enchantment.DURABILITY, 1);
+		enchants.put(Enchantment.UNBREAKING, 1);
 
 		ItemStack item = ItemManager.createItem(Material.EMERALD,
 				CommunicationManager.format("&2&l" + LanguageManager.names.itemShop),
@@ -88,7 +87,7 @@ public class GameItems {
 	}
 	public static @NotNull ItemStack challengeSelector() {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
-		enchants.put(Enchantment.DURABILITY, 1);
+		enchants.put(Enchantment.UNBREAKING, 1);
 
 		ItemStack item = ItemManager.createItem(Material.NETHER_STAR,
 				CommunicationManager.format("&9&l" + LanguageManager.names.challengeSelection),
@@ -98,7 +97,7 @@ public class GameItems {
 	}
 	public static @NotNull ItemStack boostToggle(boolean boosted) {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
-		enchants.put(Enchantment.DURABILITY, 1);
+		enchants.put(Enchantment.UNBREAKING, 1);
 
 		ItemStack item = ItemManager.createItem(Material.FIREWORK_ROCKET,
 				CommunicationManager.format("&b&l" + LanguageManager.names.boosts + ": " +
@@ -109,7 +108,7 @@ public class GameItems {
 	}
 	public static @NotNull ItemStack shareToggle(boolean sharing) {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
-		enchants.put(Enchantment.DURABILITY, 1);
+		enchants.put(Enchantment.UNBREAKING, 1);
 
 		ItemStack item = ItemManager.createItem(Material.DISPENSER,
 				CommunicationManager.format("&b&l" + LanguageManager.names.effectShare + ": " +
@@ -120,7 +119,7 @@ public class GameItems {
 	}
 	public static @NotNull ItemStack crystalConverter() {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
-		enchants.put(Enchantment.DURABILITY, 1);
+		enchants.put(Enchantment.UNBREAKING, 1);
 
 		ItemStack item = ItemManager.createItem(Material.DIAMOND,
 				CommunicationManager.format("&b&l" + LanguageManager.names.crystalConverter),
@@ -130,7 +129,7 @@ public class GameItems {
 	}
 	public static @NotNull ItemStack leave() {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
-		enchants.put(Enchantment.DURABILITY, 1);
+		enchants.put(Enchantment.UNBREAKING, 1);
 
 		ItemStack item = ItemManager.createItem(Material.BARRIER,
 				CommunicationManager.format("&c&l" + LanguageManager.messages.leave),
@@ -216,61 +215,61 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				}
 				break;
 			case 2:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 3:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .7) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 4:
 				if (chance < .05) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 5:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			default:
 				if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
@@ -428,79 +427,79 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .15) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 1);
+					enchantments.put(Enchantment.SMITE, 1);
 					price += 60;
 				} else if (chance < .25) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 2);
+					enchantments.put(Enchantment.SMITE, 2);
 					price += 120;
 				}
 				break;
 			case 2:
 				if (chance < .15) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 1);
+					enchantments.put(Enchantment.SMITE, 1);
 					price += 60;
 				} else if (chance < .3) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 2);
+					enchantments.put(Enchantment.SMITE, 2);
 					price += 120;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 3);
+					enchantments.put(Enchantment.SMITE, 3);
 					price += 180;
 				}
 				break;
 			case 3:
 				if (chance < .05) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 1);
+					enchantments.put(Enchantment.SMITE, 1);
 					price += 60;
 				} else if (chance < .2) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 2);
+					enchantments.put(Enchantment.SMITE, 2);
 					price += 120;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 3);
+					enchantments.put(Enchantment.SMITE, 3);
 					price += 180;
 				}
 				break;
 			case 4:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 2);
+					enchantments.put(Enchantment.SMITE, 2);
 					price += 120;
 				} else if (chance < .3) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 3);
+					enchantments.put(Enchantment.SMITE, 3);
 					price += 180;
 				} else if (chance < .4) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 4);
+					enchantments.put(Enchantment.SMITE, 4);
 					price += 240;
 				}
 				break;
 			case 5:
 				if (chance < .2) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 3);
+					enchantments.put(Enchantment.SMITE, 3);
 					price += 180;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 4);
+					enchantments.put(Enchantment.SMITE, 4);
 					price += 240;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 5);
+					enchantments.put(Enchantment.SMITE, 5);
 					price += 300;
 				}
 				break;
 			case 6:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 3);
+					enchantments.put(Enchantment.SMITE, 3);
 					price += 180;
 				} else if (chance < .3) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 4);
+					enchantments.put(Enchantment.SMITE, 4);
 					price += 240;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 5);
+					enchantments.put(Enchantment.SMITE, 5);
 					price += 300;
 				}
 				break;
 			default:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 4);
+					enchantments.put(Enchantment.SMITE, 4);
 					price += 240;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 5);
+					enchantments.put(Enchantment.SMITE, 5);
 					price += 300;
 				}
 		}
@@ -510,79 +509,79 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 1);
+					enchantments.put(Enchantment.SHARPNESS, 1);
 					price += 75;
 				} else if (chance < .2) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 2);
+					enchantments.put(Enchantment.SHARPNESS, 2);
 					price += 150;
 				}
 				break;
 			case 2:
 				if (chance < .15) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 1);
+					enchantments.put(Enchantment.SHARPNESS, 1);
 					price += 75;
 				} else if (chance < .25) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 2);
+					enchantments.put(Enchantment.SHARPNESS, 2);
 					price += 150;
 				} else if (chance < .3) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 3);
+					enchantments.put(Enchantment.SHARPNESS, 3);
 					price += 225;
 				}
 				break;
 			case 3:
 				if (chance < .05) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 1);
+					enchantments.put(Enchantment.SHARPNESS, 1);
 					price += 75;
 				} else if (chance < .2) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 2);
+					enchantments.put(Enchantment.SHARPNESS, 2);
 					price += 150;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 3);
+					enchantments.put(Enchantment.SHARPNESS, 3);
 					price += 225;
 				}
 				break;
 			case 4:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 2);
+					enchantments.put(Enchantment.SHARPNESS, 2);
 					price += 150;
 				} else if (chance < .3) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 3);
+					enchantments.put(Enchantment.SHARPNESS, 3);
 					price += 225;
 				} else if (chance < .4) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 4);
+					enchantments.put(Enchantment.SHARPNESS, 4);
 					price += 300;
 				}
 				break;
 			case 5:
 				if (chance < .2) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 3);
+					enchantments.put(Enchantment.SHARPNESS, 3);
 					price += 225;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 4);
+					enchantments.put(Enchantment.SHARPNESS, 4);
 					price += 300;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 5);
+					enchantments.put(Enchantment.SHARPNESS, 5);
 					price += 375;
 				}
 				break;
 			case 6:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 3);
+					enchantments.put(Enchantment.SHARPNESS, 3);
 					price += 225;
 				} else if (chance < .3) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 4);
+					enchantments.put(Enchantment.SHARPNESS, 4);
 					price += 300;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 5);
+					enchantments.put(Enchantment.SHARPNESS, 5);
 					price += 375;
 				}
 				break;
 			default:
 				if (chance < .2) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 4);
+					enchantments.put(Enchantment.SHARPNESS, 4);
 					price += 300;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 5);
+					enchantments.put(Enchantment.SHARPNESS, 5);
 					price += 375;
 				}
 		}
@@ -776,88 +775,88 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				}
 				break;
 			case 2:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 3:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .7) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 4:
 				if (chance < .05) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 5:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 6:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 7:
 				if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 8:
 				if (chance < .75) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 4);
+					enchantments.put(Enchantment.UNBREAKING, 4);
 					price += 100;
 				}
 				break;
 			default:
 				if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				} else {
-					enchantments.put(Enchantment.DURABILITY, 4);
+					enchantments.put(Enchantment.UNBREAKING, 4);
 					price += 100;
 				}
 		}
@@ -867,93 +866,93 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .2) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 1);
+					enchantments.put(Enchantment.SMITE, 1);
 					price += 60;
 				} else if (chance < .3) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 2);
+					enchantments.put(Enchantment.SMITE, 2);
 					price += 120;
 				}
 				break;
 			case 2:
 				if (chance < .15) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 1);
+					enchantments.put(Enchantment.SMITE, 1);
 					price += 60;
 				} else if (chance < .3) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 2);
+					enchantments.put(Enchantment.SMITE, 2);
 					price += 120;
 				} else if (chance < .4) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 3);
+					enchantments.put(Enchantment.SMITE, 3);
 					price += 180;
 				}
 				break;
 			case 3:
 				if (chance < .05) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 1);
+					enchantments.put(Enchantment.SMITE, 1);
 					price += 60;
 				} else if (chance < .25) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 2);
+					enchantments.put(Enchantment.SMITE, 2);
 					price += 120;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 3);
+					enchantments.put(Enchantment.SMITE, 3);
 					price += 180;
 				}
 				break;
 			case 4:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 2);
+					enchantments.put(Enchantment.SMITE, 2);
 					price += 120;
 				} else if (chance < .3) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 3);
+					enchantments.put(Enchantment.SMITE, 3);
 					price += 180;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 4);
+					enchantments.put(Enchantment.SMITE, 4);
 					price += 240;
 				}
 				break;
 			case 5:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 3);
+					enchantments.put(Enchantment.SMITE, 3);
 					price += 180;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 4);
+					enchantments.put(Enchantment.SMITE, 4);
 					price += 240;
 				} else if (chance < .55) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 5);
+					enchantments.put(Enchantment.SMITE, 5);
 					price += 300;
 				}
 				break;
 			case 6:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 3);
+					enchantments.put(Enchantment.SMITE, 3);
 					price += 180;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 4);
+					enchantments.put(Enchantment.SMITE, 4);
 					price += 240;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 5);
+					enchantments.put(Enchantment.SMITE, 5);
 					price += 300;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 6);
+					enchantments.put(Enchantment.SMITE, 6);
 					price += 360;
 				}
 				break;
 			case 7:
 				if (chance < .2) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 4);
+					enchantments.put(Enchantment.SMITE, 4);
 					price += 240;
 				} else if (chance < .4) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 5);
+					enchantments.put(Enchantment.SMITE, 5);
 					price += 300;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 6);
+					enchantments.put(Enchantment.SMITE, 6);
 					price += 360;
 				}
 			default:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 5);
+					enchantments.put(Enchantment.SMITE, 5);
 					price += 300;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 6);
+					enchantments.put(Enchantment.SMITE, 6);
 					price += 360;
 				}
 		}
@@ -963,91 +962,91 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .15) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 1);
+					enchantments.put(Enchantment.SHARPNESS, 1);
 					price += 75;
 				} else if (chance < .25) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 2);
+					enchantments.put(Enchantment.SHARPNESS, 2);
 					price += 150;
 				}
 				break;
 			case 2:
 				if (chance < .2) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 1);
+					enchantments.put(Enchantment.SHARPNESS, 1);
 					price += 75;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 2);
+					enchantments.put(Enchantment.SHARPNESS, 2);
 					price += 150;
 				} else if (chance < .4) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 3);
+					enchantments.put(Enchantment.SHARPNESS, 3);
 					price += 225;
 				}
 				break;
 			case 3:
 				if (chance < .05) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 1);
+					enchantments.put(Enchantment.SHARPNESS, 1);
 					price += 75;
 				} else if (chance < .25) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 2);
+					enchantments.put(Enchantment.SHARPNESS, 2);
 					price += 150;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 3);
+					enchantments.put(Enchantment.SHARPNESS, 3);
 					price += 225;
 				}
 				break;
 			case 4:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 2);
+					enchantments.put(Enchantment.SHARPNESS, 2);
 					price += 150;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 3);
+					enchantments.put(Enchantment.SHARPNESS, 3);
 					price += 225;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 4);
+					enchantments.put(Enchantment.SHARPNESS, 4);
 					price += 300;
 				}
 				break;
 			case 5:
 				if (chance < .2) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 3);
+					enchantments.put(Enchantment.SHARPNESS, 3);
 					price += 225;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 4);
+					enchantments.put(Enchantment.SHARPNESS, 4);
 					price += 300;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 5);
+					enchantments.put(Enchantment.SHARPNESS, 5);
 					price += 375;
 				}
 				break;
 			case 6:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 3);
+					enchantments.put(Enchantment.SHARPNESS, 3);
 					price += 225;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 4);
+					enchantments.put(Enchantment.SHARPNESS, 4);
 					price += 300;
 				} else if (chance < .55) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 5);
+					enchantments.put(Enchantment.SHARPNESS, 5);
 					price += 375;
 				}
 				break;
 			case 7:
 				if (chance < .15) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 4);
+					enchantments.put(Enchantment.SHARPNESS, 4);
 					price += 300;
 				} else if (chance < .4) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 5);
+					enchantments.put(Enchantment.SHARPNESS, 5);
 					price += 375;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 6);
+					enchantments.put(Enchantment.SHARPNESS, 6);
 					price += 450;
 				}
 				break;
 			default:
 				if (chance < .3) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 5);
+					enchantments.put(Enchantment.SHARPNESS, 5);
 					price += 375;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 6);
+					enchantments.put(Enchantment.SHARPNESS, 6);
 					price += 450;
 				}
 		}
@@ -1175,88 +1174,88 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				}
 				break;
 			case 2:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 3:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .7) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 4:
 				if (chance < .05) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 5:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 6:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 7:
 				if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 8:
 				if (chance < .75) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 4);
+					enchantments.put(Enchantment.UNBREAKING, 4);
 					price += 100;
 				}
 				break;
 			default:
 				if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				} else {
-					enchantments.put(Enchantment.DURABILITY, 4);
+					enchantments.put(Enchantment.UNBREAKING, 4);
 					price += 100;
 				}
 		}
@@ -1266,67 +1265,67 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .3) {
-					enchantments.put(Enchantment.ARROW_KNOCKBACK, 1);
+					enchantments.put(Enchantment.PUNCH, 1);
 					price += 30;
 				}
 				break;
 			case 2:
 				if (chance < .4) {
-					enchantments.put(Enchantment.ARROW_KNOCKBACK, 1);
+					enchantments.put(Enchantment.PUNCH, 1);
 					price += 30;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.ARROW_KNOCKBACK, 2);
+					enchantments.put(Enchantment.PUNCH, 2);
 					price += 60;
 				}
 				break;
 			case 3:
 				if (chance < .3) {
-					enchantments.put(Enchantment.ARROW_KNOCKBACK, 1);
+					enchantments.put(Enchantment.PUNCH, 1);
 					price += 30;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.ARROW_KNOCKBACK, 2);
+					enchantments.put(Enchantment.PUNCH, 2);
 					price += 60;
 				}
 				break;
 			case 4:
 				if (chance < .25) {
-					enchantments.put(Enchantment.ARROW_KNOCKBACK, 1);
+					enchantments.put(Enchantment.PUNCH, 1);
 					price += 30;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.ARROW_KNOCKBACK, 2);
+					enchantments.put(Enchantment.PUNCH, 2);
 					price += 60;
 				} else if (chance < .55) {
-					enchantments.put(Enchantment.ARROW_KNOCKBACK, 3);
+					enchantments.put(Enchantment.PUNCH, 3);
 					price += 90;
 				}
 				break;
 			case 5:
 				if (chance < .1) {
-					enchantments.put(Enchantment.ARROW_KNOCKBACK, 1);
+					enchantments.put(Enchantment.PUNCH, 1);
 					price += 30;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.ARROW_KNOCKBACK, 2);
+					enchantments.put(Enchantment.PUNCH, 2);
 					price += 60;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.ARROW_KNOCKBACK, 3);
+					enchantments.put(Enchantment.PUNCH, 3);
 					price += 90;
 				}
 				break;
 			case 6:
 				if (chance < .4) {
-					enchantments.put(Enchantment.ARROW_KNOCKBACK, 2);
+					enchantments.put(Enchantment.PUNCH, 2);
 					price += 60;
 				} else if (chance < .55) {
-					enchantments.put(Enchantment.ARROW_KNOCKBACK, 3);
+					enchantments.put(Enchantment.PUNCH, 3);
 					price += 90;
 				}
 				break;
 			default:
 				if (chance < .4) {
-					enchantments.put(Enchantment.ARROW_KNOCKBACK, 2);
+					enchantments.put(Enchantment.PUNCH, 2);
 					price += 60;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.ARROW_KNOCKBACK, 3);
+					enchantments.put(Enchantment.PUNCH, 3);
 					price += 90;
 				}
 		}
@@ -1336,91 +1335,91 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .15) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 1);
+					enchantments.put(Enchantment.POWER, 1);
 					price += 75;
 				} else if (chance < .25) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 2);
+					enchantments.put(Enchantment.POWER, 2);
 					price += 150;
 				}
 				break;
 			case 2:
 				if (chance < .2) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 1);
+					enchantments.put(Enchantment.POWER, 1);
 					price += 75;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 2);
+					enchantments.put(Enchantment.POWER, 2);
 					price += 150;
 				} else if (chance < .4) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 3);
+					enchantments.put(Enchantment.POWER, 3);
 					price += 225;
 				}
 				break;
 			case 3:
 				if (chance < .05) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 1);
+					enchantments.put(Enchantment.POWER, 1);
 					price += 75;
 				} else if (chance < .25) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 2);
+					enchantments.put(Enchantment.POWER, 2);
 					price += 150;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 3);
+					enchantments.put(Enchantment.POWER, 3);
 					price += 225;
 				}
 				break;
 			case 4:
 				if (chance < .1) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 2);
+					enchantments.put(Enchantment.POWER, 2);
 					price += 150;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 3);
+					enchantments.put(Enchantment.POWER, 3);
 					price += 225;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 4);
+					enchantments.put(Enchantment.POWER, 4);
 					price += 300;
 				}
 				break;
 			case 5:
 				if (chance < .2) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 3);
+					enchantments.put(Enchantment.POWER, 3);
 					price += 225;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 4);
+					enchantments.put(Enchantment.POWER, 4);
 					price += 300;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 5);
+					enchantments.put(Enchantment.POWER, 5);
 					price += 375;
 				}
 				break;
 			case 6:
 				if (chance < .1) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 3);
+					enchantments.put(Enchantment.POWER, 3);
 					price += 225;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 4);
+					enchantments.put(Enchantment.POWER, 4);
 					price += 300;
 				} else if (chance < .55) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 5);
+					enchantments.put(Enchantment.POWER, 5);
 					price += 375;
 				}
 				break;
 			case 7:
 				if (chance < .15) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 4);
+					enchantments.put(Enchantment.POWER, 4);
 					price += 300;
 				} else if (chance < .4) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 5);
+					enchantments.put(Enchantment.POWER, 5);
 					price += 375;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 6);
+					enchantments.put(Enchantment.POWER, 6);
 					price += 450;
 				}
 				break;
 			default:
 				if (chance < .3) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 5);
+					enchantments.put(Enchantment.POWER, 5);
 					price += 375;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.ARROW_DAMAGE, 6);
+					enchantments.put(Enchantment.POWER, 6);
 					price += 450;
 				}
 		}
@@ -1433,31 +1432,31 @@ public class GameItems {
 				break;
 			case 3:
 				if (chance < .05) {
-					enchantments.put(Enchantment.ARROW_FIRE, 1);
+					enchantments.put(Enchantment.FLAME, 1);
 					price += 100;
 				}
 				break;
 			case 4:
 				if (chance < .1) {
-					enchantments.put(Enchantment.ARROW_FIRE, 1);
+					enchantments.put(Enchantment.FLAME, 1);
 					price += 100;
 				}
 				break;
 			case 5:
 				if (chance < .15) {
-					enchantments.put(Enchantment.ARROW_FIRE, 1);
+					enchantments.put(Enchantment.FLAME, 1);
 					price += 100;
 				}
 				break;
 			case 6:
 				if (chance < .2) {
-					enchantments.put(Enchantment.ARROW_FIRE, 1);
+					enchantments.put(Enchantment.FLAME, 1);
 					price += 100;
 				}
 				break;
 			default:
 				if (chance < .25) {
-					enchantments.put(Enchantment.ARROW_FIRE, 1);
+					enchantments.put(Enchantment.FLAME, 1);
 					price += 100;
 				}
 		}
@@ -1470,31 +1469,31 @@ public class GameItems {
 				break;
 			case 3:
 				if (chance < .05) {
-					enchantments.put(Enchantment.ARROW_INFINITE, 1);
+					enchantments.put(Enchantment.INFINITY, 1);
 					price += 400;
 				}
 				break;
 			case 4:
 				if (chance < .1) {
-					enchantments.put(Enchantment.ARROW_INFINITE, 1);
+					enchantments.put(Enchantment.INFINITY, 1);
 					price += 400;
 				}
 				break;
 			case 5:
 				if (chance < .15) {
-					enchantments.put(Enchantment.ARROW_INFINITE, 1);
+					enchantments.put(Enchantment.INFINITY, 1);
 					price += 400;
 				}
 				break;
 			case 6:
 				if (chance < .2) {
-					enchantments.put(Enchantment.ARROW_INFINITE, 1);
+					enchantments.put(Enchantment.INFINITY, 1);
 					price += 400;
 				}
 				break;
 			default:
 				if (chance < .25) {
-					enchantments.put(Enchantment.ARROW_INFINITE, 1);
+					enchantments.put(Enchantment.INFINITY, 1);
 					price += 400;
 				}
 		}
@@ -1547,88 +1546,88 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				}
 				break;
 			case 2:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 3:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .7) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 4:
 				if (chance < .05) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 5:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 6:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 7:
 				if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 8:
 				if (chance < .75) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 4);
+					enchantments.put(Enchantment.UNBREAKING, 4);
 					price += 100;
 				}
 				break;
 			default:
 				if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				} else {
-					enchantments.put(Enchantment.DURABILITY, 4);
+					enchantments.put(Enchantment.UNBREAKING, 4);
 					price += 100;
 				}
 		}
@@ -1882,88 +1881,88 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				}
 				break;
 			case 2:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 3:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .7) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 4:
 				if (chance < .05) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 5:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 6:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 7:
 				if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 8:
 				if (chance < .75) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 4);
+					enchantments.put(Enchantment.UNBREAKING, 4);
 					price += 100;
 				}
 				break;
 			default:
 				if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				} else {
-					enchantments.put(Enchantment.DURABILITY, 4);
+					enchantments.put(Enchantment.UNBREAKING, 4);
 					price += 100;
 				}
 		}
@@ -2098,79 +2097,79 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .15) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 1);
+					enchantments.put(Enchantment.SMITE, 1);
 					price += 60;
 				} else if (chance < .25) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 2);
+					enchantments.put(Enchantment.SMITE, 2);
 					price += 120;
 				}
 				break;
 			case 2:
 				if (chance < .15) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 1);
+					enchantments.put(Enchantment.SMITE, 1);
 					price += 60;
 				} else if (chance < .3) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 2);
+					enchantments.put(Enchantment.SMITE, 2);
 					price += 120;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 3);
+					enchantments.put(Enchantment.SMITE, 3);
 					price += 180;
 				}
 				break;
 			case 3:
 				if (chance < .05) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 1);
+					enchantments.put(Enchantment.SMITE, 1);
 					price += 60;
 				} else if (chance < .2) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 2);
+					enchantments.put(Enchantment.SMITE, 2);
 					price += 120;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 3);
+					enchantments.put(Enchantment.SMITE, 3);
 					price += 180;
 				}
 				break;
 			case 4:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 2);
+					enchantments.put(Enchantment.SMITE, 2);
 					price += 120;
 				} else if (chance < .3) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 3);
+					enchantments.put(Enchantment.SMITE, 3);
 					price += 180;
 				} else if (chance < .4) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 4);
+					enchantments.put(Enchantment.SMITE, 4);
 					price += 240;
 				}
 				break;
 			case 5:
 				if (chance < .2) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 3);
+					enchantments.put(Enchantment.SMITE, 3);
 					price += 180;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 4);
+					enchantments.put(Enchantment.SMITE, 4);
 					price += 240;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 5);
+					enchantments.put(Enchantment.SMITE, 5);
 					price += 300;
 				}
 				break;
 			case 6:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 3);
+					enchantments.put(Enchantment.SMITE, 3);
 					price += 180;
 				} else if (chance < .3) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 4);
+					enchantments.put(Enchantment.SMITE, 4);
 					price += 240;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 5);
+					enchantments.put(Enchantment.SMITE, 5);
 					price += 300;
 				}
 				break;
 			default:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 4);
+					enchantments.put(Enchantment.SMITE, 4);
 					price += 240;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DAMAGE_UNDEAD, 5);
+					enchantments.put(Enchantment.SMITE, 5);
 					price += 300;
 				}
 		}
@@ -2180,79 +2179,79 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 1);
+					enchantments.put(Enchantment.SHARPNESS, 1);
 					price += 75;
 				} else if (chance < .2) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 2);
+					enchantments.put(Enchantment.SHARPNESS, 2);
 					price += 150;
 				}
 				break;
 			case 2:
 				if (chance < .15) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 1);
+					enchantments.put(Enchantment.SHARPNESS, 1);
 					price += 75;
 				} else if (chance < .25) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 2);
+					enchantments.put(Enchantment.SHARPNESS, 2);
 					price += 150;
 				} else if (chance < .3) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 3);
+					enchantments.put(Enchantment.SHARPNESS, 3);
 					price += 225;
 				}
 				break;
 			case 3:
 				if (chance < .05) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 1);
+					enchantments.put(Enchantment.SHARPNESS, 1);
 					price += 75;
 				} else if (chance < .2) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 2);
+					enchantments.put(Enchantment.SHARPNESS, 2);
 					price += 150;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 3);
+					enchantments.put(Enchantment.SHARPNESS, 3);
 					price += 225;
 				}
 				break;
 			case 4:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 2);
+					enchantments.put(Enchantment.SHARPNESS, 2);
 					price += 150;
 				} else if (chance < .3) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 3);
+					enchantments.put(Enchantment.SHARPNESS, 3);
 					price += 225;
 				} else if (chance < .4) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 4);
+					enchantments.put(Enchantment.SHARPNESS, 4);
 					price += 300;
 				}
 				break;
 			case 5:
 				if (chance < .2) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 3);
+					enchantments.put(Enchantment.SHARPNESS, 3);
 					price += 225;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 4);
+					enchantments.put(Enchantment.SHARPNESS, 4);
 					price += 300;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 5);
+					enchantments.put(Enchantment.SHARPNESS, 5);
 					price += 375;
 				}
 				break;
 			case 6:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 3);
+					enchantments.put(Enchantment.SHARPNESS, 3);
 					price += 225;
 				} else if (chance < .3) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 4);
+					enchantments.put(Enchantment.SHARPNESS, 4);
 					price += 300;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 5);
+					enchantments.put(Enchantment.SHARPNESS, 5);
 					price += 375;
 				}
 				break;
 			default:
 				if (chance < .2) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 4);
+					enchantments.put(Enchantment.SHARPNESS, 4);
 					price += 300;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DAMAGE_ALL, 5);
+					enchantments.put(Enchantment.SHARPNESS, 5);
 					price += 375;
 				}
 		}
@@ -2382,52 +2381,52 @@ public class GameItems {
 				break;
 			case 2:
 				if (chance < .2) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 100;
 				}
 				break;
 			case 3:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 100;
 				} else if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 200;
 				}
 				break;
 			case 4:
 				if (chance < .15) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 100;
 				} else if (chance < .35) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 200;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 300;
 				}
 				break;
 			case 5:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 100;
 				} else if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 200;
 				} else if (chance < .45) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 300;
 				}
 				break;
 			default:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 100;
 				} else if (chance < .3) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 200;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 300;
 				}
 		}
@@ -2484,28 +2483,28 @@ public class GameItems {
 		return item == null ? new ItemStack(Material.AIR) : item;
 	}
 	public static @NotNull ItemStack arrowsS() {
-		ItemStack item = ItemManager.createPotionItems(Material.TIPPED_ARROW, new PotionData(PotionType.SLOWNESS),
+		ItemStack item = ItemManager.createPotionItems(Material.TIPPED_ARROW, PotionType.SLOWNESS,
 				8, null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a50"));
 
 		return item == null ? new ItemStack(Material.AIR) : item;
 	}
 	public static @NotNull ItemStack arrowsD() {
-		ItemStack item = ItemManager.createPotionItems(Material.TIPPED_ARROW, new PotionData(PotionType.INSTANT_DAMAGE),
+		ItemStack item = ItemManager.createPotionItems(Material.TIPPED_ARROW, PotionType.HARMING,
 				8, null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a70"));
 
 		return item == null ? new ItemStack(Material.AIR) : item;
 	}
 	public static @NotNull ItemStack arrowsW() {
-		ItemStack item = ItemManager.createPotionItems(Material.TIPPED_ARROW, new PotionData(PotionType.WEAKNESS),
+		ItemStack item = ItemManager.createPotionItems(Material.TIPPED_ARROW, PotionType.WEAKNESS,
 				8, null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a50"));
 
 		return item == null ? new ItemStack(Material.AIR) : item;
 	}
 	public static @NotNull ItemStack arrowsP() {
-		ItemStack item = ItemManager.createPotionItems(Material.TIPPED_ARROW, new PotionData(PotionType.POISON),
+		ItemStack item = ItemManager.createPotionItems(Material.TIPPED_ARROW, PotionType.POISON,
 				16, null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a60"));
 
@@ -2513,28 +2512,28 @@ public class GameItems {
 	}
 	public static @NotNull ItemStack arrowsSPlus() {
 		ItemStack item = ItemManager.createPotionItems(Material.TIPPED_ARROW,
-				new PotionData(PotionType.SLOWNESS, true, false), 8, null,
+				PotionType.LONG_SLOWNESS, 8, null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a125"));
 
 		return item == null ? new ItemStack(Material.AIR) : item;
 	}
 	public static @NotNull ItemStack arrowsDPlus() {
 		ItemStack item = ItemManager.createPotionItems(Material.TIPPED_ARROW,
-				new PotionData(PotionType.INSTANT_DAMAGE, false, true), 8, null,
+				PotionType.STRONG_HARMING, 8, null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a175"));
 
 		return item == null ? new ItemStack(Material.AIR) : item;
 	}
 	public static @NotNull ItemStack arrowsWPlus() {
 		ItemStack item = ItemManager.createPotionItems(Material.TIPPED_ARROW,
-				new PotionData(PotionType.WEAKNESS, true,false), 8, null,
+				PotionType.LONG_WEAKNESS, 8, null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a125"));
 
 		return item == null ? new ItemStack(Material.AIR) : item;
 	}
 	public static @NotNull ItemStack arrowsPPlus() {
 		ItemStack item = ItemManager.createPotionItems(Material.TIPPED_ARROW,
-				new PotionData(PotionType.POISON, true, false), 16, null,
+				PotionType.LONG_POISON, 16, null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a130"));
 
 		return item == null ? new ItemStack(Material.AIR) : item;
@@ -2654,93 +2653,93 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				}
 				break;
 			case 2:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 3:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .7) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 4:
 				if (chance < .05) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 5:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 6:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 7:
 				if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 8:
 				if (chance < .75) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 4);
+					enchantments.put(Enchantment.UNBREAKING, 4);
 					price += 100;
 				}
 				break;
 			default:
 				if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				} else {
-					enchantments.put(Enchantment.DURABILITY, 4);
+					enchantments.put(Enchantment.UNBREAKING, 4);
 					price += 100;
 				}
 		}
 		chance = r.nextDouble();
-		
+
 		// Set thorns
 		switch (level) {
 			case 1:
@@ -2825,44 +2824,44 @@ public class GameItems {
 				}
 		}
 		chance = r.nextDouble();
-		
+
 		// Set protections
 		switch (level) {
 			case 1:
 				if (chance < .1)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+							enchantments.put(Enchantment.PROTECTION, 1);
 							price += 75;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 1);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 1);
 							price += 50;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 1);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 1);
 							price += 35;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 1);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 1);
 							price += 25;
 					}
 				else if (chance < .2)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+							enchantments.put(Enchantment.PROTECTION, 2);
 							price += 150;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 2);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 2);
 							price += 100;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 2);
 							price += 70;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 2);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 2);
 							price += 50;
 					}
 				break;
@@ -2870,55 +2869,55 @@ public class GameItems {
 				if (chance < .15)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+							enchantments.put(Enchantment.PROTECTION, 1);
 							price += 75;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 1);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 1);
 							price += 50;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 1);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 1);
 							price += 35;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 1);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 1);
 							price += 25;
 					}
 				else if (chance < .25)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+							enchantments.put(Enchantment.PROTECTION, 2);
 							price += 150;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 2);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 2);
 							price += 100;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 2);
 							price += 70;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 2);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 2);
 							price += 50;
 					}
 				else if (chance < .3)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				break;
@@ -2926,55 +2925,55 @@ public class GameItems {
 				if (chance < .05)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+							enchantments.put(Enchantment.PROTECTION, 1);
 							price += 75;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 1);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 1);
 							price += 50;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 1);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 1);
 							price += 35;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 1);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 1);
 							price += 25;
 					}
 				else if (chance < .2)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+							enchantments.put(Enchantment.PROTECTION, 2);
 							price += 150;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 2);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 2);
 							price += 100;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 2);
 							price += 70;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 2);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 2);
 							price += 50;
 					}
 				else if (chance < .35)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				break;
@@ -2982,55 +2981,55 @@ public class GameItems {
 				if (chance < .1)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+							enchantments.put(Enchantment.PROTECTION, 2);
 							price += 150;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 2);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 2);
 							price += 100;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 2);
 							price += 70;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 2);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 2);
 							price += 50;
 					}
 				else if (chance < .3)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				else if (chance < .4)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+							enchantments.put(Enchantment.PROTECTION, 4);
 							price += 300;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 4);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 4);
 							price += 200;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 4);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 4);
 							price += 140;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 4);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 4);
 							price += 100;
 					}
 				break;
@@ -3038,55 +3037,55 @@ public class GameItems {
 				if (chance < .2)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				else if (chance < .35)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+							enchantments.put(Enchantment.PROTECTION, 4);
 							price += 300;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 4);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 4);
 							price += 200;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 4);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 4);
 							price += 140;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 4);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 4);
 							price += 100;
 					}
 				else if (chance < .45)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
+							enchantments.put(Enchantment.PROTECTION, 5);
 							price += 375;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 5);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 5);
 							price += 250;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 5);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 5);
 							price += 175;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 5);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 5);
 							price += 125;
 					}
 				break;
@@ -3094,55 +3093,55 @@ public class GameItems {
 				if (chance < .1)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				else if (chance < .3)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+							enchantments.put(Enchantment.PROTECTION, 4);
 							price += 300;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 4);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 4);
 							price += 200;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 4);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 4);
 							price += 140;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 4);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 4);
 							price += 100;
 					}
 				else if (chance < .5)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
+							enchantments.put(Enchantment.PROTECTION, 5);
 							price += 375;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 5);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 5);
 							price += 250;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 5);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 5);
 							price += 175;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 5);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 5);
 							price += 125;
 					}
 				break;
@@ -3150,42 +3149,42 @@ public class GameItems {
 				if (chance < .2)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+							enchantments.put(Enchantment.PROTECTION, 4);
 							price += 300;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 4);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 4);
 							price += 200;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 4);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 4);
 							price += 140;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 4);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 4);
 							price += 100;
 					}
 				else if (chance < .5)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
+							enchantments.put(Enchantment.PROTECTION, 5);
 							price += 375;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 5);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 5);
 							price += 250;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 5);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 5);
 							price += 175;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 5);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 5);
 							price += 125;
 					}
 		}
 		chance = r.nextDouble();
-		
+
 		// Set mending
 		switch (level) {
 			case 1:
@@ -3304,88 +3303,88 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				}
 				break;
 			case 2:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 3:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .7) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 4:
 				if (chance < .05) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 5:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 6:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 7:
 				if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 8:
 				if (chance < .75) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 4);
+					enchantments.put(Enchantment.UNBREAKING, 4);
 					price += 100;
 				}
 				break;
 			default:
 				if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				} else {
-					enchantments.put(Enchantment.DURABILITY, 4);
+					enchantments.put(Enchantment.UNBREAKING, 4);
 					price += 100;
 				}
 		}
@@ -3482,37 +3481,37 @@ public class GameItems {
 				if (chance < .1)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+							enchantments.put(Enchantment.PROTECTION, 1);
 							price += 75;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 1);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 1);
 							price += 50;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 1);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 1);
 							price += 35;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 1);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 1);
 							price += 25;
 					}
 				else if (chance < .2)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+							enchantments.put(Enchantment.PROTECTION, 2);
 							price += 150;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 2);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 2);
 							price += 100;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 2);
 							price += 70;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 2);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 2);
 							price += 50;
 					}
 				break;
@@ -3520,55 +3519,55 @@ public class GameItems {
 				if (chance < .15)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+							enchantments.put(Enchantment.PROTECTION, 1);
 							price += 75;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 1);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 1);
 							price += 50;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 1);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 1);
 							price += 35;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 1);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 1);
 							price += 25;
 					}
 				else if (chance < .25)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+							enchantments.put(Enchantment.PROTECTION, 2);
 							price += 150;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 2);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 2);
 							price += 100;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 2);
 							price += 70;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 2);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 2);
 							price += 50;
 					}
 				else if (chance < .3)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				break;
@@ -3576,55 +3575,55 @@ public class GameItems {
 				if (chance < .05)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+							enchantments.put(Enchantment.PROTECTION, 1);
 							price += 75;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 1);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 1);
 							price += 50;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 1);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 1);
 							price += 35;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 1);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 1);
 							price += 25;
 					}
 				else if (chance < .2)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+							enchantments.put(Enchantment.PROTECTION, 2);
 							price += 150;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 2);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 2);
 							price += 100;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 2);
 							price += 70;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 2);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 2);
 							price += 50;
 					}
 				else if (chance < .35)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				break;
@@ -3632,55 +3631,55 @@ public class GameItems {
 				if (chance < .1)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+							enchantments.put(Enchantment.PROTECTION, 2);
 							price += 150;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 2);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 2);
 							price += 100;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 2);
 							price += 70;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 2);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 2);
 							price += 50;
 					}
 				else if (chance < .3)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				else if (chance < .4)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+							enchantments.put(Enchantment.PROTECTION, 4);
 							price += 300;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 4);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 4);
 							price += 200;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 4);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 4);
 							price += 140;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 4);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 4);
 							price += 100;
 					}
 				break;
@@ -3688,55 +3687,55 @@ public class GameItems {
 				if (chance < .2)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				else if (chance < .35)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+							enchantments.put(Enchantment.PROTECTION, 4);
 							price += 300;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 4);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 4);
 							price += 200;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 4);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 4);
 							price += 140;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 4);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 4);
 							price += 100;
 					}
 				else if (chance < .45)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
+							enchantments.put(Enchantment.PROTECTION, 5);
 							price += 375;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 5);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 5);
 							price += 250;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 5);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 5);
 							price += 175;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 5);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 5);
 							price += 125;
 					}
 				break;
@@ -3744,55 +3743,55 @@ public class GameItems {
 				if (chance < .1)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				else if (chance < .3)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+							enchantments.put(Enchantment.PROTECTION, 4);
 							price += 300;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 4);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 4);
 							price += 200;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 4);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 4);
 							price += 140;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 4);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 4);
 							price += 100;
 					}
 				else if (chance < .5)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
+							enchantments.put(Enchantment.PROTECTION, 5);
 							price += 375;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 5);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 5);
 							price += 250;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 5);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 5);
 							price += 175;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 5);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 5);
 							price += 125;
 					}
 				break;
@@ -3800,37 +3799,37 @@ public class GameItems {
 				if (chance < .2)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+							enchantments.put(Enchantment.PROTECTION, 4);
 							price += 300;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 4);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 4);
 							price += 200;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 4);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 4);
 							price += 140;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 4);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 4);
 							price += 100;
 					}
 				else if (chance < .5)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
+							enchantments.put(Enchantment.PROTECTION, 5);
 							price += 375;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 5);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 5);
 							price += 250;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 5);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 5);
 							price += 175;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 5);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 5);
 							price += 125;
 					}
 		}
@@ -3954,88 +3953,88 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				}
 				break;
 			case 2:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 3:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .7) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 4:
 				if (chance < .05) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 5:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 6:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 7:
 				if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 8:
 				if (chance < .75) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 4);
+					enchantments.put(Enchantment.UNBREAKING, 4);
 					price += 100;
 				}
 				break;
 			default:
 				if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				} else {
-					enchantments.put(Enchantment.DURABILITY, 4);
+					enchantments.put(Enchantment.UNBREAKING, 4);
 					price += 100;
 				}
 		}
@@ -4132,37 +4131,37 @@ public class GameItems {
 				if (chance < .1)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+							enchantments.put(Enchantment.PROTECTION, 1);
 							price += 75;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 1);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 1);
 							price += 50;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 1);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 1);
 							price += 35;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 1);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 1);
 							price += 25;
 					}
 				else if (chance < .2)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+							enchantments.put(Enchantment.PROTECTION, 2);
 							price += 150;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 2);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 2);
 							price += 100;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 2);
 							price += 70;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 2);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 2);
 							price += 50;
 					}
 				break;
@@ -4170,55 +4169,55 @@ public class GameItems {
 				if (chance < .15)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+							enchantments.put(Enchantment.PROTECTION, 1);
 							price += 75;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 1);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 1);
 							price += 50;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 1);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 1);
 							price += 35;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 1);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 1);
 							price += 25;
 					}
 				else if (chance < .25)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+							enchantments.put(Enchantment.PROTECTION, 2);
 							price += 150;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 2);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 2);
 							price += 100;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 2);
 							price += 70;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 2);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 2);
 							price += 50;
 					}
 				else if (chance < .3)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				break;
@@ -4226,55 +4225,55 @@ public class GameItems {
 				if (chance < .05)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+							enchantments.put(Enchantment.PROTECTION, 1);
 							price += 75;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 1);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 1);
 							price += 50;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 1);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 1);
 							price += 35;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 1);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 1);
 							price += 25;
 					}
 				else if (chance < .2)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+							enchantments.put(Enchantment.PROTECTION, 2);
 							price += 150;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 2);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 2);
 							price += 100;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 2);
 							price += 70;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 2);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 2);
 							price += 50;
 					}
 				else if (chance < .35)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				break;
@@ -4282,55 +4281,55 @@ public class GameItems {
 				if (chance < .1)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+							enchantments.put(Enchantment.PROTECTION, 2);
 							price += 150;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 2);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 2);
 							price += 100;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 2);
 							price += 70;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 2);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 2);
 							price += 50;
 					}
 				else if (chance < .3)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				else if (chance < .4)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+							enchantments.put(Enchantment.PROTECTION, 4);
 							price += 300;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 4);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 4);
 							price += 200;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 4);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 4);
 							price += 140;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 4);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 4);
 							price += 100;
 					}
 				break;
@@ -4338,55 +4337,55 @@ public class GameItems {
 				if (chance < .2)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				else if (chance < .35)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+							enchantments.put(Enchantment.PROTECTION, 4);
 							price += 300;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 4);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 4);
 							price += 200;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 4);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 4);
 							price += 140;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 4);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 4);
 							price += 100;
 					}
 				else if (chance < .45)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
+							enchantments.put(Enchantment.PROTECTION, 5);
 							price += 375;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 5);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 5);
 							price += 250;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 5);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 5);
 							price += 175;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 5);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 5);
 							price += 125;
 					}
 				break;
@@ -4394,55 +4393,55 @@ public class GameItems {
 				if (chance < .1)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				else if (chance < .3)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+							enchantments.put(Enchantment.PROTECTION, 4);
 							price += 300;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 4);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 4);
 							price += 200;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 4);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 4);
 							price += 140;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 4);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 4);
 							price += 100;
 					}
 				else if (chance < .5)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
+							enchantments.put(Enchantment.PROTECTION, 5);
 							price += 375;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 5);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 5);
 							price += 250;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 5);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 5);
 							price += 175;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 5);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 5);
 							price += 125;
 					}
 				break;
@@ -4450,37 +4449,37 @@ public class GameItems {
 				if (chance < .2)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+							enchantments.put(Enchantment.PROTECTION, 4);
 							price += 300;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 4);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 4);
 							price += 200;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 4);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 4);
 							price += 140;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 4);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 4);
 							price += 100;
 					}
 				else if (chance < .5)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
+							enchantments.put(Enchantment.PROTECTION, 5);
 							price += 375;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 5);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 5);
 							price += 250;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 5);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 5);
 							price += 175;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 5);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 5);
 							price += 125;
 					}
 		}
@@ -4604,88 +4603,88 @@ public class GameItems {
 		switch (level) {
 			case 1:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				}
 				break;
 			case 2:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 3:
 				if (chance < .1) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .5) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .7) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 4:
 				if (chance < .05) {
-					enchantments.put(Enchantment.DURABILITY, 1);
+					enchantments.put(Enchantment.UNBREAKING, 1);
 					price += 25;
 				} else if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 5:
 				if (chance < .4) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 6:
 				if (chance < .25) {
-					enchantments.put(Enchantment.DURABILITY, 2);
+					enchantments.put(Enchantment.UNBREAKING, 2);
 					price += 50;
 				} else if (chance < .9) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 7:
 				if (chance < .6) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				}
 				break;
 			case 8:
 				if (chance < .75) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				} else if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 4);
+					enchantments.put(Enchantment.UNBREAKING, 4);
 					price += 100;
 				}
 				break;
 			default:
 				if (chance < .8) {
-					enchantments.put(Enchantment.DURABILITY, 3);
+					enchantments.put(Enchantment.UNBREAKING, 3);
 					price += 75;
 				} else {
-					enchantments.put(Enchantment.DURABILITY, 4);
+					enchantments.put(Enchantment.UNBREAKING, 4);
 					price += 100;
 				}
 		}
@@ -4782,37 +4781,37 @@ public class GameItems {
 				if (chance < .1)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+							enchantments.put(Enchantment.PROTECTION, 1);
 							price += 75;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 1);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 1);
 							price += 50;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 1);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 1);
 							price += 35;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 1);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 1);
 							price += 25;
 					}
 				else if (chance < .2)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+							enchantments.put(Enchantment.PROTECTION, 2);
 							price += 150;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 2);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 2);
 							price += 100;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 2);
 							price += 70;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 2);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 2);
 							price += 50;
 					}
 				break;
@@ -4820,55 +4819,55 @@ public class GameItems {
 				if (chance < .15)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+							enchantments.put(Enchantment.PROTECTION, 1);
 							price += 75;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 1);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 1);
 							price += 50;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 1);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 1);
 							price += 35;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 1);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 1);
 							price += 25;
 					}
 				else if (chance < .25)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+							enchantments.put(Enchantment.PROTECTION, 2);
 							price += 150;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 2);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 2);
 							price += 100;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 2);
 							price += 70;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 2);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 2);
 							price += 50;
 					}
 				else if (chance < .3)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				break;
@@ -4876,55 +4875,55 @@ public class GameItems {
 				if (chance < .05)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+							enchantments.put(Enchantment.PROTECTION, 1);
 							price += 75;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 1);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 1);
 							price += 50;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 1);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 1);
 							price += 35;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 1);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 1);
 							price += 25;
 					}
 				else if (chance < .2)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+							enchantments.put(Enchantment.PROTECTION, 2);
 							price += 150;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 2);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 2);
 							price += 100;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 2);
 							price += 70;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 2);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 2);
 							price += 50;
 					}
 				else if (chance < .35)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				break;
@@ -4932,55 +4931,55 @@ public class GameItems {
 				if (chance < .1)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+							enchantments.put(Enchantment.PROTECTION, 2);
 							price += 150;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 2);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 2);
 							price += 100;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 2);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 2);
 							price += 70;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 2);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 2);
 							price += 50;
 					}
 				else if (chance < .3)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				else if (chance < .4)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+							enchantments.put(Enchantment.PROTECTION, 4);
 							price += 300;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 4);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 4);
 							price += 200;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 4);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 4);
 							price += 140;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 4);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 4);
 							price += 100;
 					}
 				break;
@@ -4988,55 +4987,55 @@ public class GameItems {
 				if (chance < .2)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				else if (chance < .35)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+							enchantments.put(Enchantment.PROTECTION, 4);
 							price += 300;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 4);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 4);
 							price += 200;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 4);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 4);
 							price += 140;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 4);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 4);
 							price += 100;
 					}
 				else if (chance < .45)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
+							enchantments.put(Enchantment.PROTECTION, 5);
 							price += 375;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 5);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 5);
 							price += 250;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 5);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 5);
 							price += 175;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 5);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 5);
 							price += 125;
 					}
 				break;
@@ -5044,55 +5043,55 @@ public class GameItems {
 				if (chance < .1)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+							enchantments.put(Enchantment.PROTECTION, 3);
 							price += 225;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 3);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 3);
 							price += 150;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 3);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 3);
 							price += 105;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 3);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 3);
 							price += 75;
 					}
 				else if (chance < .3)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+							enchantments.put(Enchantment.PROTECTION, 4);
 							price += 300;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 4);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 4);
 							price += 200;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 4);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 4);
 							price += 140;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 4);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 4);
 							price += 100;
 					}
 				else if (chance < .5)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
+							enchantments.put(Enchantment.PROTECTION, 5);
 							price += 375;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 5);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 5);
 							price += 250;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 5);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 5);
 							price += 175;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 5);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 5);
 							price += 125;
 					}
 				break;
@@ -5100,37 +5099,37 @@ public class GameItems {
 				if (chance < .2)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+							enchantments.put(Enchantment.PROTECTION, 4);
 							price += 300;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 4);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 4);
 							price += 200;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 4);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 4);
 							price += 140;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 4);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 4);
 							price += 100;
 					}
 				else if (chance < .5)
 					switch (r.nextInt(4)) {
 						case 0:
-							enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
+							enchantments.put(Enchantment.PROTECTION, 5);
 							price += 375;
 							break;
 						case 1:
-							enchantments.put(Enchantment.PROTECTION_PROJECTILE, 5);
+							enchantments.put(Enchantment.PROJECTILE_PROTECTION, 5);
 							price += 250;
 							break;
 						case 2:
-							enchantments.put(Enchantment.PROTECTION_EXPLOSIONS, 5);
+							enchantments.put(Enchantment.BLAST_PROTECTION, 5);
 							price += 175;
 							break;
 						case 3:
-							enchantments.put(Enchantment.PROTECTION_FIRE, 5);
+							enchantments.put(Enchantment.FIRE_PROTECTION, 5);
 							price += 125;
 					}
 		}
@@ -5235,7 +5234,7 @@ public class GameItems {
 		return item == null ? new ItemStack(Material.AIR) : item;
 	}
 	public static @NotNull ItemStack health() {
-		ItemStack item = ItemManager.createPotionItem(Material.POTION, new PotionData(PotionType.INSTANT_HEAL),
+		ItemStack item = ItemManager.createPotionItem(Material.POTION, PotionType.HEALING,
 				null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a50"));
 
@@ -5243,20 +5242,20 @@ public class GameItems {
 	}
 	public static @NotNull ItemStack health2() {
 		ItemStack item = ItemManager.createPotionItem(Material.POTION,
-				new PotionData(PotionType.INSTANT_HEAL, false, true), null,
+				PotionType.STRONG_HEALING, null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a120"));
 
 		return item == null ? new ItemStack(Material.AIR) : item;
 	}
 	public static @NotNull ItemStack health3() {
 		ItemStack item = ItemManager.createPotionItem(Material.LINGERING_POTION,
-				new PotionData(PotionType.INSTANT_HEAL, false, true), null,
+				PotionType.STRONG_HEALING, null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a200"));
 
 		return item == null ? new ItemStack(Material.AIR) : item;
 	}
 	public static @NotNull ItemStack strength() {
-		ItemStack item = ItemManager.createPotionItem(Material.POTION, new PotionData(PotionType.STRENGTH),
+		ItemStack item = ItemManager.createPotionItem(Material.POTION, PotionType.STRENGTH,
 				null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a150"));
 
@@ -5264,33 +5263,32 @@ public class GameItems {
 	}
 	public static @NotNull ItemStack strength2() {
 		ItemStack item = ItemManager.createPotionItem(Material.POTION,
-				new PotionData(PotionType.STRENGTH, false, true), null,
+				PotionType.STRONG_STRENGTH, null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a400"));
 
 		return item == null ? new ItemStack(Material.AIR) : item;
 	}
 	public static @NotNull ItemStack regen() {
-		ItemStack item = ItemManager.createPotionItem(Material.POTION, new PotionData(PotionType.REGEN), null,
+		ItemStack item = ItemManager.createPotionItem(Material.POTION, PotionType.REGENERATION, null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a175"));
 
 		return item == null ? new ItemStack(Material.AIR) : item;
 	}
 	public static @NotNull ItemStack regen2() {
 		ItemStack item = ItemManager.createPotionItem(Material.POTION,
-				new PotionData(PotionType.REGEN, false, true), null,
+				PotionType.STRONG_REGENERATION, null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a450"));
 
 		return item == null ? new ItemStack(Material.AIR) : item;
 	}
 	public static @NotNull ItemStack speed() {
-		ItemStack item = ItemManager.createPotionItem(Material.POTION, new PotionData(PotionType.SPEED), null,
+		ItemStack item = ItemManager.createPotionItem(Material.POTION, PotionType.SWIFTNESS, null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a125"));
 
 		return item == null ? new ItemStack(Material.AIR) : item;
 	}
 	public static @NotNull ItemStack speed2() {
-		ItemStack item = ItemManager.createPotionItem(Material.POTION, new PotionData(PotionType.SPEED, false,
-						true), null,
+		ItemStack item = ItemManager.createPotionItem(Material.POTION, PotionType.STRONG_SWIFTNESS, null,
 				CommunicationManager.format("&2" + LanguageManager.messages.gems + ": &a350"));
 
 		return item == null ? new ItemStack(Material.AIR) : item;
@@ -5372,7 +5370,7 @@ public class GameItems {
 	// Kit abilities
 	public static @NotNull ItemStack mage() {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
-		enchants.put(Enchantment.DURABILITY, 1);
+		enchants.put(Enchantment.UNBREAKING, 1);
 
 		ItemStack item = ItemManager.createItem(
 				Material.PURPLE_DYE,
@@ -5388,7 +5386,7 @@ public class GameItems {
 	}
 	public static @NotNull ItemStack ninja() {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
-		enchants.put(Enchantment.DURABILITY, 1);
+		enchants.put(Enchantment.UNBREAKING, 1);
 
 		ItemStack item = ItemManager.createItem(
 				Material.BLACK_DYE,
@@ -5405,7 +5403,7 @@ public class GameItems {
 	}
 	public static @NotNull ItemStack templar() {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
-		enchants.put(Enchantment.DURABILITY, 1);
+		enchants.put(Enchantment.UNBREAKING, 1);
 
 		ItemStack item = ItemManager.createItem(
 				Material.YELLOW_DYE,
@@ -5422,7 +5420,7 @@ public class GameItems {
 	}
 	public static @NotNull ItemStack warrior() {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
-		enchants.put(Enchantment.DURABILITY, 1);
+		enchants.put(Enchantment.UNBREAKING, 1);
 
 		ItemStack item = ItemManager.createItem(
 				Material.RED_DYE,
@@ -5439,7 +5437,7 @@ public class GameItems {
 	}
 	public static @NotNull ItemStack knight() {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
-		enchants.put(Enchantment.DURABILITY, 1);
+		enchants.put(Enchantment.UNBREAKING, 1);
 
 		ItemStack item = ItemManager.createItem(
 				Material.BROWN_DYE,
@@ -5456,7 +5454,7 @@ public class GameItems {
 	}
 	public static @NotNull ItemStack priest() {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
-		enchants.put(Enchantment.DURABILITY, 1);
+		enchants.put(Enchantment.UNBREAKING, 1);
 
 		ItemStack item = ItemManager.createItem(
 				Material.WHITE_DYE,
@@ -5473,7 +5471,7 @@ public class GameItems {
 	}
 	public static @NotNull ItemStack siren() {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
-		enchants.put(Enchantment.DURABILITY, 1);
+		enchants.put(Enchantment.UNBREAKING, 1);
 
 		ItemStack item = ItemManager.createItem(
 				Material.PINK_DYE,
@@ -5490,7 +5488,7 @@ public class GameItems {
 	}
 	public static @NotNull ItemStack monk() {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
-		enchants.put(Enchantment.DURABILITY, 1);
+		enchants.put(Enchantment.UNBREAKING, 1);
 
 		ItemStack item = ItemManager.createItem(
 				Material.GREEN_DYE,
@@ -5507,7 +5505,7 @@ public class GameItems {
 	}
 	public static @NotNull ItemStack messenger() {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
-		enchants.put(Enchantment.DURABILITY, 1);
+		enchants.put(Enchantment.UNBREAKING, 1);
 
 		ItemStack item = ItemManager.createItem(
 				Material.BLUE_DYE,

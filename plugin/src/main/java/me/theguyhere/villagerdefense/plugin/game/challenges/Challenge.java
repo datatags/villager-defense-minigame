@@ -76,7 +76,7 @@ public class Challenge {
      */
     public ItemStack getButton(boolean active) {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
-        enchants.put(Enchantment.DURABILITY, 1);
+        enchants.put(Enchantment.UNBREAKING, 1);
         List<String> lores = new ArrayList<>(masterDescription);
 
         return ItemManager.createItem(buttonMaterial,

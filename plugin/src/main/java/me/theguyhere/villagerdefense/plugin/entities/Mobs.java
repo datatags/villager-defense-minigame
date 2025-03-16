@@ -6,11 +6,13 @@ import me.theguyhere.villagerdefense.plugin.game.Arena;
 import me.theguyhere.villagerdefense.plugin.items.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scoreboard.Team;
@@ -20,6 +22,9 @@ import java.util.Objects;
 import java.util.Random;
 
 public class Mobs {
+    private static final NamespacedKey HEALTH_BOOST = new NamespacedKey(Main.plugin, "hpBoost");
+    private static final NamespacedKey ATTACK_BOOST = new NamespacedKey(Main.plugin, "atkBoost");
+    private static final NamespacedKey SPEED_BOOST = new NamespacedKey(Main.plugin, "spdBoost");
     private static void setMinion(Arena arena, LivingEntity livingEntity) {
         Team monsters = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard()
                 .getTeam("monsters");
@@ -38,36 +43,7 @@ public class Mobs {
         for (Entity passenger : livingEntity.getPassengers())
             passenger.remove();
 
-        // Set attribute modifiers
-        double difficulty = arena.getCurrentDifficulty();
-        for (int i = 0; i < 3; i++) {
-            double boost;
-            if (difficulty < 5)
-                boost = 0;
-            else boost = difficulty - 5;
-            switch (i) {
-                case 0:
-                    if (livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH) != null)
-                        livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH)
-                                .addModifier(new AttributeModifier(
-                                    "hpBoost", boost / 3, AttributeModifier.Operation.ADD_NUMBER
-                                ));
-                    break;
-                case 1:
-                    if (livingEntity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null)
-                        livingEntity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)
-                            .addModifier(new AttributeModifier(
-                                "attBoost", boost / 4, AttributeModifier.Operation.ADD_NUMBER
-                            ));
-                    break;
-                case 2:
-                    if (livingEntity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED) != null)
-                        livingEntity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)
-                            .addModifier(new AttributeModifier(
-                                "spdBoost", boost / 120, AttributeModifier.Operation.ADD_NUMBER
-                            ));
-            }
-        }
+        setAttributeModifiers(arena, livingEntity);
     }
 
     private static void setBoss(Arena arena, LivingEntity livingEntity) {
@@ -80,35 +56,7 @@ public class Mobs {
         livingEntity.setRemoveWhenFarAway(false);
         livingEntity.setCanPickupItems(false);
 
-        // Set attribute modifiers
-        double difficulty = arena.getCurrentDifficulty();
-        for (int i = 0; i < 3; i++) {
-            double boost;
-            if (difficulty < 10)
-                boost = 0;
-            else boost = difficulty - 10;
-            switch (i) {
-                case 0:
-                    Objects.requireNonNull(livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH))
-                            .addModifier(new AttributeModifier(
-                                    "hpBoost", boost / 3, AttributeModifier.Operation.ADD_NUMBER
-                            ));
-                    break;
-                case 1:
-                    if (livingEntity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null)
-                        Objects.requireNonNull(livingEntity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE))
-                                .addModifier(new AttributeModifier(
-                                        "attBoost", boost / 4, AttributeModifier.Operation.ADD_NUMBER
-                                ));
-                    break;
-                case 2:
-                    Objects.requireNonNull(livingEntity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED))
-                            .addModifier(new AttributeModifier(
-                                    "spdBoost", boost / 120, AttributeModifier.Operation.ADD_NUMBER
-                            ));
-                    break;
-            }
-        }
+        setAttributeModifiers(arena, livingEntity);
     }
 
     private static void setLargeMinion(Arena arena, LivingEntity livingEntity) {
@@ -118,30 +66,35 @@ public class Mobs {
         livingEntity.setRemoveWhenFarAway(false);
         livingEntity.setCanPickupItems(false);
 
+        setAttributeModifiers(arena, livingEntity);
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    private static void setAttributeModifiers(Arena arena, LivingEntity entity) {
         // Set attribute modifiers
         double difficulty = arena.getCurrentDifficulty();
         for (int i = 0; i < 3; i++) {
             double boost;
-            if (difficulty < 8)
+            if (difficulty < 5)
                 boost = 0;
-            else boost = difficulty - 8;
+            else boost = difficulty - 5;
             switch (i) {
                 case 0:
-                    Objects.requireNonNull(livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH))
+                    Objects.requireNonNull(entity.getAttribute(Attribute.MAX_HEALTH))
                             .addModifier(new AttributeModifier(
-                                "hpBoost", boost / 3, AttributeModifier.Operation.ADD_NUMBER
+                                    HEALTH_BOOST, boost / 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ANY
                             ));
                     break;
                 case 1:
-                    Objects.requireNonNull(livingEntity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE))
+                    Objects.requireNonNull(entity.getAttribute(Attribute.ATTACK_DAMAGE))
                             .addModifier(new AttributeModifier(
-                                "attBoost", boost / 4, AttributeModifier.Operation.ADD_NUMBER
+                                    ATTACK_BOOST, boost / 4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ANY
                             ));
                     break;
                 case 2:
-                    Objects.requireNonNull(livingEntity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED))
+                    Objects.requireNonNull(entity.getAttribute(Attribute.MOVEMENT_SPEED))
                             .addModifier(new AttributeModifier(
-                                "spdBoost", boost / 120, AttributeModifier.Operation.ADD_NUMBER
+                                    SPEED_BOOST, boost / 120, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ANY
                             ));
             }
         }
@@ -301,34 +254,34 @@ public class Mobs {
             case 3:
             case 4:
                 if (r.nextDouble() < (difficulty - 3) / 2)
-                    enchants.put(Enchantment.DAMAGE_ALL, 1);
+                    enchants.put(Enchantment.SHARPNESS, 1);
                 break;
             case 5:
             case 6:
                 if (r.nextDouble() < (difficulty - 5) / 2)
-                    enchants.put(Enchantment.DAMAGE_ALL, 2);
-                else enchants.put(Enchantment.DAMAGE_ALL, 1);
+                    enchants.put(Enchantment.SHARPNESS, 2);
+                else enchants.put(Enchantment.SHARPNESS, 1);
                 break;
             case 7:
             case 8:
                 if (r.nextDouble() < (difficulty - 7) / 2)
-                    enchants.put(Enchantment.DAMAGE_ALL, 3);
-                else enchants.put(Enchantment.DAMAGE_ALL, 2);
+                    enchants.put(Enchantment.SHARPNESS, 3);
+                else enchants.put(Enchantment.SHARPNESS, 2);
                 break;
             case 9:
             case 10:
                 if (r.nextDouble() < (difficulty - 9) / 2)
-                    enchants.put(Enchantment.DAMAGE_ALL, 4);
-                else enchants.put(Enchantment.DAMAGE_ALL, 3);
+                    enchants.put(Enchantment.SHARPNESS, 4);
+                else enchants.put(Enchantment.SHARPNESS, 3);
                 break;
             case 11:
             case 12:
                 if (r.nextDouble() < (difficulty - 11) / 2)
-                    enchants.put(Enchantment.DAMAGE_ALL, 5);
-                else enchants.put(Enchantment.DAMAGE_ALL, 4);
+                    enchants.put(Enchantment.SHARPNESS, 5);
+                else enchants.put(Enchantment.SHARPNESS, 4);
                 break;
             default:
-               enchants.put(Enchantment.DAMAGE_ALL, 5);
+               enchants.put(Enchantment.SHARPNESS, 5);
         }
 
         // Set knockback
@@ -468,34 +421,34 @@ public class Mobs {
             case 3:
             case 4:
                 if (r.nextDouble() < (difficulty - 3) / 2)
-                    enchants.put(Enchantment.DAMAGE_ALL, 1);
+                    enchants.put(Enchantment.SHARPNESS, 1);
                 break;
             case 5:
             case 6:
                 if (r.nextDouble() < (difficulty - 5) / 2)
-                    enchants.put(Enchantment.DAMAGE_ALL, 2);
-                else enchants.put(Enchantment.DAMAGE_ALL, 1);
+                    enchants.put(Enchantment.SHARPNESS, 2);
+                else enchants.put(Enchantment.SHARPNESS, 1);
                 break;
             case 7:
             case 8:
                 if (r.nextDouble() < (difficulty - 7) / 2)
-                    enchants.put(Enchantment.DAMAGE_ALL, 3);
-                else enchants.put(Enchantment.DAMAGE_ALL, 2);
+                    enchants.put(Enchantment.SHARPNESS, 3);
+                else enchants.put(Enchantment.SHARPNESS, 2);
                 break;
             case 9:
             case 10:
                 if (r.nextDouble() < (difficulty - 9) / 2)
-                    enchants.put(Enchantment.DAMAGE_ALL, 4);
-                else enchants.put(Enchantment.DAMAGE_ALL, 3);
+                    enchants.put(Enchantment.SHARPNESS, 4);
+                else enchants.put(Enchantment.SHARPNESS, 3);
                 break;
             case 11:
             case 12:
                 if (r.nextDouble() < (difficulty - 11) / 2)
-                    enchants.put(Enchantment.DAMAGE_ALL, 5);
-                else enchants.put(Enchantment.DAMAGE_ALL, 4);
+                    enchants.put(Enchantment.SHARPNESS, 5);
+                else enchants.put(Enchantment.SHARPNESS, 4);
                 break;
             default:
-                enchants.put(Enchantment.DAMAGE_ALL, 5);
+                enchants.put(Enchantment.SHARPNESS, 5);
         }
 
         // Set fire aspect
@@ -557,34 +510,34 @@ public class Mobs {
             case 3:
             case 4:
                 if (r.nextDouble() < (difficulty - 3) / 2)
-                    enchants.put(Enchantment.ARROW_DAMAGE, 1);
+                    enchants.put(Enchantment.POWER, 1);
                 break;
             case 5:
             case 6:
                 if (r.nextDouble() < (difficulty - 5) / 2)
-                    enchants.put(Enchantment.ARROW_DAMAGE, 2);
-                else enchants.put(Enchantment.ARROW_DAMAGE, 1);
+                    enchants.put(Enchantment.POWER, 2);
+                else enchants.put(Enchantment.POWER, 1);
                 break;
             case 7:
             case 8:
                 if (r.nextDouble() < (difficulty - 7) / 2)
-                    enchants.put(Enchantment.ARROW_DAMAGE, 3);
-                else enchants.put(Enchantment.ARROW_DAMAGE, 2);
+                    enchants.put(Enchantment.POWER, 3);
+                else enchants.put(Enchantment.POWER, 2);
                 break;
             case 9:
             case 10:
                 if (r.nextDouble() < (difficulty - 9) / 2)
-                    enchants.put(Enchantment.ARROW_DAMAGE, 4);
-                else enchants.put(Enchantment.ARROW_DAMAGE, 3);
+                    enchants.put(Enchantment.POWER, 4);
+                else enchants.put(Enchantment.POWER, 3);
                 break;
             case 11:
             case 12:
                 if (r.nextDouble() < (difficulty - 11) / 2)
-                    enchants.put(Enchantment.ARROW_DAMAGE, 5);
-                else enchants.put(Enchantment.ARROW_DAMAGE, 4);
+                    enchants.put(Enchantment.POWER, 5);
+                else enchants.put(Enchantment.POWER, 4);
                 break;
             default:
-                enchants.put(Enchantment.ARROW_DAMAGE, 5);
+                enchants.put(Enchantment.POWER, 5);
         }
 
         // Set punch
@@ -600,15 +553,15 @@ public class Mobs {
             case 7:
             case 8:
                 if (r.nextDouble() < (difficulty - 5) / 4)
-                    enchants.put(Enchantment.ARROW_KNOCKBACK, 1);
+                    enchants.put(Enchantment.PUNCH, 1);
                 break;
             case 9:
             case 10:
             case 11:
             case 12:
                 if (r.nextDouble() < (difficulty - 9) / 4)
-                    enchants.put(Enchantment.ARROW_KNOCKBACK, 2);
-                else enchants.put(Enchantment.ARROW_KNOCKBACK, 1);
+                    enchants.put(Enchantment.PUNCH, 2);
+                else enchants.put(Enchantment.PUNCH, 1);
                 break;
             case 13:
             case 14:
@@ -616,11 +569,11 @@ public class Mobs {
             case 16:
             case 17:
                 if (r.nextDouble() < (difficulty - 13) / 5)
-                    enchants.put(Enchantment.ARROW_KNOCKBACK, 3);
-                else enchants.put(Enchantment.ARROW_KNOCKBACK, 2);
+                    enchants.put(Enchantment.PUNCH, 3);
+                else enchants.put(Enchantment.PUNCH, 2);
                 break;
             default:
-                enchants.put(Enchantment.ARROW_KNOCKBACK, 3);
+                enchants.put(Enchantment.PUNCH, 3);
         }
 
         // Set flame
@@ -638,10 +591,10 @@ public class Mobs {
             case 9:
             case 10:
                 if (r.nextDouble() < (difficulty - 6) / 5)
-                    enchants.put(Enchantment.ARROW_FIRE, 1);
+                    enchants.put(Enchantment.FLAME, 1);
                 break;
             default:
-                enchants.put(Enchantment.ARROW_FIRE, 1);
+                enchants.put(Enchantment.FLAME, 1);
         }
 
         // Check if no enchants
@@ -772,34 +725,34 @@ public class Mobs {
             case 3:
             case 4:
                 if (r.nextDouble() < (difficulty - 3) / 2)
-                    enchants.put(Enchantment.DAMAGE_ALL, 1);
+                    enchants.put(Enchantment.SHARPNESS, 1);
                 break;
             case 5:
             case 6:
                 if (r.nextDouble() < (difficulty - 5) / 2)
-                    enchants.put(Enchantment.DAMAGE_ALL, 2);
-                else enchants.put(Enchantment.DAMAGE_ALL, 1);
+                    enchants.put(Enchantment.SHARPNESS, 2);
+                else enchants.put(Enchantment.SHARPNESS, 1);
                 break;
             case 7:
             case 8:
                 if (r.nextDouble() < (difficulty - 7) / 2)
-                    enchants.put(Enchantment.DAMAGE_ALL, 3);
-                else enchants.put(Enchantment.DAMAGE_ALL, 2);
+                    enchants.put(Enchantment.SHARPNESS, 3);
+                else enchants.put(Enchantment.SHARPNESS, 2);
                 break;
             case 9:
             case 10:
                 if (r.nextDouble() < (difficulty - 9) / 2)
-                    enchants.put(Enchantment.DAMAGE_ALL, 4);
-                else enchants.put(Enchantment.DAMAGE_ALL, 3);
+                    enchants.put(Enchantment.SHARPNESS, 4);
+                else enchants.put(Enchantment.SHARPNESS, 3);
                 break;
             case 11:
             case 12:
                 if (r.nextDouble() < (difficulty - 11) / 2)
-                    enchants.put(Enchantment.DAMAGE_ALL, 5);
-                else enchants.put(Enchantment.DAMAGE_ALL, 4);
+                    enchants.put(Enchantment.SHARPNESS, 5);
+                else enchants.put(Enchantment.SHARPNESS, 4);
                 break;
             default:
-                enchants.put(Enchantment.DAMAGE_ALL, 5);
+                enchants.put(Enchantment.SHARPNESS, 5);
         }
 
         // Set knockback
@@ -1201,33 +1154,7 @@ public class Mobs {
         wolf.setCustomNameVisible(true);
         vdPlayer.incrementWolves();
 
-        // Set attribute modifiers
-        double difficulty = arena.getCurrentDifficulty();
-        for (int i = 0; i < 3; i++) {
-            double boost;
-            if (difficulty < 5)
-                boost = 0;
-            else boost = difficulty - 5;
-            switch (i) {
-                case 0:
-                    Objects.requireNonNull(wolf.getAttribute(Attribute.GENERIC_MAX_HEALTH))
-                            .addModifier(new AttributeModifier(
-                                "hpBoost", boost / 3, AttributeModifier.Operation.ADD_NUMBER
-                            ));
-                    break;
-                case 1:
-                    Objects.requireNonNull(wolf.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE))
-                            .addModifier(new AttributeModifier(
-                                "attBoost", boost / 4, AttributeModifier.Operation.ADD_NUMBER
-                            ));
-                    break;
-                case 2:
-                    Objects.requireNonNull(wolf.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED))
-                            .addModifier(new AttributeModifier(
-                                "spdBoost", boost / 120, AttributeModifier.Operation.ADD_NUMBER
-                            ));
-            }
-        }
+        setAttributeModifiers(arena, wolf);
     }
 
     public static void setGolem(Main plugin, Arena arena, IronGolem ironGolem) {
@@ -1236,33 +1163,7 @@ public class Mobs {
         ironGolem.setCustomNameVisible(true);
         arena.incrementGolems();
 
-        // Set attribute modifiers
-        double difficulty = arena.getCurrentDifficulty();
-        for (int i = 0; i < 3; i++) {
-            double boost;
-            if (difficulty < 5)
-                boost = 0;
-            else boost = difficulty - 5;
-            switch (i) {
-                case 0:
-                    Objects.requireNonNull(ironGolem.getAttribute(Attribute.GENERIC_MAX_HEALTH))
-                            .addModifier(new AttributeModifier(
-                                "hpBoost", boost / 3, AttributeModifier.Operation.ADD_NUMBER
-                            ));
-                    break;
-                case 1:
-                    Objects.requireNonNull(ironGolem.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE))
-                            .addModifier(new AttributeModifier(
-                                "attBoost", boost / 4, AttributeModifier.Operation.ADD_NUMBER
-                            ));
-                    break;
-                case 2:
-                    Objects.requireNonNull(ironGolem.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED))
-                            .addModifier(new AttributeModifier(
-                                "spdBoost", boost / 120, AttributeModifier.Operation.ADD_NUMBER
-                            ));
-            }
-        }
+        setAttributeModifiers(arena, ironGolem);
     }
 
     // Returns a formatted health bar

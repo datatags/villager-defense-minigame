@@ -24,7 +24,7 @@ import me.theguyhere.villagerdefense.plugin.data.exceptions.InvalidLocationExcep
 import me.theguyhere.villagerdefense.plugin.game.exceptions.InvalidNameException;
 import me.theguyhere.villagerdefense.plugin.entities.PlayerNotFoundException;
 import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
-import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -428,7 +428,7 @@ public class Arena {
      */
     public ItemStack getWaitingSoundButton(String name) {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
-        enchants.put(Enchantment.DURABILITY, 1);
+        enchants.put(Enchantment.UNBREAKING, 1);
         String sound = config.getString(path + ".sounds.waiting");
         boolean selected;
 
@@ -603,7 +603,7 @@ public class Arena {
     public Location getArenaBoardLocation() {
         return DataManager.getConfigLocationNoPitch(path + ".arenaBoard");
     }
-    
+
     /**
      * Creates a new arena leaderboard at the given location and deletes the old arena leaderboard.
      * @param location New location
@@ -923,7 +923,7 @@ public class Arena {
 
     public void startSpawnParticles() {
         Particle spawnParticle = Particle.valueOf(NMSVersion.getCurrent().getNmsManager().getSpawnParticleName());
-        
+
         if (getPlayerSpawn() == null)
             return;
 
@@ -983,7 +983,7 @@ public class Arena {
 
     public void startMonsterParticles() {
         Particle monsterParticle = Particle.valueOf(NMSVersion.getCurrent().getNmsManager().getMonsterParticleName());
-        
+
         if (monsterParticlesID == 0 && !getMonsterSpawns().isEmpty())
             monsterParticlesID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, new Runnable() {
                 double var = 0;
@@ -1038,7 +1038,7 @@ public class Arena {
 
     public void startVillagerParticles() {
         Particle villagerParticle = Particle.valueOf(NMSVersion.getCurrent().getNmsManager().getVillagerParticleName());
-        
+
         if (villagerParticlesID == 0 && !getVillagerSpawns().isEmpty())
             villagerParticlesID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, new Runnable() {
                 double var = 0;
