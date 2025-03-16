@@ -1166,6 +1166,42 @@ public class Mobs {
         setAttributeModifiers(arena, ironGolem);
     }
 
+    @SuppressWarnings("UnstableApiUsage")
+    public static void setBreeze(Arena arena, Breeze breeze) {
+        setMinion(arena, breeze);
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    public static void setBogged(Arena arena, Bogged bogged) {
+        setMinion(arena, bogged);
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    public static void setCreaking(Arena arena, Creaking creaking) {
+        setMinion(arena, creaking);
+    }
+
+    public static void setGuardian(Arena arena, Guardian guardian) {
+        setMinion(arena, guardian);
+    }
+
+    public static void setElderGuardian(Arena arena, ElderGuardian elderGuardian) {
+        setMinion(arena, elderGuardian);
+    }
+
+    public static void setIllusioner(Arena arena, Illusioner illusioner) {
+        setMinion(arena, illusioner);
+    }
+
+    public static void setKillerBunny(Arena arena, Rabbit killerBunny) {
+        killerBunny.setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
+        setMinion(arena, killerBunny);
+    }
+
+    public static void setWarden(Arena arena, Warden warden) {
+        setBoss(arena, warden);
+    }
+
     // Returns a formatted health bar
     public static String healthBar(double max, double remaining, int size) {
         String toFormat;
