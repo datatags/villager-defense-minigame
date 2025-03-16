@@ -207,22 +207,22 @@ public class Tasks {
 				// Set health for people with giant kits
 				if ((Kit.giant().setKitLevel(1).equals(player.getKit()) ||
 						Kit.giant().setKitLevel(1).equals(player.getKit2())) && !player.isSharing())
-					Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH))
+					Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.MAX_HEALTH))
 							.addModifier(new AttributeModifier("Giant1", 2,
 									AttributeModifier.Operation.ADD_NUMBER));
 				else if ((Kit.giant().setKitLevel(2).equals(player.getKit()) ||
 						Kit.giant().setKitLevel(2).equals(player.getKit2())) && !player.isSharing())
-					Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH))
+					Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.MAX_HEALTH))
 							.addModifier(new AttributeModifier("Giant2", 4,
 									AttributeModifier.Operation.ADD_NUMBER));
 				else if (r.nextDouble() > Math.pow(.75, arena.effectShareCount(Kit.EffectType.GIANT2))) {
-					Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH))
+					Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.MAX_HEALTH))
 							.addModifier(new AttributeModifier("Giant2", 4,
 									AttributeModifier.Operation.ADD_NUMBER));
 					PlayerManager.notifySuccess(player.getPlayer(), LanguageManager.messages.effectShare);
 				}
 				else if (r.nextDouble() > Math.pow(.75, arena.effectShareCount(Kit.EffectType.GIANT1))) {
-					Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH))
+					Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.MAX_HEALTH))
 							.addModifier(new AttributeModifier("Giant1", 2,
 									AttributeModifier.Operation.ADD_NUMBER));
 					PlayerManager.notifySuccess(player.getPlayer(), LanguageManager.messages.effectShare);
@@ -230,21 +230,21 @@ public class Tasks {
 
 				// Set health for people with health boost and are boosted
 				if (player.isBoosted() && PlayerDataManager.getPlayerAchievements(uuid).contains(Achievement.topWave9().getID())) {
-					Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH))
+					Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.MAX_HEALTH))
 						.addModifier(new AttributeModifier("HealthBoost", 2,
 							AttributeModifier.Operation.ADD_NUMBER));
 				}
 
 				// Set health for people with dwarf challenge
 				if (player.getChallenges().contains(Challenge.dwarf())) {
-					Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH))
+					Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.MAX_HEALTH))
 						.addModifier(new AttributeModifier("Dwarf", -.5,
 							AttributeModifier.Operation.MULTIPLY_SCALAR_1));
 				}
 
 				// Make sure new health is set up correctly
 				player.getPlayer().setHealth(
-						Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH))
+						Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.MAX_HEALTH))
 								.getValue());
 
 				// Give blindness to people with that challenge
@@ -373,22 +373,22 @@ public class Tasks {
 				// Set health for people with giant kits
 				if ((Kit.giant().setKitLevel(1).equals(p.getKit()) ||
 						Kit.giant().setKitLevel(1).equals(p.getKit2())) && !p.isSharing())
-					Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH))
+					Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.MAX_HEALTH))
 							.addModifier(new AttributeModifier("Giant1", 2,
 									AttributeModifier.Operation.ADD_NUMBER));
 				else if ((Kit.giant().setKitLevel(2).equals(p.getKit()) ||
 						Kit.giant().setKitLevel(2).equals(p.getKit2())) && !p.isSharing())
-					Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH))
+					Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.MAX_HEALTH))
 							.addModifier(new AttributeModifier("Giant2", 4,
 									AttributeModifier.Operation.ADD_NUMBER));
 				else if (r.nextDouble() > Math.pow(.75, arena.effectShareCount(Kit.EffectType.GIANT2))) {
-					Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH))
+					Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.MAX_HEALTH))
 							.addModifier(new AttributeModifier("Giant2", 4,
 									AttributeModifier.Operation.ADD_NUMBER));
 					PlayerManager.notifySuccess(p.getPlayer(), LanguageManager.messages.effectShare);
 				}
 				else if (r.nextDouble() > Math.pow(.75, arena.effectShareCount(Kit.EffectType.GIANT1))) {
-					Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH))
+					Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.MAX_HEALTH))
 							.addModifier(new AttributeModifier("Giant1", 2,
 									AttributeModifier.Operation.ADD_NUMBER));
 					PlayerManager.notifySuccess(p.getPlayer(), LanguageManager.messages.effectShare);
@@ -396,21 +396,21 @@ public class Tasks {
 
 				// Set health for people with health boost and are boosted
 				if (p.isBoosted() && PlayerDataManager.getPlayerAchievements(p.getID()).contains(Achievement.topWave9().getID())) {
-					Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH))
+					Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.MAX_HEALTH))
 						.addModifier(new AttributeModifier("HealthBoost", 2,
 							AttributeModifier.Operation.ADD_NUMBER));
 				}
 
 				// Set health for people with dwarf challenge
 				if (p.getChallenges().contains(Challenge.dwarf())) {
-					Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH))
+					Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.MAX_HEALTH))
 						.addModifier(new AttributeModifier("Dwarf", -.5,
 							AttributeModifier.Operation.MULTIPLY_SCALAR_1));
 				}
 
 				// Make sure new health is set up correctly
 				p.getPlayer().setHealth(
-						Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH))
+						Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.MAX_HEALTH))
 								.getValue());
 
 				// Give blindness to people with that challenge

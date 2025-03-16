@@ -49,7 +49,7 @@ public class PlayerManager {
     public static void teleportIntoAdventure(Player player, @NotNull Location location) {
         player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
         player.setFireTicks(0);
-        AttributeInstance maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        AttributeInstance maxHealth = player.getAttribute(Attribute.MAX_HEALTH);
         assert maxHealth != null;
 
         if (!maxHealth.getModifiers().isEmpty())
@@ -71,7 +71,7 @@ public class PlayerManager {
 
     // Prepares and teleports a player into spectator mode
     public static void teleportIntoSpectator(Player player, @NotNull Location location) {
-        AttributeInstance maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        AttributeInstance maxHealth = player.getAttribute(Attribute.MAX_HEALTH);
         if (maxHealth == null)
             return;
 

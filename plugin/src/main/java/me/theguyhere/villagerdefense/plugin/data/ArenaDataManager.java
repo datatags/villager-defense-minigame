@@ -5,7 +5,7 @@ import me.theguyhere.villagerdefense.plugin.data.exceptions.BadDataException;
 import me.theguyhere.villagerdefense.plugin.data.exceptions.NoSuchPathException;
 import me.theguyhere.villagerdefense.plugin.data.exceptions.UpdateFailedException;
 import me.theguyhere.villagerdefense.plugin.structures.ArenaRecord;
-import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

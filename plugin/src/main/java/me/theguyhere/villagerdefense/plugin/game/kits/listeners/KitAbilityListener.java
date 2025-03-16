@@ -216,10 +216,10 @@ public class KitAbilityListener implements Listener {
 
             // Activate ability
             WorldManager.getNearbyPlayers(player, range).forEach(player1 -> player1.addPotionEffect(
-                    new PotionEffect(PotionEffectType.INCREASE_DAMAGE, altDuration, amplifier)));
+                    new PotionEffect(PotionEffectType.INSTANT_DAMAGE, altDuration, amplifier)));
             WorldManager.getNearbyAllies(player, range).forEach(ally -> ally.addPotionEffect(
-                    new PotionEffect(PotionEffectType.INCREASE_DAMAGE, altDuration, amplifier)));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, duration, amplifier));
+                    new PotionEffect(PotionEffectType.INSTANT_DAMAGE, altDuration, amplifier)));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE, duration, amplifier));
             cooldowns.put(gamer, System.currentTimeMillis() + coolDown);
 
             // Fire ability sound if turned on
@@ -256,10 +256,10 @@ public class KitAbilityListener implements Listener {
 
             // Activate ability
             WorldManager.getNearbyPlayers(player, range).forEach(player1 -> player1.addPotionEffect(
-                    new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, altDuration, amplifier)));
+                    new PotionEffect(PotionEffectType.RESISTANCE, altDuration, amplifier)));
             WorldManager.getNearbyAllies(player, range).forEach(ally -> ally.addPotionEffect(
-                    new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, altDuration, amplifier)));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, duration, amplifier));
+                    new PotionEffect(PotionEffectType.RESISTANCE, altDuration, amplifier)));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, duration, amplifier));
             cooldowns.put(gamer, System.currentTimeMillis() + coolDown);
 
             // Fire ability sound if turned on
@@ -339,7 +339,7 @@ public class KitAbilityListener implements Listener {
 
             // Activate ability
             WorldManager.getNearbyMonsters(player, range).forEach(ent -> ent.addPotionEffect(
-                    new PotionEffect(PotionEffectType.SLOW, duration, amp1)));
+                    new PotionEffect(PotionEffectType.SLOWNESS, duration, amp1)));
             if (amp2 != -1)
                 WorldManager.getNearbyMonsters(player, range).forEach(ent -> ent.addPotionEffect(
                         new PotionEffect(PotionEffectType.WEAKNESS, altDuration, amp2)));
@@ -379,10 +379,10 @@ public class KitAbilityListener implements Listener {
 
             // Activate ability
             WorldManager.getNearbyPlayers(player, range).forEach(player1 -> player1.addPotionEffect(
-                    new PotionEffect(PotionEffectType.FAST_DIGGING, altDuration, amplifier)));
+                    new PotionEffect(PotionEffectType.HASTE, altDuration, amplifier)));
             WorldManager.getNearbyAllies(player, range).forEach(ally -> ally.addPotionEffect(
-                    new PotionEffect(PotionEffectType.FAST_DIGGING, altDuration, amplifier)));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, duration, amplifier));
+                    new PotionEffect(PotionEffectType.HASTE, altDuration, amplifier)));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, duration, amplifier));
             cooldowns.put(gamer, System.currentTimeMillis() + coolDown);
 
             // Fire ability sound if turned on
@@ -543,10 +543,10 @@ public class KitAbilityListener implements Listener {
 
                 // Activate ability
                 WorldManager.getNearbyPlayers(player, range).forEach(player1 -> player1.addPotionEffect(
-                        new PotionEffect(PotionEffectType.INCREASE_DAMAGE, altDuration, amplifier)));
+                        new PotionEffect(PotionEffectType.INSTANT_DAMAGE, altDuration, amplifier)));
                 WorldManager.getNearbyAllies(player, range).forEach(ally -> ally.addPotionEffect(
-                        new PotionEffect(PotionEffectType.INCREASE_DAMAGE, altDuration, amplifier)));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, duration, amplifier));
+                        new PotionEffect(PotionEffectType.INSTANT_DAMAGE, altDuration, amplifier)));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE, duration, amplifier));
                 cooldowns.put(gamer, System.currentTimeMillis() + coolDown);
 
                 // Fire ability sound if turned on
@@ -581,10 +581,10 @@ public class KitAbilityListener implements Listener {
 
                 // Activate ability
                 WorldManager.getNearbyPlayers(player, range).forEach(player1 -> player1.addPotionEffect(
-                        new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, altDuration, amplifier)));
+                        new PotionEffect(PotionEffectType.RESISTANCE, altDuration, amplifier)));
                 WorldManager.getNearbyAllies(player, range).forEach(ally -> ally.addPotionEffect(
-                        new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, altDuration, amplifier)));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, duration, amplifier));
+                        new PotionEffect(PotionEffectType.RESISTANCE, altDuration, amplifier)));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, duration, amplifier));
                 cooldowns.put(gamer, System.currentTimeMillis() + coolDown);
 
                 // Fire ability sound if turned on
@@ -660,7 +660,7 @@ public class KitAbilityListener implements Listener {
 
                 // Activate ability
                 WorldManager.getNearbyMonsters(player, range).forEach(ent -> ent.addPotionEffect(
-                        new PotionEffect(PotionEffectType.SLOW, duration, amp1)));
+                        new PotionEffect(PotionEffectType.SLOWNESS, duration, amp1)));
                 if (amp2 != -1)
                     WorldManager.getNearbyMonsters(player, range).forEach(ent -> ent.addPotionEffect(
                             new PotionEffect(PotionEffectType.WEAKNESS, altDuration, amp2)));
@@ -698,10 +698,10 @@ public class KitAbilityListener implements Listener {
 
                 // Activate ability
                 WorldManager.getNearbyPlayers(player, range).forEach(player1 -> player1.addPotionEffect(
-                        new PotionEffect(PotionEffectType.FAST_DIGGING, altDuration, amplifier)));
+                        new PotionEffect(PotionEffectType.HASTE, altDuration, amplifier)));
                 WorldManager.getNearbyAllies(player, range).forEach(ally -> ally.addPotionEffect(
-                        new PotionEffect(PotionEffectType.FAST_DIGGING, altDuration, amplifier)));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, duration, amplifier));
+                        new PotionEffect(PotionEffectType.HASTE, altDuration, amplifier)));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, duration, amplifier));
                 cooldowns.put(gamer, System.currentTimeMillis() + coolDown);
 
                 // Fire ability sound if turned on
@@ -786,7 +786,7 @@ public class KitAbilityListener implements Listener {
             // Heal if probability is right
             if (r.nextInt(50) < damage)
                 player.setHealth(Math.min(player.getHealth() + 1,
-                        Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue()));
+                        Objects.requireNonNull(player.getAttribute(Attribute.MAX_HEALTH)).getValue()));
         }
 
         // Check for shared vampire effect
@@ -794,7 +794,7 @@ public class KitAbilityListener implements Listener {
             // Heal if probability is right
             if (r.nextInt(50) < damage) {
                 player.setHealth(Math.min(player.getHealth() + 1,
-                        Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue()));
+                        Objects.requireNonNull(player.getAttribute(Attribute.MAX_HEALTH)).getValue()));
                 PlayerManager.notifySuccess(player, LanguageManager.messages.effectShare);
             }
         }

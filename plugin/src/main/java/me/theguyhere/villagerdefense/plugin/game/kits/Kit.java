@@ -11,7 +11,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
 import java.util.*;
@@ -208,7 +207,7 @@ public class Kit {
      */
     public ItemStack getButton(int purchasedLevel, boolean purchaseMode) {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
-        enchants.put(Enchantment.DURABILITY, 1);
+        enchants.put(Enchantment.UNBREAKING, 1);
 
         if (kitType == Type.NONE) {
             return ItemManager.createItem(buttonMaterial,
@@ -221,9 +220,9 @@ public class Kit {
                 lores.addAll(masterDescription);
                 lores.add(CommunicationManager.format("&c" + LanguageManager.messages.level + " 1"));
                 lores.addAll(getLevelDescription(1));
-                lores.add(purchaseMode ? CommunicationManager.format("&c" + 
-                        LanguageManager.messages.purchase + ": &b" + getPrice(1) + " " + 
-                        LanguageManager.names.crystals) : CommunicationManager.format(ChatColor.RED + 
+                lores.add(purchaseMode ? CommunicationManager.format("&c" +
+                        LanguageManager.messages.purchase + ": &b" + getPrice(1) + " " +
+                        LanguageManager.names.crystals) : CommunicationManager.format(ChatColor.RED +
                         LanguageManager.messages.unavailable));
             }
             else if (purchasedLevel == pricesMap.size()) {
@@ -231,7 +230,7 @@ public class Kit {
                 lores.add(CommunicationManager.format("&a" + LanguageManager.messages.level + " " +
                         pricesMap.size()));
                 lores.addAll(getLevelDescription(pricesMap.size()));
-                lores.add(purchaseMode ? CommunicationManager.format(ChatColor.GREEN + 
+                lores.add(purchaseMode ? CommunicationManager.format(ChatColor.GREEN +
                         LanguageManager.messages.purchased) : CommunicationManager.format(ChatColor.GREEN +
                         LanguageManager.messages.available));
             }
@@ -284,7 +283,7 @@ public class Kit {
                                         CommunicationManager.format(ChatColor.GREEN +
                                                 LanguageManager.messages.available)) :
                                 (purchaseMode ? CommunicationManager.format("&c" +
-                                        LanguageManager.messages.purchase + ": &b" + 
+                                        LanguageManager.messages.purchase + ": &b" +
                                         getPrice(1) + " " + LanguageManager.names.crystals) :
                                         CommunicationManager.format(ChatColor.RED +
                                                 LanguageManager.messages.unavailable)));
@@ -404,11 +403,11 @@ public class Kit {
         kit.addPrice(1, 300);
         kit.addItems(1, new ItemStack[]{
                 new ItemStack(Material.WOODEN_SWORD),
-                ItemManager.createPotionItem(Material.SPLASH_POTION, new PotionData(PotionType.SPEED),
+                ItemManager.createPotionItem(Material.SPLASH_POTION, PotionType.SWIFTNESS,
                         new ColoredMessage(ChatColor.GREEN, LanguageManager.kits.alchemist.items.speed).toString()),
-                ItemManager.createPotionItem(Material.SPLASH_POTION, new PotionData(PotionType.INSTANT_HEAL),
+                ItemManager.createPotionItem(Material.SPLASH_POTION, PotionType.HEALING,
                         new ColoredMessage(ChatColor.GREEN, LanguageManager.kits.alchemist.items.health).toString()),
-                ItemManager.createPotionItem(Material.SPLASH_POTION, new PotionData(PotionType.INSTANT_HEAL),
+                ItemManager.createPotionItem(Material.SPLASH_POTION, PotionType.HEALING,
                         new ColoredMessage(ChatColor.GREEN, LanguageManager.kits.alchemist.items.health).toString())
         });
         return kit;
@@ -479,21 +478,21 @@ public class Kit {
         kit.addPrice(3, 4000);
 
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
-        enchants.put(Enchantment.DAMAGE_ALL, 3);
+        enchants.put(Enchantment.SHARPNESS, 3);
         kit.addItems(1, new ItemStack[]{ItemManager.createItem(
                 Material.NETHERITE_HOE,
                 new ColoredMessage(ChatColor.GREEN, LanguageManager.kits.reaper.items.scythe).toString(),
                 ItemManager.NORMAL_FLAGS,
                 enchants
         )});
-        enchants.put(Enchantment.DAMAGE_ALL, 5);
+        enchants.put(Enchantment.SHARPNESS, 5);
         kit.addItems(2, new ItemStack[]{ItemManager.createItem(
                 Material.NETHERITE_HOE,
                 new ColoredMessage(ChatColor.GREEN, LanguageManager.kits.reaper.items.scythe).toString(),
                 ItemManager.NORMAL_FLAGS,
                 enchants
         )});
-        enchants.put(Enchantment.DAMAGE_ALL, 8);
+        enchants.put(Enchantment.SHARPNESS, 8);
         kit.addItems(3, new ItemStack[]{ItemManager.createItem(
                 Material.NETHERITE_HOE,
                 new ColoredMessage(ChatColor.GREEN, LanguageManager.kits.reaper.items.scythe).toString(),

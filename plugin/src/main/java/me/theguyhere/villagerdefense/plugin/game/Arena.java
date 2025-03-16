@@ -387,7 +387,7 @@ public class Arena {
      */
     public ItemStack getWaitingSoundButton(String name) {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
-        enchants.put(Enchantment.DURABILITY, 1);
+        enchants.put(Enchantment.UNBREAKING, 1);
         String sound = getWaitingSoundCode();
         boolean selected;
 
@@ -569,7 +569,7 @@ public class Arena {
     public Location getArenaBoardLocation() {
         return ArenaDataManager.getArenaBoard(id);
     }
-    
+
     /**
      * Creates a new arena leaderboard at the given location and deletes the old arena leaderboard.
      * @param location New location
@@ -919,7 +919,7 @@ public class Arena {
 
     public void startSpawnParticles() {
         Particle spawnParticle = Particle.valueOf(NMSVersion.getCurrent().getNmsManager().getSpawnParticleName());
-        
+
         if (getPlayerSpawn() == null)
             return;
 
@@ -984,7 +984,7 @@ public class Arena {
 
     public void startMonsterParticles() {
         Particle monsterParticle = Particle.valueOf(NMSVersion.getCurrent().getNmsManager().getMonsterParticleName());
-        
+
         if (monsterParticlesID == 0 && !getMonsterSpawns().isEmpty())
             monsterParticlesID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, new Runnable() {
                 double var = 0;
@@ -1043,7 +1043,7 @@ public class Arena {
 
     public void startVillagerParticles() {
         Particle villagerParticle = Particle.valueOf(NMSVersion.getCurrent().getNmsManager().getVillagerParticleName());
-        
+
         if (villagerParticlesID == 0 && !getVillagerSpawns().isEmpty())
             villagerParticlesID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, new Runnable() {
                 double var = 0;

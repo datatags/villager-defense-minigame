@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 
 import java.util.*;
 
@@ -148,7 +148,7 @@ public class ItemManager {
     }
 
     // Creates an ItemStack that has potion meta
-    public static ItemStack createPotionItem(Material matID, PotionData potionData, String dispName, String... lores) {
+    public static ItemStack createPotionItem(Material matID, PotionType potionType, String dispName, String... lores) {
         // Create ItemStack
         ItemStack item = new ItemStack(matID);
         ItemMeta meta = item.getItemMeta();
@@ -168,7 +168,7 @@ public class ItemManager {
         meta.setLore(lore);
 
         // Set potion data
-        pot.setBasePotionData(potionData);
+        pot.setBasePotionType(potionType);
         item.setItemMeta(meta);
 
         return item;
@@ -199,7 +199,7 @@ public class ItemManager {
 
     // Creates an ItemStack of multiple items that has potion meta
     public static ItemStack createPotionItems(Material matID,
-                                              PotionData potionData,
+                                              PotionType potionType,
                                               int amount,
                                               String dispName,
                                               String... lores) {
@@ -222,7 +222,7 @@ public class ItemManager {
         meta.setLore(lore);
 
         // Set potion data
-        pot.setBasePotionData(potionData);
+        pot.setBasePotionType(potionType);
         item.setItemMeta(meta);
 
         return item;
@@ -250,7 +250,7 @@ public class ItemManager {
     // Dummy enchant for glowing buttons
     public static HashMap<Enchantment, Integer> glow() {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
-        enchants.put(Enchantment.DURABILITY, 1);
+        enchants.put(Enchantment.UNBREAKING, 1);
         return enchants;
     }
 }

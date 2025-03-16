@@ -259,7 +259,7 @@ public class GameListener implements Listener {
 			return;
 
 		LivingEntity n = (LivingEntity) ent;
-		double maxHealth = Objects.requireNonNull(n.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
+		double maxHealth = Objects.requireNonNull(n.getAttribute(Attribute.MAX_HEALTH)).getValue();
 
 		// Update health bar
 		if (ent instanceof IronGolem || ent instanceof Ravager)
@@ -292,7 +292,7 @@ public class GameListener implements Listener {
 			return;
 
 		LivingEntity n = (LivingEntity) ent;
-		double maxHealth = Objects.requireNonNull(n.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
+		double maxHealth = Objects.requireNonNull(n.getAttribute(Attribute.MAX_HEALTH)).getValue();
 
 		// Update health bar
 		if (ent instanceof IronGolem || ent instanceof Ravager)
@@ -334,7 +334,7 @@ public class GameListener implements Listener {
 			return;
 
 		LivingEntity n = (LivingEntity) ent;
-		double maxHealth = Objects.requireNonNull(n.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
+		double maxHealth = Objects.requireNonNull(n.getAttribute(Attribute.MAX_HEALTH)).getValue();
 		double modifiedHealth = n.getHealth() + e.getAmount();
 
 		// Update health bar
@@ -1431,9 +1431,9 @@ public class GameListener implements Listener {
 		// Attempt to add enchant and remove book
 		Map<Enchantment, Integer> enchantList = Objects.requireNonNull(clickedOn.getItemMeta()).getEnchants();
 		if (enchantList.containsKey(enchantingBook.getEnchantToAdd())) {
-			if (enchantingBook.getEnchantToAdd() == Enchantment.ARROW_FIRE ||
+			if (enchantingBook.getEnchantToAdd() == Enchantment.FLAME ||
 					enchantingBook.getEnchantToAdd() == Enchantment.MULTISHOT ||
-					enchantingBook.getEnchantToAdd() == Enchantment.ARROW_INFINITE ||
+					enchantingBook.getEnchantToAdd() == Enchantment.INFINITY ||
 					enchantingBook.getEnchantToAdd() == Enchantment.MENDING) {
 				PlayerManager.notifyFailure(player, LanguageManager.errors.enchant);
 				return;
