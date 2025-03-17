@@ -726,12 +726,16 @@ public class ArenaListener implements Listener {
 
             String typename = typeRatio.get(r.nextInt(typeRatio.size()));
             EntityType type = null;
+            Bukkit.getLogger().info("Got type: " + typename);
             try {
                 type = EntityType.valueOf(typename.toUpperCase());
+                Bukkit.getLogger().info("Parsed as an entity type: " + type);
             } catch (IllegalArgumentException err) {
                 type = entityTypeAbbvs.get(typename);
+                Bukkit.getLogger().info("Parsed as an abbreviation: " + type);
             }
             if (type == null) {
+                Bukkit.getLogger().info("Failed to parse type: " + typename);
                 continue;
             }
 
@@ -830,12 +834,13 @@ public class ArenaListener implements Listener {
                     mob = (a, e) -> Mobs.setWarden(a, (Warden) e);
                     break;
                 default:
+                    Bukkit.getLogger().info("Couldn't find a mob for type: " + type);
                     continue;
             }
 
             BiConsumer<Arena, Entity> finalMob = mob;
             final Location loc = isAir ? grounds.get(r.nextInt(grounds.size())) : airs.get(r.nextInt(airs.size()));
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, () -> finalMob.accept(arena, loc.getWorld().spawnEntity(loc, EntityType.ZOMBIE)), delay);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, () -> finalMob.accept(arena, loc.getWorld().spawnEntity(loc, type)), delay);
 
             // Manage spawning state
             boolean spawning = i + 1 < toSpawn;
