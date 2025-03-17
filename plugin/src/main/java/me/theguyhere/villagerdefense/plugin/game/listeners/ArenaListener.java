@@ -840,7 +840,8 @@ public class ArenaListener implements Listener {
 
             BiConsumer<Arena, Entity> finalMob = mob;
             final Location loc = isAir ? grounds.get(r.nextInt(grounds.size())) : airs.get(r.nextInt(airs.size()));
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, () -> finalMob.accept(arena, loc.getWorld().spawnEntity(loc, type)), delay);
+            final EntityType finalType = type;
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, () -> finalMob.accept(arena, loc.getWorld().spawnEntity(loc, finalType)), delay);
 
             // Manage spawning state
             boolean spawning = i + 1 < toSpawn;
