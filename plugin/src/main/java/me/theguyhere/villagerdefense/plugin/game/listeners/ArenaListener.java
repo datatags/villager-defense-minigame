@@ -61,7 +61,7 @@ public class ArenaListener implements Listener {
         entityTypeAbbvs.put("crpr", EntityType.CREEPER);
         entityTypeAbbvs.put("phtm", EntityType.PHANTOM);
         entityTypeAbbvs.put("evok", EntityType.EVOKER);
-        entityTypeAbbvs.put("hgln", EntityType.HOGLIN);
+        entityTypeAbbvs.put("hgln", EntityType.ZOGLIN);
         entityTypeAbbvs.put("rvgr", EntityType.RAVAGER);
 
     }
