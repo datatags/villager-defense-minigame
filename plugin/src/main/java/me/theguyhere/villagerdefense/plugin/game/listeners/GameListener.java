@@ -660,18 +660,19 @@ public class GameListener implements Listener {
 		// Set player to fake death mode
 		PlayerManager.fakeDeath(gamer);
 
-		// Check for explosive challenge
-		if (gamer.getChallenges().contains(Challenge.explosive())) {
-			// Create an explosion
+		boolean explosive = gamer.getChallenges().contains(Challenge.explosive());
+		// Create an explosion. Must be done before spawning the items or the items will be killed.
+		if (explosive) {
 			player.getWorld().createExplosion(player.getLocation(), 1.25F, false, false);
-
-			// Drop all items and clear inventory
-			player.getInventory().forEach(itemStack -> {
-				if (itemStack != null && !itemStack.equals(GameItems.shop()))
-						player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
-			});
-			player.getInventory().clear();
 		}
+		// Drop items
+		player.getInventory().forEach(itemStack -> {
+			if (itemStack != null && !itemStack.equals(GameItems.shop())) {
+				Item item = player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+				if (explosive) item.setVelocity(item.getVelocity().multiply(5));
+			}
+		});
+		player.getInventory().clear();
 
 		// Notify player of their own death
 		player.sendTitle(
