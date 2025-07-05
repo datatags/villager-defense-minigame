@@ -501,10 +501,6 @@ public class GameListener implements Listener {
 			// Set player to fake death mode
 			PlayerManager.fakeDeath(gamer);
 
-			// Check for explosive challenge
-			if (gamer.getChallenges().contains(Challenge.explosive()))
-				player.getInventory().clear();
-
 			// Notify player of their own death
 			player.sendTitle(
 					new ColoredMessage(ChatColor.DARK_RED, LanguageManager.messages.death1).toString(),
