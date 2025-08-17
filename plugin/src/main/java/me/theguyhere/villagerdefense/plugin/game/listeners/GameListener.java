@@ -38,6 +38,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
@@ -46,9 +47,61 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class GameListener implements Listener {
 	private final NMSManager nmsManager = NMSVersion.getCurrent().getNmsManager();
+
+	private ItemStack pickLoot(Arena arena) {
+		// Get rare loot probability
+		double probability;
+		switch (arena.getDifficultyMultiplier()) {
+			case 1:
+				probability = .006;
+				break;
+			case 2:
+				probability = .008;
+				break;
+			case 3:
+				probability = .01;
+				break;
+			case 4:
+				probability = .015;
+				break;
+			default:
+				return null;
+		}
+
+		if (ThreadLocalRandom.current().nextDouble() < probability) {
+			return GameItems.randCare(arena.getCurrentWave() / 10 + 1);
+		} else {
+			return null;
+		}
+	}
+
+	private void giveGems(VDPlayer vdPlayer, int gems) {
+		vdPlayer.addGems(gems);
+
+		// Notify player
+		PlayerManager.notifySuccess(
+				vdPlayer.getPlayer(),
+				LanguageManager.messages.earnedGems,
+				new ColoredMessage(ChatColor.AQUA, Integer.toString(gems))
+		);
+
+		// Update player stats
+		UUID uuid = vdPlayer.getID();
+		PlayerDataManager.setPlayerStat(uuid, "totalGems",
+				PlayerDataManager.getPlayerStat(uuid, "totalGems") + gems);
+		if (PlayerDataManager.getPlayerStat(uuid, "topBalance") < vdPlayer.getGems()) {
+			PlayerDataManager.setPlayerStat(uuid, "topBalance", vdPlayer.getGems());
+		}
+
+		// Update scoreboard
+		GameManager.createBoard(vdPlayer);
+	}
 
 	// Keep score and drop gems, exp, and rare loot
 	@EventHandler
@@ -56,8 +109,9 @@ public class GameListener implements Listener {
 		LivingEntity ent = e.getEntity();
 
 		// Check for arena mobs
-		if (!ent.hasMetadata("VD"))
+		if (!ent.hasMetadata("VD")) {
 			return;
+		}
 
 		Arena arena;
 		try {
@@ -67,10 +121,9 @@ public class GameListener implements Listener {
 		}
 
 		// Check for right game
-		if (!ent.hasMetadata("game"))
+		if (!ent.hasMetadata("game") || ent.getMetadata("game").get(0).asInt() != arena.getGameID()) {
 			return;
-		if (ent.getMetadata("game").get(0).asInt() != arena.getGameID())
-			return;
+		}
 
 		// Arena enemies not part of an active arena
 		if (arena.getStatus() != ArenaStatus.ACTIVE) {
@@ -78,99 +131,114 @@ public class GameListener implements Listener {
 			return;
 		}
 
+		if (ent instanceof Wolf) {
+			try {
+				arena.getPlayer((Player) ((Wolf) ent).getOwner()).decrementWolves();
+			} catch (Exception ignored) {
+			}
+			return;
+		}
+		// Update iron golem count
+		else if (ent instanceof IronGolem) {
+			arena.decrementGolems();
+			return;
+		}
+
 		// Check for right wave
-		if (!ent.hasMetadata("wave"))
+		if (!ent.hasMetadata("wave") || ent.getMetadata("wave").get(0).asInt() != arena.getCurrentWave()) {
 			return;
-		if (ent.getMetadata("wave").get(0).asInt() != arena.getCurrentWave())
+		}
+
+		Player killer = ent.getKiller();
+		if (killer == null) {
 			return;
+		}
+
+		VDPlayer gamer;
+		try {
+			gamer = arena.getPlayer(killer);
+		} catch (PlayerNotFoundException err) {
+			return;
+		}
+
+		// Increment kill count
+		gamer.incrementKills();
 
 		// Clear normal drops
 		e.getDrops().clear();
 		e.setDroppedExp(0);
 
-		// Get spawn table
-		SpawnTableDataManager spawnTable = arena.getSpawnTable();
-
-		if (ent instanceof Wolf) {
-			try {
-				arena.getPlayer((Player) ((Wolf) ent).getOwner()).decrementWolves();
-			} catch (Exception err) {
-				return;
-			}
-		}
-
-		// Update iron golem count
-		else if (ent instanceof IronGolem)
-			arena.decrementGolems();
-
-		// Manage drops and update enemy count, update player kill count
-		else {
-			Random r = new Random();
-
-			// Set drop to emerald, exp, and rare loot
-			if (ent instanceof Wither) {
-				if (arena.hasGemDrop())
-					e.getDrops().add(ItemManager.createItems(Material.EMERALD, 20, null,
-							Integer.toString(arena.getId())));
-				if (arena.hasExpDrop())
-					e.setDroppedExp((int) (arena.getCurrentDifficulty() * 40));
-			} else {
-				if (arena.hasGemDrop()) {
-					e.getDrops().add(ItemManager.createItem(Material.EMERALD, null,
-							Integer.toString(arena.getId())));
-
-					// Get rare loot probability
-					double probability;
-					switch (arena.getDifficultyMultiplier()) {
-						case 1:
-							probability = .015;
-							break;
-						case 2:
-							probability = .01;
-							break;
-						case 3:
-							probability = .008;
-							break;
-						default:
-							probability = .006;
-					}
-
-					if (r.nextDouble() < probability)
-						e.getDrops().add(GameItems.randCare(arena.getCurrentWave() / 10 + 1));
-				}
-				if (arena.hasExpDrop())
-					e.setDroppedExp((int) (arena.getCurrentDifficulty() * 2));
-			}
-
-			// Calculate count multiplier
-			double countMultiplier = Math.log((arena.getActiveCount() + 7) / 10d) + 1;
-			if (!arena.hasDynamicCount())
-				countMultiplier = 1;
-
-			// Calculate monster count
-            int count;
-            try {
-                count = spawnTable.getMonstersToSpawn(arena.getCurrentWave(), countMultiplier);
-            } catch (NoSuchPathException err) {
-				CommunicationManager.debugErrorShouldNotHappen();
-                return;
-            }
-
-            // Set monsters glowing when only 20% remain
-			if (arena.getEnemies() <= .2 * count && !arena.isSpawningMonsters() && arena.getEnemies() > 0)
-				arena.setMonsterGlow();
-		}
-
 		// Update scoreboards
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, () ->
 				Bukkit.getPluginManager().callEvent(new ReloadBoardsEvent(arena)));
-	}
 
-	// Stop automatic game mode switching between worlds
-	@EventHandler
-	public void onGameModeSwitch(PlayerGameModeChangeEvent e) {
-		if (GameManager.checkPlayer(e.getPlayer()) && e.getNewGameMode() == GameMode.SURVIVAL)
-			e.setCancelled(true);
+		boolean boss = ent instanceof Wither;
+
+		// Manage drops and update enemy count, update player kill count
+		int bossMultiplier = boss ? 20 : 1;
+
+		if (arena.hasGemDrop()) {
+			e.getDrops().add(ItemManager.createItems(Material.EMERALD, bossMultiplier, null,
+					Integer.toString(arena.getId())));
+			if (!boss) {
+				ItemStack loot = pickLoot(arena);
+				if (loot != null) {
+					e.getDrops().add(loot);
+				}
+			}
+		} else {
+			// Calculate and give player gems
+			int wave = arena.getCurrentWave();
+			double maxEarned = 50 * Math.pow(wave, .15) * bossMultiplier;
+			if (boss) {
+				maxEarned /= arena.getAlive();
+			}
+
+			int earned = Math.max(1, ThreadLocalRandom.current().nextInt((int)maxEarned));
+			if (boss) {
+				arena.getActives().stream().filter(v -> !arena.getGhosts().contains(v))
+						.forEach(v -> giveGems(v, earned));
+			} else {
+				giveGems(gamer, earned);
+				ItemStack loot = pickLoot(arena);
+				if (loot != null) {
+					PlayerManager.giveItem(killer, loot, LanguageManager.errors.inventoryFull);
+				}
+			}
+		}
+
+		final int xp = (int) (arena.getCurrentDifficulty() * bossMultiplier);
+		if (arena.hasExpDrop()) {
+			e.setDroppedExp(xp);
+		} else {
+			if (boss) {
+				arena.getActives().stream().filter(vdPlayer -> !arena.getGhosts().contains(vdPlayer))
+						.forEach(vdPlayer -> vdPlayer.getPlayer()
+								.giveExp(xp / arena.getAlive()));
+			} else {
+				killer.giveExp(xp);
+			}
+		}
+
+        // Calculate count multiplier
+		double countMultiplier = 1;
+		if (arena.hasDynamicCount()) {
+			countMultiplier += Math.log((arena.getActiveCount() + 7) / 10d);
+		}
+
+		// Calculate monster count
+		int count;
+		try {
+			count = arena.getSpawnTable().getMonstersToSpawn(arena.getCurrentWave(), countMultiplier);
+		} catch (NoSuchPathException err) {
+			CommunicationManager.debugErrorShouldNotHappen();
+			return;
+		}
+
+		// Set monsters glowing when only 20% remain
+		if (arena.getEnemies() <= .2 * count && !arena.isSpawningMonsters() && arena.getEnemies() > 0) {
+			arena.setMonsterGlow();
+		}
 	}
 
 	// Save gems from explosions
@@ -545,8 +613,9 @@ public class GameListener implements Listener {
 	@EventHandler
 	public void onGemPickup(EntityPickupItemEvent e) {
 		// Check for player picking up item
-		if (!(e.getEntity() instanceof Player))
+		if (!(e.getEntity() instanceof Player)) {
 			return;
+		}
 
 		Player player = (Player) e.getEntity();
 		Arena arena;
@@ -696,159 +765,41 @@ public class GameListener implements Listener {
 				Bukkit.getPluginManager().callEvent(new ReloadBoardsEvent(arena)));
 
 		// Check for game end condition
-		if (arena.getAlive() == 0 && arena.getStatus() == ArenaStatus.ACTIVE)
+		if (arena.getAlive() == 0 && arena.getStatus() == ArenaStatus.ACTIVE) {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, () ->
 					Bukkit.getPluginManager().callEvent(new GameEndEvent(arena)));
+		}
 	}
 
-	// Update player kill counter
 	@EventHandler
-	public void onMobKillByPlayer(EntityDamageByEntityEvent e) {
-		// Check for living entity
-		if (!(e.getEntity() instanceof LivingEntity)) return;
-
-		// Check for fatal damage
-		if (((LivingEntity) e.getEntity()).getHealth() > e.getFinalDamage()) return;
-
+	public void onWitherRose(EntityBlockFormEvent e) {
 		// Check damage was done to monster
-		if (!(e.getEntity().hasMetadata("VD")) || e.getEntity() instanceof Villager || e.getEntity() instanceof Golem
-			|| e.getEntity() instanceof Wolf) return;
-
-		// Prevent wither roses from being created
-		if (e.getDamager() instanceof WitherSkull || e.getDamager() instanceof Wither) {
-			e.setCancelled(true);
-			e.getEntity().remove();
-		}
-
-		// Check that a player caused the damage
-		if (!(e.getDamager() instanceof Player || e.getDamager() instanceof Projectile)) return;
-
-		Player player;
-		Arena arena;
-		VDPlayer gamer;
-
-		// Check if projectile came from player, then set player
-		if (e.getDamager() instanceof Projectile) {
-			if (((Projectile) e.getDamager()).getShooter() instanceof Player)
-				player = (Player) ((Projectile) e.getDamager()).getShooter();
-			else return;
-		} else player = (Player) e.getDamager();
-		assert player != null;
-
-		// Attempt to get arena and player
-		try {
-			arena = GameManager.getArena(player);
-			gamer = arena.getPlayer(player);
-		} catch (ArenaNotFoundException | PlayerNotFoundException err) {
+		if (!e.getEntity().hasMetadata("VD")) {
 			return;
 		}
 
-		// Increment kill count
-		gamer.incrementKills();
-
-		// Add gems, loot, and experience if needed
-		if (!arena.hasGemDrop()) {
-			// Calculate and give player gems
-			Random r = new Random();
-			int wave = arena.getCurrentWave();
-
-			if (e.getEntity() instanceof Wither) {
-				int earned = r.nextInt((int) (50 * Math.pow(wave, .15) * 20) / arena.getAlive());
-				arena.getActives().stream().filter(vdPlayer -> !arena.getGhosts().contains(vdPlayer))
-						.forEach(vdPlayer -> {
-							vdPlayer.addGems(earned);
-
-							// Notify player
-							PlayerManager.notifySuccess(
-									vdPlayer.getPlayer(),
-									LanguageManager.messages.earnedGems,
-									new ColoredMessage(ChatColor.AQUA, Integer.toString(earned))
-							);
-
-							// Update player stats
-							UUID uuid = vdPlayer.getID();
-							PlayerDataManager.setPlayerStat(uuid, "totalGems",
-								PlayerDataManager.getPlayerStat(uuid, "totalGems") + earned);
-							if (PlayerDataManager.getPlayerStat(uuid, "topBalance") < vdPlayer.getGems()) {
-								PlayerDataManager.setPlayerStat(uuid, "topBalance", vdPlayer.getGems());
-							}
-
-							// Update scoreboard
-							GameManager.createBoard(vdPlayer);
-						});
-			} else {
-				int earned = r.nextInt((int) (50 * Math.pow(wave, .15)));
-				gamer.addGems(earned == 0 ? 1 : earned);
-
-				// Get rare loot probability
-				double probability;
-				switch (arena.getDifficultyMultiplier()) {
-					case 1:
-						probability = .015;
-						break;
-					case 2:
-						probability = .01;
-						break;
-					case 3:
-						probability = .008;
-						break;
-					default:
-						probability = .006;
-				}
-
-				if (r.nextDouble() < probability)
-					PlayerManager.giveItem(player, GameItems.randCare(wave / 10 + 1),
-							LanguageManager.errors.inventoryFull);
-
-				// Notify player
-				PlayerManager.notifySuccess(
-						player,
-						LanguageManager.messages.earnedGems,
-						new ColoredMessage(ChatColor.AQUA, Integer.toString(earned))
-				);
-
-				// Update player stats
-				UUID uuid = player.getUniqueId();
-				PlayerDataManager.setPlayerStat(uuid, "totalGems",
-					PlayerDataManager.getPlayerStat(uuid, "totalGems") + earned);
-				if (PlayerDataManager.getPlayerStat(uuid, "topBalance") < gamer.getGems()) {
-					PlayerDataManager.setPlayerStat(uuid, "topBalance", gamer.getGems());
-				}
-
-				// Update scoreboard
-				GameManager.createBoard(gamer);
-			}
-		}
-		if (!arena.hasExpDrop()) {
-			if (e.getEntity() instanceof Wither)
-				arena.getActives().stream().filter(vdPlayer -> !arena.getGhosts().contains(vdPlayer))
-						.forEach(vdPlayer -> vdPlayer.getPlayer()
-								.giveExp((int) (arena.getCurrentDifficulty() * 40) / arena.getAlive()));
-			else player.giveExp((int) (arena.getCurrentDifficulty() * 2));
+		// Prevent wither roses from being created
+		if (e.getNewState().getType() == Material.WITHER_ROSE) {
+			e.setCancelled(true);
 		}
 	}
 
 	// Stops slimes and magma cubes from splitting on death
 	@EventHandler
 	public void onSplit(SlimeSplitEvent e) {
-		Entity ent = e.getEntity();
-		if (!ent.hasMetadata("VD"))
-			return;
-		e.setCancelled(true);
+		if (e.getEntity().hasMetadata("VD")) {
+			e.setCancelled(true);
+		}
 	}
 
 	// Stop interactions with villagers in game
 	@EventHandler
 	public void onTrade(PlayerInteractEntityEvent e) {
 		Entity ent = e.getRightClicked();
-
-		// Check for villager
-		if (!(ent instanceof Villager))
-			return;
-
 		// Check for arena mobs
-		if (ent.hasMetadata("VD"))
+		if (ent instanceof Villager && ent.hasMetadata("VD")) {
 			e.setCancelled(true);
+		}
 	}
 
 	// Stop spawning babies
@@ -862,10 +813,9 @@ public class GameListener implements Listener {
 		}
 
 		// Check for wolf
-		if (!(e.getRightClicked() instanceof Wolf))
-			return;
-
-		e.setCancelled(true);
+		if (e.getRightClicked() instanceof Wolf) {
+			e.setCancelled(true);
+		}
 	}
 
 	// Manage spawning pets and care packages

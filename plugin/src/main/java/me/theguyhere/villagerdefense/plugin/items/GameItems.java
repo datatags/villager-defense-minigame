@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class GameItems {
@@ -6051,8 +6052,7 @@ public class GameItems {
 		}
 	}
 	public static @NotNull ItemStack randCare(int level) {
-		Random r = new Random();
-		double chance = r.nextDouble();
+		double chance = ThreadLocalRandom.current().nextDouble();
 		switch (level) {
 			case 1:
 				return smallCare();
