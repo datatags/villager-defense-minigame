@@ -81,20 +81,26 @@ public class GameListener implements Listener {
 		}
 	}
 
-	private void giveGems(VDPlayer vdPlayer, int gems) {
-		vdPlayer.addGems(gems);
+	private void giveGems(VDPlayer vdPlayer, double gems) {
+		// Check if player has gem increase achievement and is boosted
+		UUID uuid = vdPlayer.getID();
+		if (PlayerDataManager.getPlayerAchievements(uuid).contains(Achievement.topBalance9().getID()) &&
+				vdPlayer.isBoosted()) {
+			gems *= 1.1;
+		}
+
+		int earned = (int)gems;
+
+		vdPlayer.addGems(earned);
 
 		// Notify player
-		PlayerManager.notifySuccess(
-				vdPlayer.getPlayer(),
-				LanguageManager.messages.earnedGems,
-				new ColoredMessage(ChatColor.AQUA, Integer.toString(gems))
-		);
+		vdPlayer.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(
+				CommunicationManager.format(new ColoredMessage(ChatColor.GREEN, LanguageManager.messages.foundGems),
+						Integer.toString(earned))));
 
 		// Update player stats
-		UUID uuid = vdPlayer.getID();
 		PlayerDataManager.setPlayerStat(uuid, "totalGems",
-				PlayerDataManager.getPlayerStat(uuid, "totalGems") + gems);
+				PlayerDataManager.getPlayerStat(uuid, "totalGems") + earned);
 		if (PlayerDataManager.getPlayerStat(uuid, "topBalance") < vdPlayer.getGems()) {
 			PlayerDataManager.setPlayerStat(uuid, "topBalance", vdPlayer.getGems());
 		}
@@ -194,7 +200,7 @@ public class GameListener implements Listener {
 				maxEarned /= arena.getAlive();
 			}
 
-			int earned = Math.max(1, ThreadLocalRandom.current().nextInt((int)maxEarned));
+			double earned = Math.max(1, ThreadLocalRandom.current().nextDouble(maxEarned));
 			if (boss) {
 				arena.getActives().stream().filter(v -> !arena.getGhosts().contains(v))
 						.forEach(v -> giveGems(v, earned));
@@ -632,7 +638,7 @@ public class GameListener implements Listener {
 		ItemStack item = e.getItem().getItemStack();
 
 		// Check for gem item
-		if (!item.getType().equals(Material.EMERALD))
+		if (item.getType() != Material.EMERALD)
 			return;
 
 		// Ignore item shop
@@ -645,45 +651,22 @@ public class GameListener implements Listener {
 		int wave = arena.getCurrentWave();
 		double earned = 0;
 		for (int i = 0; i < stack; i++) {
-			int temp = r.nextInt((int) (50 * Math.pow(wave, .15)));
-			earned += temp == 0 ? 1 : temp;
+			earned += Math.max(1, r.nextInt((int) (50 * Math.pow(wave, .15))));
 		}
-
-		// Check if player has gem increase achievement and is boosted
-		UUID uuid = player.getUniqueId();
-		if (PlayerDataManager.getPlayerAchievements(uuid).contains(Achievement.topBalance9().getID()) &&
-			gamer.isBoosted()) {
-			earned *= 1.1;
-		}
-
-		gamer.addGems((int) earned);
 
 		// Cancel picking up of emeralds and notify player
 		e.setCancelled(true);
 		e.getItem().remove();
-		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(
-				CommunicationManager.format(new ColoredMessage(ChatColor.GREEN, LanguageManager.messages.foundGems),
-						Integer.toString((int) earned))));
-		if (arena.hasGemSound())
+
+		if (arena.hasGemSound()) {
 			player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, .5f, 0);
-
-		// Update player stats
-		PlayerDataManager.setPlayerStat(uuid, "totalGems",
-			PlayerDataManager.getPlayerStat(uuid, "totalGems") + (int) earned);
-		if (PlayerDataManager.getPlayerStat(uuid, "topBalance") < gamer.getGems())
-			PlayerDataManager.setPlayerStat(uuid, "topBalance", gamer.getGems());
-
-		// Update scoreboard
-		GameManager.createBoard(gamer);
+		}
+		giveGems(gamer, earned);
 	}
 
 	// Handle player death
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerDeath(EntityDamageEvent e) {
-		// Ignore if cancelled
-		if (e.isCancelled())
-			return;
-
 		// Check for player
 		if (!(e.getEntity() instanceof Player)) return;
 
@@ -703,7 +686,7 @@ public class GameListener implements Listener {
 		if (arena.getStatus() != ArenaStatus.ACTIVE) return;
 
 		// Ignore void damage
-		if (e.getCause().equals(EntityDamageEvent.DamageCause.VOID)) return;
+		if (e.getCause() == EntityDamageEvent.DamageCause.VOID) return;
 
 		// Check if player is about to die
 		if (e.getFinalDamage() < player.getHealth()) return;
