@@ -25,6 +25,7 @@ public enum NMSVersion {
     v1_21_R3(new me.theguyhere.villagerdefense.nms.v1_21_r3.VersionNMSManager()),
     v1_21_R4(new me.theguyhere.villagerdefense.nms.v1_21_r4.VersionNMSManager()),
     v1_21_R5(new me.theguyhere.villagerdefense.nms.v1_21_r5.VersionNMSManager()),
+    v1_21_R6(new me.theguyhere.villagerdefense.nms.v1_21_r6.VersionNMSManager()),
     ;
 
     private static final NMSVersion CURRENT_VERSION = extractCurrentVersion();
@@ -100,6 +101,9 @@ public enum NMSVersion {
                 case 7:
                 case 8:
                     return "v1_21_R5";
+                case 9:
+                case 10:
+                    return "v1_21_R6";
             }
         }
 

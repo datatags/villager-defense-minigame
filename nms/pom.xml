@@ -33,6 +33,7 @@
         <module>v1_21_r3</module>
         <module>v1_21_r4</module>
         <module>v1_21_r5</module>
+        <module>v1_21_r6</module>
         <module>common</module>
     </modules>
 </project>

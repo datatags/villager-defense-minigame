@@ -10,12 +10,12 @@
         <version>dev</version>
     </parent>
 
-    <artifactId>VillagerDefense-nms-v1_21_r5</artifactId>
+    <artifactId>VillagerDefense-nms-v1_21_r6</artifactId>
 
-    <name>VillagerDefense NMS v1_21_r5</name>
+    <name>VillagerDefense NMS v1_21_r6</name>
 
     <properties>
-        <spigot-api.version>1.21.8-R0.1-SNAPSHOT</spigot-api.version>
+        <spigot-api.version>1.21.10-R0.1-SNAPSHOT</spigot-api.version>
     </properties>
 
     <build>
