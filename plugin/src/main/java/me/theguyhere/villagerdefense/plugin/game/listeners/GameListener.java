@@ -260,8 +260,9 @@ public class GameListener implements Listener {
 
 		// Check for right item
 		if (item.getType() == Material.EMERALD && item.hasItemMeta() &&
-				Objects.requireNonNull(item.getItemMeta()).hasLore())
+				Objects.requireNonNull(item.getItemMeta()).hasLore()) {
 			e.setCancelled(true);
+		}
 	}
 
 	// Update health bar when damage is dealt by entity
@@ -500,8 +501,9 @@ public class GameListener implements Listener {
 
 		// Cancel damage to each other if they are in a game
 		if (ent instanceof Player && damager instanceof Player) {
-			if (GameManager.checkPlayer((Player) ent))
+			if (GameManager.checkPlayer((Player) ent)) {
 				e.setCancelled(true);
+			}
 		}
 
 		// Check for special mobs
@@ -509,31 +511,36 @@ public class GameListener implements Listener {
 			return;
 
 		// Cancel damage to villager
-		if ((ent instanceof Villager || ent instanceof Wolf || ent instanceof IronGolem) && damager instanceof Player)
+		if ((ent instanceof Villager || ent instanceof Wolf || ent instanceof IronGolem) && damager instanceof Player) {
 			e.setCancelled(true);
+		}
 
 		// Cancel monster friendly fire damage
 		else if ((ent instanceof Monster || ent instanceof Slime || ent instanceof Hoglin) &&
-				(damager instanceof Monster || damager instanceof Slime || ent instanceof Hoglin))
+				(damager instanceof Monster || damager instanceof Slime || ent instanceof Hoglin)) {
 			e.setCancelled(true);
+		}
 
 		// Check for projectile damage
 		else if (damager instanceof Projectile) {
 			// Player on player
 			if (ent instanceof Player && ((Projectile) damager).getShooter() instanceof Player) {
-				if (GameManager.checkPlayer((Player) ent))
+				if (GameManager.checkPlayer((Player) ent)) {
 					e.setCancelled(true);
+				}
 			}
 
 			// Player on friendly
 			if ((ent instanceof Villager || ent instanceof Wolf || ent instanceof IronGolem) &&
-					((Projectile) damager).getShooter() instanceof Player)
+					((Projectile) damager).getShooter() instanceof Player) {
 				e.setCancelled(true);
+			}
 
 			// Monster on monster
 			else if ((ent instanceof Monster || ent instanceof Slime) &&
-					((Projectile) damager).getShooter() instanceof Monster)
+					((Projectile) damager).getShooter() instanceof Monster) {
 				e.setCancelled(true);
+			}
 		}
 	}
 
@@ -1112,20 +1119,15 @@ public class GameListener implements Listener {
 		}
 	}
 
-	// Prevent wolves from targeting villagers
+	// Prevent wolves from targeting villagers or players
 	@EventHandler
 	public void onTarget(EntityTargetLivingEntityEvent e) {
-		// Check for wolf
-		if (!(e.getEntity() instanceof Wolf))
+		if (!(e.getEntity() instanceof Wolf) || !e.getEntity().hasMetadata("VD")) {
 			return;
-
-		// Check for villager target
-		if (!(e.getTarget() instanceof Villager))
-			return;
-
-		// Cancel if special wolf
-		if (e.getEntity().hasMetadata("VD"))
+		}
+		if (e.getTarget() instanceof Villager || e.getTarget() instanceof Player) {
 			e.setCancelled(true);
+		}
 	}
 
 	// Prevent wolves from teleporting
@@ -1226,25 +1228,18 @@ public class GameListener implements Listener {
 	// Prevents arena mobs from turning into different entities
 	@EventHandler
 	public void onTransform(EntityTransformEvent e) {
-		Entity ent = e.getEntity();
-
 		// Check for special mob
-		if (!ent.hasMetadata("VD"))
-			return;
-
-		e.setCancelled(true);
+		if (e.getEntity().hasMetadata("VD")) {
+			e.setCancelled(true);
+		}
 	}
 
 	// Prevent zombies from breaking doors
 	@EventHandler
 	public void onBreakDoor(EntityBreakDoorEvent e) {
-		Entity ent = e.getEntity();
-
-		// Check for special mob
-		if (!ent.hasMetadata("VD"))
-			return;
-
-		e.setCancelled(true);
+		if (!e.getEntity().hasMetadata("VD")) {
+			e.setCancelled(true);
+		}
 	}
 
 	// Prevent players from dropping standard game items
