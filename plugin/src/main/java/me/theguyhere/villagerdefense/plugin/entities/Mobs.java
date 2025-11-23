@@ -33,17 +33,14 @@ public class Mobs {
         monsters.addEntry(livingEntity.getUniqueId().toString());
         livingEntity.setCustomName(healthBar(1, 1, 5));
         livingEntity.setCustomNameVisible(true);
-        livingEntity.setMetadata("VD", new FixedMetadataValue(Main.plugin, arena.getId()));
         livingEntity.setMetadata("game", new FixedMetadataValue(Main.plugin, arena.getGameID()));
         livingEntity.setMetadata("wave", new FixedMetadataValue(Main.plugin, arena.getCurrentWave()));
-        livingEntity.setRemoveWhenFarAway(false);
-        livingEntity.setCanPickupItems(false);
         if (livingEntity.isInsideVehicle())
             Objects.requireNonNull(livingEntity.getVehicle()).remove();
         for (Entity passenger : livingEntity.getPassengers())
             passenger.remove();
 
-        setAttributeModifiers(arena, livingEntity);
+        commonMobSetup(arena, livingEntity);
     }
 
     private static void setBoss(Arena arena, LivingEntity livingEntity) {
@@ -52,20 +49,25 @@ public class Mobs {
         assert monsters != null;
 
         monsters.addEntry(livingEntity.getUniqueId().toString());
-        livingEntity.setMetadata("VD", new FixedMetadataValue(Main.plugin, arena.getId()));
-        livingEntity.setRemoveWhenFarAway(false);
-        livingEntity.setCanPickupItems(false);
-
-        setAttributeModifiers(arena, livingEntity);
+        commonMobSetup(arena, livingEntity);
     }
 
     private static void setLargeMinion(Arena arena, LivingEntity livingEntity) {
         livingEntity.setCustomName(healthBar(1, 1, 10));
         livingEntity.setCustomNameVisible(true);
+        commonMobSetup(arena, livingEntity);
+    }
+
+    private static void commonMobSetup(Arena arena, LivingEntity livingEntity) {
         livingEntity.setMetadata("VD", new FixedMetadataValue(Main.plugin, arena.getId()));
         livingEntity.setRemoveWhenFarAway(false);
         livingEntity.setCanPickupItems(false);
 
+        EntityEquipment equipment = livingEntity.getEquipment();
+        if (equipment != null && (equipment.getHelmet() == null || equipment.getHelmet().getType() == Material.AIR)) {
+            // Prevent mobs burning in daylight without giving complete fire immunity
+            equipment.setHelmet(new ItemStack(Material.OAK_BUTTON, 1));
+        }
         setAttributeModifiers(arena, livingEntity);
     }
 
@@ -846,7 +848,7 @@ public class Mobs {
             case 2:
                 if (r.nextDouble() < (difficulty - 1) / 2)
                     return new ItemStack(Material.LEATHER_HELMET);
-                else return null;
+                else return new ItemStack(Material.OAK_BUTTON); // prevent burning in daylight
             case 3:
             case 4:
                 if (r.nextDouble() < (difficulty - 3) / 2)

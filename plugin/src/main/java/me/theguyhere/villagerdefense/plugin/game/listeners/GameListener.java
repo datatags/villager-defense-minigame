@@ -119,6 +119,10 @@ public class GameListener implements Listener {
             return;
         }
 
+        // Clear normal drops
+        e.getDrops().clear();
+        e.setDroppedExp(0);
+
         Arena arena;
         try {
             arena = GameManager.getArena(ent.getMetadata("VD").get(0).asInt());
@@ -133,7 +137,6 @@ public class GameListener implements Listener {
 
         // Arena enemies not part of an active arena
         if (arena.getStatus() != ArenaStatus.ACTIVE) {
-            e.getDrops().clear();
             return;
         }
 
@@ -147,6 +150,7 @@ public class GameListener implements Listener {
         // Update iron golem count
         else if (ent instanceof IronGolem) {
             arena.decrementGolems();
+            e.getDrops().add(new ItemStack(Material.IRON_INGOT, ThreadLocalRandom.current().nextInt(3) + 3));
             return;
         }
 
@@ -169,10 +173,6 @@ public class GameListener implements Listener {
 
         // Increment kill count
         gamer.incrementKills();
-
-        // Clear normal drops
-        e.getDrops().clear();
-        e.setDroppedExp(0);
 
         // Update scoreboards
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, () ->
