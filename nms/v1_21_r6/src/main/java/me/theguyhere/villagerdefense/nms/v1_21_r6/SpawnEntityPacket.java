@@ -6,6 +6,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.Location;
 
 /**
@@ -36,6 +37,9 @@ class SpawnEntityPacket extends VersionNMSPacket {
         packetSetter.writeDouble(location.getY());
         packetSetter.writeDouble(location.getZ());
 
+        // Velocity
+        packetSetter.writeLpVec3(Vec3.ZERO);
+
         // Rotation
         packetSetter.writeByte(Calculator.degreesToByte(location.getPitch()));
         packetSetter.writeByte(Calculator.degreesToByte(location.getYaw()));
@@ -45,11 +49,6 @@ class SpawnEntityPacket extends VersionNMSPacket {
 
         // Object data
         packetSetter.writeInt(objectData);
-
-        // Velocity
-        packetSetter.writeShort(0);
-        packetSetter.writeShort(0);
-        packetSetter.writeShort(0);
 
         rawPacket = ClientboundAddEntityPacket.STREAM_CODEC.decode(new RegistryFriendlyByteBuf(packetSetter, MinecraftServer
             .getServer().registryAccess()));
