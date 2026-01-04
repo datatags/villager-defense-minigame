@@ -26,6 +26,7 @@ public enum NMSVersion {
     v1_21_R4(new me.theguyhere.villagerdefense.nms.v1_21_r4.VersionNMSManager()),
     v1_21_R5(new me.theguyhere.villagerdefense.nms.v1_21_r5.VersionNMSManager()),
     v1_21_R6(new me.theguyhere.villagerdefense.nms.v1_21_r6.VersionNMSManager()),
+    v1_21_R7(new me.theguyhere.villagerdefense.nms.v1_21_r7.VersionNMSManager()),
     ;
 
     private static final NMSVersion CURRENT_VERSION = extractCurrentVersion();
@@ -75,11 +76,15 @@ public enum NMSVersion {
      * @return the NMS package part or null if not found.
      */
     private static String extractNMSVersion() {
-        String[] versionParts = Bukkit.getServer().getBukkitVersion().split("-")[0].split("\\.");
-        int majorVer = Integer.parseInt(versionParts[1]);
+        String version = Bukkit.getServer().getBukkitVersion().split("-")[0];
+        if (version.startsWith("1.")) {
+            version = version.substring(2);
+        }
+        String[] versionParts = version.split("\\.");
+        int majorVer = Integer.parseInt(versionParts[0]);
         int minorVer = 0;
-        if (versionParts.length > 2) {
-            minorVer = Integer.parseInt(versionParts[2]);
+        if (versionParts.length > 1) {
+            minorVer = Integer.parseInt(versionParts[1]);
         }
 
         // If we're on 1.20.5 or higher, the server package may not be relocated on Paper
@@ -104,6 +109,8 @@ public enum NMSVersion {
                 case 9:
                 case 10:
                     return "v1_21_R6";
+                case 11:
+                    return "v1_21_R7";
             }
         }
 
