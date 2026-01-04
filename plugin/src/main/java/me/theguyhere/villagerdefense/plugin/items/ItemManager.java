@@ -70,7 +70,7 @@ public class ItemManager {
     public static ItemStack createItem(Material matID,
                                        String dispName,
                                        boolean[] flags,
-                                       HashMap<Enchantment, Integer> enchants,
+                                       Map<Enchantment, Integer> enchants,
                                        String... lores) {
         // Create ItemStack
         ItemStack item = createItem(matID, dispName, lores);
@@ -82,14 +82,18 @@ public class ItemManager {
             return null;
 
         // Set enchants
-        if (!(enchants == null))
-            enchants.forEach((k, v) -> meta.addEnchant(k, v, true));
-        if (flags != null && flags[0])
+        if (enchants != null) {
+            enchants.entrySet().stream().filter(e -> e.getValue() > 0)
+                    .forEach(e -> meta.addEnchant(e.getKey(), e.getValue(), true));
+        }
+        if (flags != null && flags[0]) {
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
 
         // Set attribute flag
-        if (flags != null && flags[1])
+        if (flags != null && flags[1]) {
             meta.addItemFlags(ItemFlag.values());
+        }
         item.setItemMeta(meta);
 
         return item;

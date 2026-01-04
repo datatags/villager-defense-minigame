@@ -3,6 +3,7 @@ package me.theguyhere.villagerdefense.plugin.entities;
 import me.theguyhere.villagerdefense.common.CommunicationManager;
 import me.theguyhere.villagerdefense.plugin.Main;
 import me.theguyhere.villagerdefense.plugin.game.Arena;
+import me.theguyhere.villagerdefense.plugin.game.LerpChance;
 import me.theguyhere.villagerdefense.plugin.items.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -22,15 +23,31 @@ import java.util.Objects;
 import java.util.Random;
 
 public class Mobs {
+    private enum ItemType {
+        HELMET,
+        CHESTPLATE,
+        LEGGINGS,
+        BOOTS,
+        SWORD,
+        AXE,
+    }
+
+    private enum ItemMaterial {
+        NONE,
+        WOODEN,
+        STONE,
+        LEATHER,
+        CHAINMAIL,
+        IRON,
+        GOLD,
+        DIAMOND,
+        NETHERITE,
+    }
+
     private static final NamespacedKey HEALTH_BOOST = new NamespacedKey(Main.plugin, "hpBoost");
     private static final NamespacedKey ATTACK_BOOST = new NamespacedKey(Main.plugin, "atkBoost");
     private static final NamespacedKey SPEED_BOOST = new NamespacedKey(Main.plugin, "spdBoost");
     private static void setMinion(Arena arena, LivingEntity livingEntity) {
-        Team monsters = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard()
-                .getTeam("monsters");
-        assert monsters != null;
-
-        monsters.addEntry(livingEntity.getUniqueId().toString());
         livingEntity.setCustomName(healthBar(1, 1, 5));
         livingEntity.setCustomNameVisible(true);
         livingEntity.setMetadata("game", new FixedMetadataValue(Main.plugin, arena.getGameID()));
@@ -44,11 +61,6 @@ public class Mobs {
     }
 
     private static void setBoss(Arena arena, LivingEntity livingEntity) {
-        Team monsters = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard()
-                .getTeam("monsters");
-        assert monsters != null;
-
-        monsters.addEntry(livingEntity.getUniqueId().toString());
         commonMobSetup(arena, livingEntity);
     }
 
@@ -59,7 +71,13 @@ public class Mobs {
     }
 
     private static void commonMobSetup(Arena arena, LivingEntity livingEntity) {
+        Team monsters = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard()
+                .getTeam("monsters");
+        assert monsters != null;
+
+        monsters.addEntry(livingEntity.getUniqueId().toString());
         livingEntity.setMetadata("VD", new FixedMetadataValue(Main.plugin, arena.getId()));
+        livingEntity.setMetadata("VD_Monster", new FixedMetadataValue(Main.plugin, true));
         livingEntity.setRemoveWhenFarAway(false);
         livingEntity.setCanPickupItems(false);
 
@@ -112,39 +130,11 @@ public class Mobs {
     }
 
     private static void setSize(Arena arena, Slime slime) {
-        Random r = new Random();
-        double difficulty = arena.getCurrentDifficulty();
+        int size = new LerpChance<Integer>()
+                .add(3, 1).add(6, 2).add(9, 3).add(12, 4)
+                .choose(arena.getCurrentDifficulty());
 
-        // Set size
-        switch ((int) difficulty) {
-            case 1:
-            case 2:
-                slime.setSize(1);
-                break;
-            case 3:
-            case 4:
-            case 5:
-                if (r.nextDouble() < (difficulty - 3) / 3)
-                    slime.setSize(2);
-                else slime.setSize(1);
-                break;
-            case 6:
-            case 7:
-            case 8:
-                if (r.nextDouble() < (difficulty - 6) / 3)
-                    slime.setSize(3);
-                else slime.setSize(2);
-                break;
-            case 9:
-            case 10:
-            case 11:
-                if (r.nextDouble() < (difficulty - 9) / 3)
-                    slime.setSize(4);
-                else slime.setSize(3);
-                break;
-            default:
-                slime.setSize(4);
-        }
+        slime.setSize(size);
     }
 
     private static void setSword(Arena arena, Monster monster) {
@@ -201,801 +191,207 @@ public class Mobs {
     }
 
     private static ItemStack getSword(Arena arena) {
-        Random r = new Random();
-        Material mat;
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         double difficulty = arena.getCurrentDifficulty();
 
-        // Set material
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-                if (r.nextDouble() < (difficulty - 1) / 2)
-                    mat = Material.WOODEN_SWORD;
-                else return null;
-                break;
-            case 3:
-            case 4:
-                if (r.nextDouble() < (difficulty - 3) / 2)
-                    mat = Material.STONE_SWORD;
-                else mat = Material.WOODEN_SWORD;
-                break;
-            case 5:
-            case 6:
-                if (r.nextDouble() < (difficulty - 5) / 2)
-                    mat = Material.IRON_SWORD;
-                else mat = Material.STONE_SWORD;
-                break;
-            case 7:
-            case 8:
-            case 9:
-                if (r.nextDouble() < (difficulty - 7) / 3)
-                    mat = Material.DIAMOND_SWORD;
-                else mat = Material.IRON_SWORD;
-                break;
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-                if (r.nextDouble() < (difficulty - 10) / 5)
-                    mat = Material.NETHERITE_SWORD;
-                else mat = Material.DIAMOND_SWORD;
-                break;
-            default:
-                mat = Material.NETHERITE_SWORD;
+        ItemStack item = getItem(ItemType.AXE, getToolTypeSelector().choose(difficulty));
+        if (item == null) {
+            return null;
         }
+        Material mat = item.getType();
 
-        // Set sharpness
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-                break;
-            case 3:
-            case 4:
-                if (r.nextDouble() < (difficulty - 3) / 2)
-                    enchants.put(Enchantment.SHARPNESS, 1);
-                break;
-            case 5:
-            case 6:
-                if (r.nextDouble() < (difficulty - 5) / 2)
-                    enchants.put(Enchantment.SHARPNESS, 2);
-                else enchants.put(Enchantment.SHARPNESS, 1);
-                break;
-            case 7:
-            case 8:
-                if (r.nextDouble() < (difficulty - 7) / 2)
-                    enchants.put(Enchantment.SHARPNESS, 3);
-                else enchants.put(Enchantment.SHARPNESS, 2);
-                break;
-            case 9:
-            case 10:
-                if (r.nextDouble() < (difficulty - 9) / 2)
-                    enchants.put(Enchantment.SHARPNESS, 4);
-                else enchants.put(Enchantment.SHARPNESS, 3);
-                break;
-            case 11:
-            case 12:
-                if (r.nextDouble() < (difficulty - 11) / 2)
-                    enchants.put(Enchantment.SHARPNESS, 5);
-                else enchants.put(Enchantment.SHARPNESS, 4);
-                break;
-            default:
-               enchants.put(Enchantment.SHARPNESS, 5);
-        }
+        enchants.put(Enchantment.SHARPNESS, new LerpChance<Integer>()
+                .add(3, 0)
+                .add(5, 1)
+                .add(7, 2)
+                .add(9, 3)
+                .add(11, 4)
+                .add(13, 5)
+                .choose(difficulty));
 
-        // Set knockback
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-                break;
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-                if (r.nextDouble() < (difficulty - 5) / 4)
-                    enchants.put(Enchantment.KNOCKBACK, 1);
-                break;
-            case 9:
-            case 10:
-            case 11:
-            case 12:
-                if (r.nextDouble() < (difficulty - 9) / 4)
-                    enchants.put(Enchantment.KNOCKBACK, 2);
-                else enchants.put(Enchantment.KNOCKBACK, 1);
-                break;
-            case 13:
-            case 14:
-            case 15:
-            case 16:
-            case 17:
-                if (r.nextDouble() < (difficulty - 13) / 5)
-                    enchants.put(Enchantment.KNOCKBACK, 3);
-                else enchants.put(Enchantment.KNOCKBACK, 2);
-                break;
-            default:
-                enchants.put(Enchantment.KNOCKBACK, 3);
-        }
+        enchants.put(Enchantment.KNOCKBACK, new LerpChance<Integer>()
+                .add(5, 0)
+                .add(9, 1)
+                .add(13, 2)
+                .add(18, 3)
+                .choose(difficulty));
 
-        // Set fire aspect
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-                break;
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-                if (r.nextDouble() < (difficulty - 6) / 4)
-                    enchants.put(Enchantment.FIRE_ASPECT, 1);
-                break;
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-                if (r.nextDouble() < (difficulty - 10) / 5)
-                    enchants.put(Enchantment.FIRE_ASPECT, 2);
-                else enchants.put(Enchantment.FIRE_ASPECT, 1);
-                break;
-            case 15:
-            case 16:
-            case 17:
-            case 18:
-            case 19:
-                if (r.nextDouble() < (difficulty - 15) / 5)
-                    enchants.put(Enchantment.FIRE_ASPECT, 3);
-                else enchants.put(Enchantment.FIRE_ASPECT, 2);
-                break;
-            default:
-                enchants.put(Enchantment.FIRE_ASPECT, 3);
-        }
-
-        // Check if no enchants
-        if (enchants.isEmpty())
-            enchants = null;
+        enchants.put(Enchantment.FIRE_ASPECT, new LerpChance<Integer>()
+                .add(6, 0)
+                .add(10, 1)
+                .add(15, 2)
+                .add(20, 3)
+                .choose(difficulty));
 
         return ItemManager.createItem(mat, null, null, enchants);
     }
 
     private static ItemStack getAxe(Arena arena) {
-        Random r = new Random();
-        Material mat;
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         double difficulty = arena.getCurrentDifficulty();
 
-        // Set material
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-                if (r.nextDouble() < (difficulty - 1) / 2)
-                    mat = Material.WOODEN_AXE;
-                else return null;
-                break;
-            case 3:
-            case 4:
-                if (r.nextDouble() < (difficulty - 3) / 2)
-                    mat = Material.STONE_AXE;
-                else mat = Material.WOODEN_AXE;
-                break;
-            case 5:
-            case 6:
-                if (r.nextDouble() < (difficulty - 5) / 2)
-                    mat = Material.IRON_AXE;
-                else mat = Material.STONE_AXE;
-                break;
-            case 7:
-            case 8:
-            case 9:
-                if (r.nextDouble() < (difficulty - 7) / 3)
-                    mat = Material.DIAMOND_AXE;
-                else mat = Material.IRON_AXE;
-                break;
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-                if (r.nextDouble() < (difficulty - 10) / 5)
-                    mat = Material.NETHERITE_AXE;
-                else mat = Material.DIAMOND_AXE;
-                break;
-            default:
-                mat = Material.NETHERITE_AXE;
+        ItemStack item = getItem(ItemType.AXE, getToolTypeSelector().choose(difficulty));
+        if (item == null) {
+            return null;
         }
+        Material mat = item.getType();
 
-        // Set sharpness
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-                break;
-            case 3:
-            case 4:
-                if (r.nextDouble() < (difficulty - 3) / 2)
-                    enchants.put(Enchantment.SHARPNESS, 1);
-                break;
-            case 5:
-            case 6:
-                if (r.nextDouble() < (difficulty - 5) / 2)
-                    enchants.put(Enchantment.SHARPNESS, 2);
-                else enchants.put(Enchantment.SHARPNESS, 1);
-                break;
-            case 7:
-            case 8:
-                if (r.nextDouble() < (difficulty - 7) / 2)
-                    enchants.put(Enchantment.SHARPNESS, 3);
-                else enchants.put(Enchantment.SHARPNESS, 2);
-                break;
-            case 9:
-            case 10:
-                if (r.nextDouble() < (difficulty - 9) / 2)
-                    enchants.put(Enchantment.SHARPNESS, 4);
-                else enchants.put(Enchantment.SHARPNESS, 3);
-                break;
-            case 11:
-            case 12:
-                if (r.nextDouble() < (difficulty - 11) / 2)
-                    enchants.put(Enchantment.SHARPNESS, 5);
-                else enchants.put(Enchantment.SHARPNESS, 4);
-                break;
-            default:
-                enchants.put(Enchantment.SHARPNESS, 5);
-        }
+        enchants.put(Enchantment.SHARPNESS, new LerpChance<Integer>()
+                .add(3, 0)
+                .add(5, 1)
+                .add(7, 2)
+                .add(9, 3)
+                .add(11, 4)
+                .add(13, 5)
+                .choose(difficulty));
 
-        // Set fire aspect
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-                break;
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-                if (r.nextDouble() < (difficulty - 6) / 4)
-                    enchants.put(Enchantment.FIRE_ASPECT, 1);
-                break;
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-                if (r.nextDouble() < (difficulty - 10) / 5)
-                    enchants.put(Enchantment.FIRE_ASPECT, 2);
-                else enchants.put(Enchantment.FIRE_ASPECT, 1);
-                break;
-            case 15:
-            case 16:
-            case 17:
-            case 18:
-            case 19:
-                if (r.nextDouble() < (difficulty - 15) / 5)
-                    enchants.put(Enchantment.FIRE_ASPECT, 3);
-                else enchants.put(Enchantment.FIRE_ASPECT, 2);
-                break;
-            default:
-                enchants.put(Enchantment.FIRE_ASPECT, 3);
-        }
-
-        // Check if no enchants
-        if (enchants.isEmpty())
-            enchants = null;
+        enchants.put(Enchantment.FIRE_ASPECT, new LerpChance<Integer>()
+                .add(6, 0)
+                .add(10, 1)
+                .add(15, 2)
+                .add(20, 3)
+                .choose(difficulty));
 
         return ItemManager.createItem(mat, null, null, enchants);
     }
 
     private static ItemStack getBow(Arena arena) {
-        Random r = new Random();
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         double difficulty = arena.getCurrentDifficulty();
 
-        // Set power
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-                break;
-            case 3:
-            case 4:
-                if (r.nextDouble() < (difficulty - 3) / 2)
-                    enchants.put(Enchantment.POWER, 1);
-                break;
-            case 5:
-            case 6:
-                if (r.nextDouble() < (difficulty - 5) / 2)
-                    enchants.put(Enchantment.POWER, 2);
-                else enchants.put(Enchantment.POWER, 1);
-                break;
-            case 7:
-            case 8:
-                if (r.nextDouble() < (difficulty - 7) / 2)
-                    enchants.put(Enchantment.POWER, 3);
-                else enchants.put(Enchantment.POWER, 2);
-                break;
-            case 9:
-            case 10:
-                if (r.nextDouble() < (difficulty - 9) / 2)
-                    enchants.put(Enchantment.POWER, 4);
-                else enchants.put(Enchantment.POWER, 3);
-                break;
-            case 11:
-            case 12:
-                if (r.nextDouble() < (difficulty - 11) / 2)
-                    enchants.put(Enchantment.POWER, 5);
-                else enchants.put(Enchantment.POWER, 4);
-                break;
-            default:
-                enchants.put(Enchantment.POWER, 5);
-        }
+        enchants.put(Enchantment.POWER, new LerpChance<Integer>()
+                .add(3, 0)
+                .add(5, 1)
+                .add(7, 2)
+                .add(9, 3)
+                .add(11, 4)
+                .add(13, 5)
+                .choose(difficulty));
 
-        // Set punch
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-                break;
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-                if (r.nextDouble() < (difficulty - 5) / 4)
-                    enchants.put(Enchantment.PUNCH, 1);
-                break;
-            case 9:
-            case 10:
-            case 11:
-            case 12:
-                if (r.nextDouble() < (difficulty - 9) / 4)
-                    enchants.put(Enchantment.PUNCH, 2);
-                else enchants.put(Enchantment.PUNCH, 1);
-                break;
-            case 13:
-            case 14:
-            case 15:
-            case 16:
-            case 17:
-                if (r.nextDouble() < (difficulty - 13) / 5)
-                    enchants.put(Enchantment.PUNCH, 3);
-                else enchants.put(Enchantment.PUNCH, 2);
-                break;
-            default:
-                enchants.put(Enchantment.PUNCH, 3);
-        }
+        enchants.put(Enchantment.PUNCH, new LerpChance<Integer>()
+                .add(5, 0)
+                .add(9, 1)
+                .add(13, 2)
+                .add(18, 3)
+                .choose(difficulty));
 
-        // Set flame
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-                break;
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
-                if (r.nextDouble() < (difficulty - 6) / 5)
-                    enchants.put(Enchantment.FLAME, 1);
-                break;
-            default:
-                enchants.put(Enchantment.FLAME, 1);
-        }
-
-        // Check if no enchants
-        if (enchants.isEmpty())
-            enchants = null;
+        enchants.put(Enchantment.FLAME, new LerpChance<Integer>()
+                .add(6, 0)
+                .add(11, 1)
+                .choose(difficulty));
 
         return ItemManager.createItem(Material.BOW, null, null, enchants);
     }
 
     private static ItemStack getCrossbow(Arena arena) {
-        Random r = new Random();
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         double difficulty = arena.getCurrentDifficulty();
 
-        // Set piercing
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-                break;
-            case 3:
-            case 4:
-                if (r.nextDouble() < (difficulty - 3) / 2)
-                    enchants.put(Enchantment.PIERCING, 1);
-                break;
-            case 5:
-            case 6:
-                if (r.nextDouble() < (difficulty - 5) / 2)
-                    enchants.put(Enchantment.PIERCING, 2);
-                else enchants.put(Enchantment.PIERCING, 1);
-                break;
-            case 7:
-            case 8:
-                if (r.nextDouble() < (difficulty - 7) / 2)
-                    enchants.put(Enchantment.PIERCING, 3);
-                else enchants.put(Enchantment.PIERCING, 2);
-                break;
-            case 9:
-            case 10:
-                if (r.nextDouble() < (difficulty - 9) / 2)
-                    enchants.put(Enchantment.PIERCING, 4);
-                else enchants.put(Enchantment.PIERCING, 3);
-                break;
-            case 11:
-            case 12:
-                if (r.nextDouble() < (difficulty - 11) / 2)
-                    enchants.put(Enchantment.PIERCING, 5);
-                else enchants.put(Enchantment.PIERCING, 4);
-                break;
-            default:
-                enchants.put(Enchantment.PIERCING, 5);
-        }
+        enchants.put(Enchantment.PIERCING, new LerpChance<Integer>()
+                .add(3, 0)
+                .add(5, 1)
+                .add(7, 2)
+                .add(9, 3)
+                .add(11, 4)
+                .add(13, 5)
+                .choose(difficulty));
 
-        // Set quick charge
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-                break;
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-                if (r.nextDouble() < (difficulty - 5) / 4)
-                    enchants.put(Enchantment.QUICK_CHARGE, 1);
-                break;
-            case 9:
-            case 10:
-            case 11:
-            case 12:
-                if (r.nextDouble() < (difficulty - 9) / 4)
-                    enchants.put(Enchantment.QUICK_CHARGE, 2);
-                else enchants.put(Enchantment.QUICK_CHARGE, 1);
-                break;
-            case 13:
-            case 14:
-            case 15:
-            case 16:
-            case 17:
-                if (r.nextDouble() < (difficulty - 13) / 5)
-                    enchants.put(Enchantment.QUICK_CHARGE, 3);
-                else enchants.put(Enchantment.QUICK_CHARGE, 2);
-                break;
-            default:
-                enchants.put(Enchantment.QUICK_CHARGE, 3);
-        }
+        enchants.put(Enchantment.QUICK_CHARGE, new LerpChance<Integer>()
+                .add(5, 0)
+                .add(9, 1)
+                .add(13, 2)
+                .add(18, 3)
+                .choose(difficulty));
 
-        // Set multishot
-        switch ((int) difficulty) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-                break;
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
-                if (r.nextDouble() < (difficulty - 6) / 5)
-                    enchants.put(Enchantment.MULTISHOT, 1);
-                break;
-            default:
-                enchants.put(Enchantment.MULTISHOT, 1);
-        }
-
-        // Check if no enchants
-        if (enchants.isEmpty())
-            enchants = null;
+        enchants.put(Enchantment.MULTISHOT, new LerpChance<Integer>()
+                .add(6, 0)
+                .add(11, 1)
+                .choose(difficulty));
 
         return ItemManager.createItem(Material.CROSSBOW, null, null, enchants);
     }
 
     private static ItemStack getTrident(Arena arena) {
-        Random r = new Random();
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         double difficulty = arena.getCurrentDifficulty();
 
-        // Set sharpness
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-                break;
-            case 3:
-            case 4:
-                if (r.nextDouble() < (difficulty - 3) / 2)
-                    enchants.put(Enchantment.SHARPNESS, 1);
-                break;
-            case 5:
-            case 6:
-                if (r.nextDouble() < (difficulty - 5) / 2)
-                    enchants.put(Enchantment.SHARPNESS, 2);
-                else enchants.put(Enchantment.SHARPNESS, 1);
-                break;
-            case 7:
-            case 8:
-                if (r.nextDouble() < (difficulty - 7) / 2)
-                    enchants.put(Enchantment.SHARPNESS, 3);
-                else enchants.put(Enchantment.SHARPNESS, 2);
-                break;
-            case 9:
-            case 10:
-                if (r.nextDouble() < (difficulty - 9) / 2)
-                    enchants.put(Enchantment.SHARPNESS, 4);
-                else enchants.put(Enchantment.SHARPNESS, 3);
-                break;
-            case 11:
-            case 12:
-                if (r.nextDouble() < (difficulty - 11) / 2)
-                    enchants.put(Enchantment.SHARPNESS, 5);
-                else enchants.put(Enchantment.SHARPNESS, 4);
-                break;
-            default:
-                enchants.put(Enchantment.SHARPNESS, 5);
-        }
+        enchants.put(Enchantment.SHARPNESS, new LerpChance<Integer>()
+                .add(3, 0)
+                .add(5, 1)
+                .add(7, 2)
+                .add(9, 3)
+                .add(11, 4)
+                .add(13, 5)
+                .choose(difficulty));
 
-        // Set knockback
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-                break;
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-                if (r.nextDouble() < (difficulty - 5) / 4)
-                    enchants.put(Enchantment.KNOCKBACK, 1);
-                break;
-            case 9:
-            case 10:
-            case 11:
-            case 12:
-                if (r.nextDouble() < (difficulty - 9) / 4)
-                    enchants.put(Enchantment.KNOCKBACK, 2);
-                else enchants.put(Enchantment.KNOCKBACK, 1);
-                break;
-            case 13:
-            case 14:
-            case 15:
-            case 16:
-            case 17:
-                if (r.nextDouble() < (difficulty - 13) / 5)
-                    enchants.put(Enchantment.KNOCKBACK, 3);
-                else enchants.put(Enchantment.KNOCKBACK, 2);
-                break;
-            default:
-                enchants.put(Enchantment.KNOCKBACK, 3);
-        }
+        enchants.put(Enchantment.KNOCKBACK, new LerpChance<Integer>()
+                .add(5, 0)
+                .add(9, 1)
+                .add(13, 2)
+                .add(18, 3)
+                .choose(difficulty));
 
-        // Set fire aspect
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-                break;
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-                if (r.nextDouble() < (difficulty - 6) / 4)
-                    enchants.put(Enchantment.FIRE_ASPECT, 1);
-                break;
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-                if (r.nextDouble() < (difficulty - 10) / 5)
-                    enchants.put(Enchantment.FIRE_ASPECT, 2);
-                else enchants.put(Enchantment.FIRE_ASPECT, 1);
-                break;
-            case 15:
-            case 16:
-            case 17:
-            case 18:
-            case 19:
-                if (r.nextDouble() < (difficulty - 15) / 5)
-                    enchants.put(Enchantment.FIRE_ASPECT, 3);
-                else enchants.put(Enchantment.FIRE_ASPECT, 2);
-                break;
-            default:
-                enchants.put(Enchantment.FIRE_ASPECT, 3);
-        }
-
-        // Check if no enchants
-        if (enchants.isEmpty())
-            enchants = null;
+        enchants.put(Enchantment.FIRE_ASPECT, new LerpChance<Integer>()
+                .add(6, 0)
+                .add(10, 1)
+                .add(15, 2)
+                .add(20, 3)
+                .choose(difficulty));
 
         return ItemManager.createItem(Material.TRIDENT, null, null, enchants);
     }
 
-    private static ItemStack getHelmet(Arena arena) {
-        Random r = new Random();
-        double difficulty = arena.getCurrentDifficulty();
-
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-                if (r.nextDouble() < (difficulty - 1) / 2)
-                    return new ItemStack(Material.LEATHER_HELMET);
-                else return new ItemStack(Material.OAK_BUTTON); // prevent burning in daylight
-            case 3:
-            case 4:
-                if (r.nextDouble() < (difficulty - 3) / 2)
-                    return new ItemStack(Material.CHAINMAIL_HELMET);
-                else return new ItemStack(Material.LEATHER_HELMET);
-            case 5:
-            case 6:
-                if (r.nextDouble() < (difficulty - 5) / 2)
-                    return new ItemStack(Material.IRON_HELMET);
-                else return new ItemStack(Material.CHAINMAIL_HELMET);
-            case 7:
-            case 8:
-            case 9:
-                if (r.nextDouble() < (difficulty - 7) / 3)
-                    return new ItemStack(Material.DIAMOND_HELMET);
-                else return new ItemStack(Material.IRON_HELMET);
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-                if (r.nextDouble() < (difficulty - 10) / 5)
-                    return new ItemStack(Material.NETHERITE_HELMET);
-                else return new ItemStack(Material.DIAMOND_HELMET);
-            default:
-                return new ItemStack(Material.NETHERITE_HELMET);
+    private static ItemStack getItem(ItemType type, ItemMaterial mat) {
+        if (mat == ItemMaterial.NONE) {
+            if (type == ItemType.HELMET) {
+                return new ItemStack(Material.OAK_BUTTON);
+            }
+            return null;
         }
+        if (type != ItemType.HELMET && type != ItemType.CHESTPLATE && type != ItemType.LEGGINGS && type != ItemType.BOOTS) {
+            return null;
+        }
+        return new ItemStack(Material.valueOf(mat.name() + "_" + type.name()));
+    }
+
+    private static LerpChance<ItemMaterial> getArmorTypeSelector() {
+        return new LerpChance<ItemMaterial>()
+                .add(1, ItemMaterial.NONE)
+                .add(3, ItemMaterial.LEATHER)
+                .add(5, ItemMaterial.CHAINMAIL)
+                .add(7, ItemMaterial.IRON)
+                .add(10, ItemMaterial.DIAMOND)
+                .add(15, ItemMaterial.NETHERITE);
+    }
+
+    private static LerpChance<ItemMaterial> getToolTypeSelector() {
+        return new LerpChance<ItemMaterial>()
+                .add(1, ItemMaterial.NONE)
+                .add(3, ItemMaterial.WOODEN)
+                .add(5, ItemMaterial.STONE)
+                .add(7, ItemMaterial.IRON)
+                .add(10, ItemMaterial.DIAMOND)
+                .add(15, ItemMaterial.NETHERITE);
+    }
+
+    private static ItemStack getHelmet(Arena arena) {
+        ItemMaterial type = getArmorTypeSelector().choose(arena.getCurrentDifficulty());
+        return getItem(ItemType.HELMET, type);
     }
 
     private static ItemStack getChestplate(Arena arena) {
-        Random r = new Random();
-        double difficulty = arena.getCurrentDifficulty();
-
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-                if (r.nextDouble() < (difficulty - 1) / 2)
-                    return new ItemStack(Material.LEATHER_CHESTPLATE);
-                else return null;
-            case 3:
-            case 4:
-                if (r.nextDouble() < (difficulty - 3) / 2)
-                    return new ItemStack(Material.CHAINMAIL_CHESTPLATE);
-                else return new ItemStack(Material.LEATHER_CHESTPLATE);
-            case 5:
-            case 6:
-                if (r.nextDouble() < (difficulty - 5) / 2)
-                    return new ItemStack(Material.IRON_CHESTPLATE);
-                else return new ItemStack(Material.CHAINMAIL_CHESTPLATE);
-            case 7:
-            case 8:
-            case 9:
-                if (r.nextDouble() < (difficulty - 7) / 3)
-                    return new ItemStack(Material.DIAMOND_CHESTPLATE);
-                else return new ItemStack(Material.IRON_CHESTPLATE);
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-                if (r.nextDouble() < (difficulty - 10) / 5)
-                    return new ItemStack(Material.NETHERITE_CHESTPLATE);
-                else return new ItemStack(Material.DIAMOND_CHESTPLATE);
-            default:
-                return new ItemStack(Material.NETHERITE_CHESTPLATE);
-        }
+        ItemMaterial type = getArmorTypeSelector().choose(arena.getCurrentDifficulty());
+        return getItem(ItemType.CHESTPLATE, type);
     }
 
     private static ItemStack getLeggings(Arena arena) {
-        Random r = new Random();
-        double difficulty = arena.getCurrentDifficulty();
-
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-                if (r.nextDouble() < (difficulty - 1) / 2)
-                    return new ItemStack(Material.LEATHER_LEGGINGS);
-                else return null;
-            case 3:
-            case 4:
-                if (r.nextDouble() < (difficulty - 3) / 2)
-                    return new ItemStack(Material.CHAINMAIL_LEGGINGS);
-                else return new ItemStack(Material.LEATHER_LEGGINGS);
-            case 5:
-            case 6:
-                if (r.nextDouble() < (difficulty - 5) / 2)
-                    return new ItemStack(Material.IRON_LEGGINGS);
-                else return new ItemStack(Material.CHAINMAIL_LEGGINGS);
-            case 7:
-            case 8:
-            case 9:
-                if (r.nextDouble() < (difficulty - 7) / 3)
-                    return new ItemStack(Material.DIAMOND_LEGGINGS);
-                else return new ItemStack(Material.IRON_LEGGINGS);
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-                if (r.nextDouble() < (difficulty - 10) / 5)
-                    return new ItemStack(Material.NETHERITE_LEGGINGS);
-                else return new ItemStack(Material.DIAMOND_LEGGINGS);
-            default:
-                return new ItemStack(Material.NETHERITE_LEGGINGS);
-        }
+        ItemMaterial type = getArmorTypeSelector().choose(arena.getCurrentDifficulty());
+        return getItem(ItemType.CHESTPLATE, type);
     }
 
     private static ItemStack getBoots(Arena arena) {
-        Random r = new Random();
-        double difficulty = arena.getCurrentDifficulty();
-
-        switch ((int) difficulty) {
-            case 0:
-            case 1:
-            case 2:
-                if (r.nextDouble() < (difficulty - 1) / 2)
-                    return new ItemStack(Material.LEATHER_BOOTS);
-                else return null;
-            case 3:
-            case 4:
-                if (r.nextDouble() < (difficulty - 3) / 2)
-                    return new ItemStack(Material.CHAINMAIL_BOOTS);
-                else return new ItemStack(Material.LEATHER_BOOTS);
-            case 5:
-            case 6:
-                if (r.nextDouble() < (difficulty - 5) / 2)
-                    return new ItemStack(Material.IRON_BOOTS);
-                else return new ItemStack(Material.CHAINMAIL_BOOTS);
-            case 7:
-            case 8:
-            case 9:
-                if (r.nextDouble() < (difficulty - 7) / 3)
-                    return new ItemStack(Material.DIAMOND_BOOTS);
-                else return new ItemStack(Material.IRON_BOOTS);
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-                if (r.nextDouble() < (difficulty - 10) / 5)
-                    return new ItemStack(Material.NETHERITE_BOOTS);
-                else return new ItemStack(Material.DIAMOND_BOOTS);
-            default:
-                return new ItemStack(Material.NETHERITE_BOOTS);
-        }
+        ItemMaterial type = getArmorTypeSelector().choose(arena.getCurrentDifficulty());
+        return getItem(ItemType.BOOTS, type);
     }
 
     public static void setVillager(Arena arena, Villager villager) {
@@ -1102,27 +498,10 @@ public class Mobs {
 
     public static void setCreeper(Arena arena, Creeper creeper) {
         setMinion(arena, creeper);
-        Random r = new Random();
         double difficulty = arena.getCurrentDifficulty();
-
-        // Set charged
-        switch ((int) difficulty) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-                return;
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-                if (r.nextDouble() < (difficulty - 5) / 4)
-                    creeper.setPowered(true);
-                return;
-            default:
-                creeper.setPowered(true);
+        if (new LerpChance<Boolean>().add(5, false).add(9, true).choose(difficulty)) {
+            creeper.setPowered(true);
         }
-
     }
 
     public static void setPhantom(Arena arena, Phantom phantom) {

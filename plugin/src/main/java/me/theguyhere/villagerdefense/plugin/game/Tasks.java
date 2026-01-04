@@ -352,13 +352,6 @@ public class Tasks {
 					.stream().filter(Objects::nonNull)
 					.filter(ent -> ent instanceof Monster || ent instanceof Hoglin || ent instanceof Phantom ||
 							ent instanceof Slime)
-					.filter(ent -> (!ent.hasMetadata("game") ||
-							ent.getMetadata("game").get(0).asInt() != arena.getGameID()))
-					.forEach(System.out::println);
-			Objects.requireNonNull(arena.getCorner1().getWorld()).getNearbyEntities(arena.getBounds())
-					.stream().filter(Objects::nonNull)
-					.filter(ent -> ent instanceof Monster || ent instanceof Hoglin || ent instanceof Phantom ||
-							ent instanceof Slime)
 					.filter(ent -> (!ent.hasMetadata("wave") ||
 							ent.getMetadata("wave").get(0).asInt() != arena.getCurrentWave()))
 					.forEach(Entity::remove);
