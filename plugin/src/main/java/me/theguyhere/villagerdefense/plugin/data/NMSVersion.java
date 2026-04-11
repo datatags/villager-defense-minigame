@@ -112,6 +112,9 @@ public enum NMSVersion {
                 case 11:
                     return "v1_21_R7";
             }
+        } else if (majorVer >= 26) {
+            // Optimistically assume that all versions 26+ will be NMS-stable
+            return "v26_1";
         }
 
         Matcher matcher = Pattern.compile("v\\d+_\\d+_R\\d+").matcher(Bukkit.getServer().getClass().getPackage().getName());
