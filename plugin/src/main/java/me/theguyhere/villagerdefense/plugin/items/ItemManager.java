@@ -92,7 +92,7 @@ public class ItemManager {
 
         // Set attribute flag
         if (flags != null && flags[1]) {
-            meta.addItemFlags(ItemFlag.values());
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         }
         item.setItemMeta(meta);
 
@@ -120,7 +120,7 @@ public class ItemManager {
 
         // Set attribute flag
         if (flags != null && flags[1])
-            meta.addItemFlags(ItemFlag.values());
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         item.setItemMeta(meta);
 
         return item;

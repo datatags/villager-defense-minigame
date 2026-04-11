@@ -79,12 +79,12 @@ public class GameItems {
 				ItemManager.HIDE_ENCHANT_FLAGS, enchants,
 				CommunicationManager.format("&7&o" + String.format(LanguageManager.messages.itemShopDesc, "10")));
 
-		return item == null ? new ItemStack(Material.AIR) : item;
+		return GameItemType.SHOP.apply(item);
 	}
 	public static @NotNull ItemStack kitSelector() {
 		ItemStack item = ItemManager.createItem(Material.CHEST,
 				CommunicationManager.format("&9&l" + LanguageManager.names.kitSelection));
-		return item == null ? new ItemStack(Material.AIR) : item;
+		return GameItemType.KIT_SELECTOR.apply(item);
 	}
 	public static @NotNull ItemStack challengeSelector() {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
@@ -94,7 +94,7 @@ public class GameItems {
 				CommunicationManager.format("&9&l" + LanguageManager.names.challengeSelection),
 				ItemManager.HIDE_ENCHANT_FLAGS, enchants);
 
-		return item == null ? new ItemStack(Material.AIR) : item;
+		return GameItemType.CHALLENGE_SELECTOR.apply(item);
 	}
 	public static @NotNull ItemStack boostToggle(boolean boosted) {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
@@ -105,7 +105,7 @@ public class GameItems {
 						getToggleStatus(boosted)),
 				ItemManager.HIDE_ENCHANT_FLAGS, enchants);
 
-		return item == null ? new ItemStack(Material.AIR) : item;
+		return GameItemType.BOOST_TOGGLE.apply(item);
 	}
 	public static @NotNull ItemStack shareToggle(boolean sharing) {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
@@ -116,7 +116,7 @@ public class GameItems {
 						getToggleStatus(sharing)),
 				ItemManager.HIDE_ENCHANT_FLAGS, enchants);
 
-		return item == null ? new ItemStack(Material.AIR) : item;
+		return GameItemType.SHARE_TOGGLE.apply(item);
 	}
 	public static @NotNull ItemStack crystalConverter() {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
@@ -126,7 +126,7 @@ public class GameItems {
 				CommunicationManager.format("&b&l" + LanguageManager.names.crystalConverter),
 				ItemManager.HIDE_ENCHANT_FLAGS, enchants);
 
-		return item == null ? new ItemStack(Material.AIR) : item;
+		return GameItemType.CRYSTAL_CONVERTER.apply(item);
 	}
 	public static @NotNull ItemStack leave() {
 		HashMap<Enchantment, Integer> enchants = new HashMap<>();
@@ -136,7 +136,7 @@ public class GameItems {
 				CommunicationManager.format("&c&l" + LanguageManager.messages.leave),
 				ItemManager.HIDE_ENCHANT_FLAGS, enchants);
 
-		return item == null ? new ItemStack(Material.AIR) : item;
+		return GameItemType.LEAVE.apply(item);
 	}
 
 	// Weapons

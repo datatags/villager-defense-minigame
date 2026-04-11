@@ -1,36 +1,43 @@
 package me.theguyhere.villagerdefense.plugin.game.listeners;
 
+import me.theguyhere.villagerdefense.common.Calculator;
 import me.theguyhere.villagerdefense.common.ColoredMessage;
 import me.theguyhere.villagerdefense.common.CommunicationManager;
-import me.theguyhere.villagerdefense.common.Calculator;
 import me.theguyhere.villagerdefense.nms.common.NMSManager;
-import me.theguyhere.villagerdefense.plugin.data.*;
+import me.theguyhere.villagerdefense.plugin.Main;
+import me.theguyhere.villagerdefense.plugin.data.LanguageManager;
+import me.theguyhere.villagerdefense.plugin.data.NMSVersion;
+import me.theguyhere.villagerdefense.plugin.data.PlayerDataManager;
 import me.theguyhere.villagerdefense.plugin.data.exceptions.BadDataException;
 import me.theguyhere.villagerdefense.plugin.data.exceptions.NoSuchPathException;
 import me.theguyhere.villagerdefense.plugin.data.listeners.PacketListenerImp;
-import me.theguyhere.villagerdefense.plugin.game.achievements.AchievementChecker;
-import me.theguyhere.villagerdefense.plugin.game.exceptions.ArenaNotFoundException;
-import me.theguyhere.villagerdefense.plugin.game.challenges.Challenge;
 import me.theguyhere.villagerdefense.plugin.entities.Mobs;
 import me.theguyhere.villagerdefense.plugin.entities.PlayerNotFoundException;
-import me.theguyhere.villagerdefense.plugin.game.achievements.Achievement;
-import me.theguyhere.villagerdefense.plugin.game.GameManager;
-import me.theguyhere.villagerdefense.plugin.visuals.Inventories;
-import me.theguyhere.villagerdefense.plugin.Main;
-import me.theguyhere.villagerdefense.plugin.game.events.GameEndEvent;
-import me.theguyhere.villagerdefense.plugin.game.events.LeaveArenaEvent;
-import me.theguyhere.villagerdefense.plugin.structures.events.ReloadBoardsEvent;
+import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
 import me.theguyhere.villagerdefense.plugin.game.Arena;
 import me.theguyhere.villagerdefense.plugin.game.ArenaStatus;
-import me.theguyhere.villagerdefense.plugin.items.EnchantingBook;
-import me.theguyhere.villagerdefense.plugin.items.GameItems;
-import me.theguyhere.villagerdefense.plugin.game.kits.Kit;
-import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
-import me.theguyhere.villagerdefense.plugin.items.ItemManager;
+import me.theguyhere.villagerdefense.plugin.game.GameManager;
 import me.theguyhere.villagerdefense.plugin.game.PlayerManager;
+import me.theguyhere.villagerdefense.plugin.game.achievements.Achievement;
+import me.theguyhere.villagerdefense.plugin.game.achievements.AchievementChecker;
+import me.theguyhere.villagerdefense.plugin.game.challenges.Challenge;
+import me.theguyhere.villagerdefense.plugin.game.events.GameEndEvent;
+import me.theguyhere.villagerdefense.plugin.game.events.LeaveArenaEvent;
+import me.theguyhere.villagerdefense.plugin.game.exceptions.ArenaNotFoundException;
+import me.theguyhere.villagerdefense.plugin.game.kits.Kit;
+import me.theguyhere.villagerdefense.plugin.items.EnchantingBook;
+import me.theguyhere.villagerdefense.plugin.items.GameItemType;
+import me.theguyhere.villagerdefense.plugin.items.GameItems;
+import me.theguyhere.villagerdefense.plugin.items.ItemManager;
+import me.theguyhere.villagerdefense.plugin.structures.events.ReloadBoardsEvent;
+import me.theguyhere.villagerdefense.plugin.visuals.Inventories;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -41,15 +48,26 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class GameListener implements Listener {
     private final NMSManager nmsManager = NMSVersion.getCurrent().getNmsManager();
@@ -487,39 +505,39 @@ public class GameListener implements Listener {
         }
 
         // Open shop inventory
-        if (GameItems.shop().equals(item)) {
+        if (GameItemType.SHOP.is(item)) {
             player.openInventory(Inventories.createShopMenu(arena.getCurrentWave() / 10 + 1, arena));
         }
 
         // Open kit selection menu
-        else if (GameItems.kitSelector().equals(item)) {
+        else if (GameItemType.KIT_SELECTOR.is(item)) {
             player.openInventory(Inventories.createSelectKitsMenu(player, arena));
         }
 
         // Open challenge selection menu
-        else if (GameItems.challengeSelector().equals(item)) {
+        else if (GameItemType.CHALLENGE_SELECTOR.is(item)) {
             player.openInventory(Inventories.createSelectChallengesMenu(gamer, arena));
         }
 
         // Toggle boost
-        else if (GameItems.boostToggle(true).equals(item) || GameItems.boostToggle(false).equals(item)) {
+        else if (GameItemType.BOOST_TOGGLE.is(item)) {
             gamer.toggleBoost();
             PlayerManager.giveChoiceItems(gamer);
         }
 
         // Toggle share
-        else if (GameItems.shareToggle(true).equals(item) || GameItems.shareToggle(false).equals(item)) {
+        else if (GameItemType.SHARE_TOGGLE.is(item)) {
             gamer.toggleShare();
             PlayerManager.giveChoiceItems(gamer);
         }
 
         // Open crystal convert menu
-        else if (GameItems.crystalConverter().equals(item)) {
+        else if (GameItemType.CRYSTAL_CONVERTER.is(item)) {
             player.openInventory(Inventories.createCrystalConvertMenu(gamer));
         }
 
         // Make player leave
-        else if (GameItems.leave().equals(item)) {
+        else if (GameItemType.LEAVE.is(item)) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, () ->
                     Bukkit.getPluginManager().callEvent(new LeaveArenaEvent(player)));
         }
@@ -1319,8 +1337,8 @@ public class GameListener implements Listener {
         }
 
         // Check for standard game items item
-        if (item.equals(GameItems.shop()) || item.equals(GameItems.kitSelector()) || item.equals(GameItems.leave()) ||
-                item.equals(GameItems.challengeSelector())) {
+        if (GameItemType.SHOP.is(item) || GameItemType.KIT_SELECTOR.is(item) || GameItemType.LEAVE.is(item)
+                || GameItemType.CHALLENGE_SELECTOR.is(item)) {
             e.setCancelled(true);
         }
     }
