@@ -2,8 +2,10 @@ package me.theguyhere.villagerdefense.plugin.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.theguyhere.villagerdefense.plugin.data.PlayerDataManager;
 import me.theguyhere.villagerdefense.plugin.game.challenges.Challenge;
 import me.theguyhere.villagerdefense.plugin.game.kits.Kit;
+import me.theguyhere.villagerdefense.plugin.game.kits.KitNone;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -38,12 +40,12 @@ public class VDPlayer {
     /** The number of times this player violated arena boundaries.*/
     private int infractions;
     /** The {@link Kit} the player will play with.*/
-    @Setter
     @Getter
+    @Setter
     private Kit kit;
     /** A possible second {@link Kit} the player can play with.*/
-    @Setter
     @Getter
+    @Setter
     private Kit kit2;
     /** The list of {@link Challenge}'s the player will take on.*/
     private List<Challenge> challenge = new ArrayList<>();
@@ -77,7 +79,7 @@ public class VDPlayer {
         wolves = 0;
         joinedWave = 0;
         infractions = 0;
-        kit = Kit.none();
+        kit = new KitNone();
     }
 
     public UUID getID() {
@@ -90,6 +92,29 @@ public class VDPlayer {
 
     public void addGems(int change) {
         gems += change;
+    }
+
+    public boolean using(Class<? extends Kit> kitType) {
+        return (kit != null && kitType.isAssignableFrom(kit.getClass()))
+                || (kit2 != null && kitType.isAssignableFrom(kit2.getClass()));
+    }
+
+    public int getKitLevel() {
+        return PlayerDataManager.getPlayerKitLevel(player, kit);
+    }
+
+    public int getKit2Level() {
+        return PlayerDataManager.getPlayerKitLevel(player, kit2);
+    }
+
+    public int getActiveKitLevel(Class<? extends Kit> kitType) {
+        if (kit != null && kitType.isAssignableFrom(kit.getClass())) {
+            return getKitLevel();
+        }
+        if (kit2 != null && kitType.isAssignableFrom(kit2.getClass())) {
+            return getKit2Level();
+        }
+        return 0;
     }
 
     /**

@@ -11,6 +11,7 @@ import me.theguyhere.villagerdefense.plugin.game.GameManager;
 import me.theguyhere.villagerdefense.plugin.game.PlayerManager;
 import me.theguyhere.villagerdefense.plugin.game.exceptions.ArenaNotFoundException;
 import me.theguyhere.villagerdefense.plugin.game.kits.Kit;
+import me.theguyhere.villagerdefense.plugin.game.kits.KitPhantom;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -37,7 +38,8 @@ class CommandJoinAsPhantom {
 		}
 
 		// Check if player owns the phantom kit if late arrival is not on
-		if (!PlayerDataManager.playerOwnsKit(player.getUniqueId(), Kit.phantom()) &&
+        Kit phantom = new KitPhantom();
+		if (!PlayerDataManager.playerOwnsKit(player.getUniqueId(), phantom) &&
 			!arena.hasLateArrival()) {
 			PlayerManager.notifyFailure(player, LanguageManager.errors.phantomOwn);
 			return;
@@ -67,7 +69,7 @@ class CommandJoinAsPhantom {
 		arena.getTask().giveItems(gamer);
 		GameManager.createBoard(gamer);
 		gamer.setJoinedWave(arena.getCurrentWave());
-		gamer.setKit(Kit.phantom());
+		gamer.setKit(phantom);
 		player.closeInventory();
 	}
 }

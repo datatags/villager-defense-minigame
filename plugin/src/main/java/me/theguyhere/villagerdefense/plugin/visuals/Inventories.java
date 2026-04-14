@@ -1,16 +1,20 @@
 package me.theguyhere.villagerdefense.plugin.visuals;
 
+import me.theguyhere.villagerdefense.common.CommunicationManager;
 import me.theguyhere.villagerdefense.common.Constants;
-import me.theguyhere.villagerdefense.plugin.data.*;
-import me.theguyhere.villagerdefense.plugin.game.exceptions.ArenaNotFoundException;
-import me.theguyhere.villagerdefense.plugin.game.challenges.Challenge;
-import me.theguyhere.villagerdefense.plugin.items.GameItems;
-import me.theguyhere.villagerdefense.plugin.game.achievements.Achievement;
+import me.theguyhere.villagerdefense.plugin.data.ArenaDataManager;
+import me.theguyhere.villagerdefense.plugin.data.GameDataManager;
+import me.theguyhere.villagerdefense.plugin.data.LanguageManager;
+import me.theguyhere.villagerdefense.plugin.data.NMSVersion;
+import me.theguyhere.villagerdefense.plugin.data.PlayerDataManager;
+import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
 import me.theguyhere.villagerdefense.plugin.game.Arena;
 import me.theguyhere.villagerdefense.plugin.game.GameManager;
-import me.theguyhere.villagerdefense.plugin.game.kits.Kit;
-import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
-import me.theguyhere.villagerdefense.common.CommunicationManager;
+import me.theguyhere.villagerdefense.plugin.game.achievements.Achievement;
+import me.theguyhere.villagerdefense.plugin.game.challenges.Challenge;
+import me.theguyhere.villagerdefense.plugin.game.exceptions.ArenaNotFoundException;
+import me.theguyhere.villagerdefense.plugin.game.kits.*;
+import me.theguyhere.villagerdefense.plugin.items.GameItems;
 import me.theguyhere.villagerdefense.plugin.items.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,7 +24,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.function.BiConsumer;
 
 public class Inventories {
 	// The main admin menu for the plugin
@@ -951,6 +960,12 @@ public class Inventories {
 				CommunicationManager.format("&9&l" + LanguageManager.messages.allowedKits + ": " + arena.getName())
 		);
 
+        final List<String> banned = arena.getBannedKits();
+        BiConsumer<Integer, Kit> buttonBuilder = (slot, kit) -> {
+            boolean canPurchase = !banned.contains(kit.getName());
+            inv.setItem(slot, kit.getButton(-1, canPurchase));
+        };
+
 		// Gift kits
 		for (int i = 0; i < 9; i++)
 			inv.setItem(i, ItemManager.createItem(Material.LIME_STAINED_GLASS_PANE,
@@ -958,33 +973,15 @@ public class Inventories {
 					CommunicationManager.formatDescriptionArr(ChatColor.GRAY,
 							LanguageManager.messages.giftKitsDescription, Constants.LORE_CHAR_LIMIT)));
 
-		if (arena.getBannedKits().contains(Kit.orc().getName()))
-			inv.setItem(9, Kit.orc().getButton(-1, false));
-		else inv.setItem(9, Kit.orc().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.farmer().getName()))
-			inv.setItem(10, Kit.farmer().getButton(-1, false));
-		else inv.setItem(10, Kit.farmer().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.soldier().getName()))
-			inv.setItem(11, Kit.soldier().getButton(-1, false));
-		else inv.setItem(11, Kit.soldier().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.alchemist().getName()))
-			inv.setItem(12, Kit.alchemist().getButton(-1, false));
-		else inv.setItem(12, Kit.alchemist().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.tailor().getName()))
-			inv.setItem(13, Kit.tailor().getButton(-1, false));
-		else inv.setItem(13, Kit.tailor().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.trader().getName()))
-			inv.setItem(14, Kit.trader().getButton(-1, false));
-		else inv.setItem(14, Kit.trader().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.summoner().getName()))
-			inv.setItem(15, Kit.summoner().getButton(-1, false));
-		else inv.setItem(15, Kit.summoner().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.reaper().getName()))
-			inv.setItem(16, Kit.reaper().getButton(-1, false));
-		else inv.setItem(16, Kit.reaper().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.phantom().getName()))
-			inv.setItem(17, Kit.phantom().getButton(-1, false));
-		else inv.setItem(17, Kit.phantom().getButton(-1, true));
+		buttonBuilder.accept(9, new KitOrc());
+		buttonBuilder.accept(10, new KitFarmer());
+		buttonBuilder.accept(11, new KitSoldier());
+		buttonBuilder.accept(12, new KitAlchemist());
+		buttonBuilder.accept(13, new KitTailor());
+		buttonBuilder.accept(14, new KitTrader());
+		buttonBuilder.accept(15, new KitSummoner());
+		buttonBuilder.accept(16, new KitReaper());
+		buttonBuilder.accept(17, new KitPhantom());
 
 		// Ability kits
 		for (int i = 18; i < 27; i++)
@@ -993,33 +990,15 @@ public class Inventories {
 					CommunicationManager.formatDescriptionArr(ChatColor.GRAY,
 							LanguageManager.messages.abilityKitsDescription, Constants.LORE_CHAR_LIMIT)));
 
-		if (arena.getBannedKits().contains(Kit.mage().getName()))
-			inv.setItem(27, Kit.mage().getButton(-1, false));
-		else inv.setItem(27, Kit.mage().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.ninja().getName()))
-			inv.setItem(28, Kit.ninja().getButton(-1, false));
-		else inv.setItem(28, Kit.ninja().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.templar().getName()))
-			inv.setItem(29, Kit.templar().getButton(-1, false));
-		else inv.setItem(29, Kit.templar().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.warrior().getName()))
-			inv.setItem(30, Kit.warrior().getButton(-1, false));
-		else inv.setItem(30, Kit.warrior().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.knight().getName()))
-			inv.setItem(31, Kit.knight().getButton(-1, false));
-		else inv.setItem(31, Kit.knight().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.priest().getName()))
-			inv.setItem(32, Kit.priest().getButton(-1, false));
-		else inv.setItem(32, Kit.priest().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.siren().getName()))
-			inv.setItem(33, Kit.siren().getButton(-1, false));
-		else inv.setItem(33, Kit.siren().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.monk().getName()))
-			inv.setItem(34, Kit.monk().getButton(-1, false));
-		else inv.setItem(34, Kit.monk().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.messenger().getName()))
-			inv.setItem(35, Kit.messenger().getButton(-1, false));
-		else inv.setItem(35, Kit.messenger().getButton(-1, true));
+		buttonBuilder.accept(27, new KitMage());
+		buttonBuilder.accept(28, new KitNinja());
+		buttonBuilder.accept(29, new KitTemplar());
+		buttonBuilder.accept(30, new KitWarrior());
+		buttonBuilder.accept(31, new KitKnight());
+		buttonBuilder.accept(32, new KitPriest());
+		buttonBuilder.accept(33, new KitSiren());
+		buttonBuilder.accept(34, new KitMonk());
+		buttonBuilder.accept(35, new KitMessenger());
 
 		// Effect kits
 		for (int i = 36; i < 45; i++)
@@ -1028,21 +1007,11 @@ public class Inventories {
 					CommunicationManager.formatDescriptionArr(ChatColor.GRAY,
 							LanguageManager.messages.effectKitsDescription, Constants.LORE_CHAR_LIMIT)));
 
-		if (arena.getBannedKits().contains(Kit.blacksmith().getName()))
-			inv.setItem(45, Kit.blacksmith().getButton(-1, false));
-		else inv.setItem(45, Kit.blacksmith().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.witch().getName()))
-			inv.setItem(46, Kit.witch().getButton(-1, false));
-		else inv.setItem(46, Kit.witch().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.merchant().getName()))
-			inv.setItem(47, Kit.merchant().getButton(-1, false));
-		else inv.setItem(47, Kit.merchant().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.vampire().getName()))
-			inv.setItem(48, Kit.vampire().getButton(-1, false));
-		else inv.setItem(48, Kit.vampire().getButton(-1, true));
-		if (arena.getBannedKits().contains(Kit.giant().getName()))
-			inv.setItem(49, Kit.giant().getButton(-1, false));
-		else inv.setItem(49, Kit.giant().getButton(-1, true));
+		buttonBuilder.accept(45, new KitBlacksmith());
+		buttonBuilder.accept(46, new KitWitch());
+		buttonBuilder.accept(47, new KitMerchant());
+		buttonBuilder.accept(48, new KitVampire());
+		buttonBuilder.accept(49, new KitGiant());
 
 		// Option to exit
 		inv.setItem(53, InventoryButtons.exit());
@@ -1752,6 +1721,10 @@ public class Inventories {
 				CommunicationManager.format("&9&l" + String.format(LanguageManager.messages.playerKits, name))
 		);
 
+        BiConsumer<Integer,Kit> buttonBuilder = (slot, kit) -> {
+            inv.setItem(slot, kit.getButton(PlayerDataManager.getPlayerKitLevel(uuid, kit), true));
+        };
+
 		// Gift kits
 		for (int i = 0; i < 9; i++)
 			inv.setItem(i, ItemManager.createItem(Material.LIME_STAINED_GLASS_PANE,
@@ -1759,15 +1732,15 @@ public class Inventories {
 					CommunicationManager.formatDescriptionArr(ChatColor.GRAY,
 							LanguageManager.messages.giftKitsDescription, Constants.LORE_CHAR_LIMIT)));
 
-		inv.setItem(9, Kit.orc().getButton(1, true));
-		inv.setItem(10, Kit.farmer().getButton(1, true));
-		inv.setItem(11, Kit.soldier().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.soldier()), true));
-		inv.setItem(12, Kit.alchemist().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.alchemist()), true));
-		inv.setItem(13, Kit.tailor().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.tailor()), true));
-		inv.setItem(14, Kit.trader().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.trader()), true));
-		inv.setItem(15, Kit.summoner().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.summoner()), true));
-		inv.setItem(16, Kit.reaper().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.reaper()), true));
-		inv.setItem(17, Kit.phantom().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.phantom()), true));
+		buttonBuilder.accept(9, new KitOrc());
+		buttonBuilder.accept(10, new KitFarmer());
+		buttonBuilder.accept(11, new KitSoldier());
+		buttonBuilder.accept(12, new KitAlchemist());
+		buttonBuilder.accept(13, new KitTailor());
+		buttonBuilder.accept(14, new KitTrader());
+		buttonBuilder.accept(15, new KitSummoner());
+		buttonBuilder.accept(16, new KitReaper());
+		buttonBuilder.accept(17, new KitPhantom());
 
 		// Ability kits
 		for (int i = 18; i < 27; i++)
@@ -1776,15 +1749,15 @@ public class Inventories {
 					CommunicationManager.formatDescriptionArr(ChatColor.GRAY,
 							LanguageManager.messages.abilityKitsDescription, Constants.LORE_CHAR_LIMIT)));
 
-		inv.setItem(27, Kit.mage().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.mage()), true));
-		inv.setItem(28, Kit.ninja().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.ninja()), true));
-		inv.setItem(29, Kit.templar().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.templar()), true));
-		inv.setItem(30, Kit.warrior().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.warrior()), true));
-		inv.setItem(31, Kit.knight().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.knight()), true));
-		inv.setItem(32, Kit.priest().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.priest()), true));
-		inv.setItem(33, Kit.siren().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.siren()), true));
-		inv.setItem(34, Kit.monk().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.monk()), true));
-		inv.setItem(35, Kit.messenger().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.messenger()), true));
+		buttonBuilder.accept(27, new KitMage());
+		buttonBuilder.accept(28, new KitNinja());
+		buttonBuilder.accept(29, new KitTemplar());
+		buttonBuilder.accept(30, new KitWarrior());
+		buttonBuilder.accept(31, new KitKnight());
+		buttonBuilder.accept(32, new KitPriest());
+		buttonBuilder.accept(33, new KitSiren());
+		buttonBuilder.accept(34, new KitMonk());
+		buttonBuilder.accept(35, new KitMessenger());
 
 		// Effect kits
 		for (int i = 36; i < 45; i++)
@@ -1793,11 +1766,11 @@ public class Inventories {
 					CommunicationManager.formatDescriptionArr(ChatColor.GRAY,
 							LanguageManager.messages.effectKitsDescription, Constants.LORE_CHAR_LIMIT)));
 
-		inv.setItem(45, Kit.blacksmith().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.blacksmith()), true));
-		inv.setItem(46, Kit.witch().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.witch()), true));
-		inv.setItem(47, Kit.merchant().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.merchant()), true));
-		inv.setItem(48, Kit.vampire().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.vampire()), true));
-		inv.setItem(49, Kit.giant().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.giant()), true));
+		buttonBuilder.accept(45, new KitBlacksmith());
+		buttonBuilder.accept(46, new KitWitch());
+		buttonBuilder.accept(47, new KitMerchant());
+		buttonBuilder.accept(48, new KitVampire());
+		buttonBuilder.accept(49, new KitGiant());
 
 		// Crystal balance
 		if (name.equals(requester)) {
@@ -1823,6 +1796,13 @@ public class Inventories {
 				CommunicationManager.format("&9&l" + arena.getName() + " " + LanguageManager.messages.kits)
 		);
 
+        final List<String> banned = arena.getBannedKits();
+        BiConsumer<Integer, Kit> buttonBuilder = (slot, kit) -> {
+            if (!banned.contains(kit.getName())) {
+                inv.setItem(slot, kit.getButton(PlayerDataManager.getPlayerKitLevel(uuid, kit), false));
+            }
+        };
+
 		// Gift kits
 		for (int i = 0; i < 9; i++)
 			inv.setItem(i, ItemManager.createItem(Material.LIME_STAINED_GLASS_PANE,
@@ -1830,24 +1810,15 @@ public class Inventories {
 					CommunicationManager.formatDescriptionArr(ChatColor.GRAY,
 							LanguageManager.messages.giftKitsDescription, Constants.LORE_CHAR_LIMIT)));
 
-		if (!arena.getBannedKits().contains("Orc"))
-			inv.setItem(9, Kit.orc().getButton(1, false));
-		if (!arena.getBannedKits().contains("Farmer"))
-			inv.setItem(10, Kit.farmer().getButton(1, false));
-		if (!arena.getBannedKits().contains("Soldier"))
-			inv.setItem(11, Kit.soldier().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.soldier()), false));
-		if (!arena.getBannedKits().contains("Alchemist"))
-			inv.setItem(12, Kit.alchemist().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.alchemist()), false));
-		if (!arena.getBannedKits().contains("Tailor"))
-			inv.setItem(13, Kit.tailor().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.tailor()), false));
-		if (!arena.getBannedKits().contains("Trader"))
-			inv.setItem(14, Kit.trader().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.trader()), false));
-		if (!arena.getBannedKits().contains("Summoner"))
-			inv.setItem(15, Kit.summoner().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.summoner()), false));
-		if (!arena.getBannedKits().contains("Reaper"))
-			inv.setItem(16, Kit.reaper().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.reaper()), false));
-		if (!arena.getBannedKits().contains("Phantom"))
-			inv.setItem(17, Kit.phantom().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.phantom()), false));
+		buttonBuilder.accept(9, new KitOrc());
+		buttonBuilder.accept(10, new KitFarmer());
+		buttonBuilder.accept(11, new KitSoldier());
+		buttonBuilder.accept(12, new KitAlchemist());
+		buttonBuilder.accept(13, new KitTailor());
+		buttonBuilder.accept(14, new KitTrader());
+		buttonBuilder.accept(15, new KitSummoner());
+		buttonBuilder.accept(16, new KitReaper());
+		buttonBuilder.accept(17, new KitPhantom());
 
 		// Ability kits
 		for (int i = 18; i < 27; i++)
@@ -1856,24 +1827,15 @@ public class Inventories {
 					CommunicationManager.formatDescriptionArr(ChatColor.GRAY,
 							LanguageManager.messages.abilityKitsDescription, Constants.LORE_CHAR_LIMIT)));
 
-		if (!arena.getBannedKits().contains("Mage"))
-			inv.setItem(27, Kit.mage().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.mage()), false));
-		if (!arena.getBannedKits().contains("Ninja"))
-			inv.setItem(28, Kit.ninja().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.ninja()), false));
-		if (!arena.getBannedKits().contains("Templar"))
-			inv.setItem(29, Kit.templar().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.templar()), false));
-		if (!arena.getBannedKits().contains("Warrior"))
-			inv.setItem(30, Kit.warrior().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.warrior()), false));
-		if (!arena.getBannedKits().contains("Knight"))
-			inv.setItem(31, Kit.knight().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.knight()), false));
-		if (!arena.getBannedKits().contains("Priest"))
-			inv.setItem(32, Kit.priest().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.priest()), false));
-		if (!arena.getBannedKits().contains("Siren"))
-			inv.setItem(33, Kit.siren().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.siren()), false));
-		if (!arena.getBannedKits().contains("Monk"))
-			inv.setItem(34, Kit.monk().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.monk()), false));
-		if (!arena.getBannedKits().contains("Messenger"))
-			inv.setItem(35, Kit.messenger().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.messenger()), false));
+		buttonBuilder.accept(27, new KitMage());
+		buttonBuilder.accept(28, new KitNinja());
+		buttonBuilder.accept(29, new KitTemplar());
+		buttonBuilder.accept(30, new KitWarrior());
+		buttonBuilder.accept(31, new KitKnight());
+		buttonBuilder.accept(32, new KitPriest());
+		buttonBuilder.accept(33, new KitSiren());
+		buttonBuilder.accept(34, new KitMonk());
+		buttonBuilder.accept(35, new KitMessenger());
 
 		// Effect kits
 		for (int i = 36; i < 45; i++)
@@ -1882,19 +1844,14 @@ public class Inventories {
 					CommunicationManager.formatDescriptionArr(ChatColor.GRAY,
 							LanguageManager.messages.effectKitsDescription, Constants.LORE_CHAR_LIMIT)));
 
-		if (!arena.getBannedKits().contains("Blacksmith"))
-			inv.setItem(45, Kit.blacksmith().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.blacksmith()), false));
-		if (!arena.getBannedKits().contains("Witch"))
-			inv.setItem(46, Kit.witch().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.witch()), false));
-		if (!arena.getBannedKits().contains("Merchant"))
-			inv.setItem(47, Kit.merchant().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.merchant()), false));
-		if (!arena.getBannedKits().contains("Vampire"))
-			inv.setItem(48, Kit.vampire().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.vampire()), false));
-		if (!arena.getBannedKits().contains("Giant"))
-			inv.setItem(49, Kit.giant().getButton(PlayerDataManager.getPlayerKitLevel(uuid, Kit.giant()), false));
+		buttonBuilder.accept(45, new KitBlacksmith());
+		buttonBuilder.accept(46, new KitWitch());
+		buttonBuilder.accept(47, new KitMerchant());
+		buttonBuilder.accept(48, new KitVampire());
+		buttonBuilder.accept(49, new KitGiant());
 
 		// Option for no kit
-		inv.setItem(52, Kit.none().getButton(0, true));
+		inv.setItem(52, new KitNone().getButton(0, true));
 
 		// Option to exit
 		inv.setItem(53, InventoryButtons.exit());

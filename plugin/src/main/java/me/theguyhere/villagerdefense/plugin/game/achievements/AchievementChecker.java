@@ -2,17 +2,17 @@ package me.theguyhere.villagerdefense.plugin.game.achievements;
 
 import me.theguyhere.villagerdefense.common.ColoredMessage;
 import me.theguyhere.villagerdefense.common.CommunicationManager;
+import me.theguyhere.villagerdefense.plugin.data.LanguageManager;
 import me.theguyhere.villagerdefense.plugin.data.PlayerDataManager;
-import me.theguyhere.villagerdefense.plugin.game.exceptions.ArenaNotFoundException;
-import me.theguyhere.villagerdefense.plugin.game.achievements.exceptions.InvalidAchievementReqValException;
-import me.theguyhere.villagerdefense.plugin.game.challenges.Challenge;
-import me.theguyhere.villagerdefense.plugin.game.GameManager;
+import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
 import me.theguyhere.villagerdefense.plugin.game.Arena;
 import me.theguyhere.villagerdefense.plugin.game.ArenaStatus;
-import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
-import me.theguyhere.villagerdefense.plugin.data.LanguageManager;
+import me.theguyhere.villagerdefense.plugin.game.GameManager;
 import me.theguyhere.villagerdefense.plugin.game.PlayerManager;
-import me.theguyhere.villagerdefense.plugin.game.kits.Kit;
+import me.theguyhere.villagerdefense.plugin.game.achievements.exceptions.InvalidAchievementReqValException;
+import me.theguyhere.villagerdefense.plugin.game.challenges.Challenge;
+import me.theguyhere.villagerdefense.plugin.game.exceptions.ArenaNotFoundException;
+import me.theguyhere.villagerdefense.plugin.game.kits.Kits;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -160,7 +160,7 @@ public class AchievementChecker {
         for (AchievementRequirement requirement : achievement.getRequirements()) {
             try {
                 if (PlayerDataManager.getPlayerKitLevel(player.getUniqueId(),
-                    Objects.requireNonNull(Kit.getKit(requirement.getString())))
+                    Objects.requireNonNull(Kits.getByName(requirement.getString())))
                     < requirement.getInteger()) {
                     targets.add(false);
                 }

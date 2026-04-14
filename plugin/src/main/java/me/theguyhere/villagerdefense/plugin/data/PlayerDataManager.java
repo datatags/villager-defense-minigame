@@ -38,6 +38,9 @@ public class PlayerDataManager {
      * @return Kit level
      */
     public static int getPlayerKitLevel(UUID uuid, Kit kit) {
+        if (kit == null) {
+            return 0;
+        }
         try {
             return yamlManager.getSoftInteger(uuid + ".kits." + kit.getName());
         } catch (NoSuchPathException e) {
@@ -48,7 +51,7 @@ public class PlayerDataManager {
     public static void setPlayerKitLevel(UUID uuid, Kit kit, int level) {
         yamlManager.setInteger(uuid + ".kits." + kit.getName(), level);
     }
-    
+
     public static int getPlayerCrystals(UUID uuid) {
         try {
             return yamlManager.getInteger(uuid + ".crystalBalance");
@@ -57,7 +60,7 @@ public class PlayerDataManager {
             return 0;
         }
     }
-    
+
     public static void setPlayerCrystals(UUID uuid, int balance) {
         yamlManager.setInteger(uuid + ".crystalBalance", balance);
     }

@@ -2,39 +2,59 @@ package me.theguyhere.villagerdefense.plugin.visuals.listeners;
 
 import me.theguyhere.villagerdefense.common.CommunicationManager;
 import me.theguyhere.villagerdefense.plugin.Main;
-import me.theguyhere.villagerdefense.plugin.data.*;
+import me.theguyhere.villagerdefense.plugin.data.ArenaDataManager;
+import me.theguyhere.villagerdefense.plugin.data.GameDataManager;
+import me.theguyhere.villagerdefense.plugin.data.LanguageManager;
+import me.theguyhere.villagerdefense.plugin.data.PlayerDataManager;
 import me.theguyhere.villagerdefense.plugin.data.exceptions.BadDataException;
 import me.theguyhere.villagerdefense.plugin.data.exceptions.NoSuchPathException;
+import me.theguyhere.villagerdefense.plugin.data.listeners.ChatListener;
+import me.theguyhere.villagerdefense.plugin.entities.PlayerNotFoundException;
+import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
+import me.theguyhere.villagerdefense.plugin.game.Arena;
+import me.theguyhere.villagerdefense.plugin.game.GameManager;
+import me.theguyhere.villagerdefense.plugin.game.PlayerManager;
+import me.theguyhere.villagerdefense.plugin.game.achievements.AchievementChecker;
+import me.theguyhere.villagerdefense.plugin.game.challenges.Challenge;
 import me.theguyhere.villagerdefense.plugin.game.exceptions.ArenaNotFoundException;
 import me.theguyhere.villagerdefense.plugin.game.exceptions.InvalidNameException;
-import me.theguyhere.villagerdefense.plugin.entities.PlayerNotFoundException;
-import me.theguyhere.villagerdefense.plugin.game.challenges.Challenge;
+import me.theguyhere.villagerdefense.plugin.game.kits.Kit;
+import me.theguyhere.villagerdefense.plugin.game.kits.KitBlacksmith;
+import me.theguyhere.villagerdefense.plugin.game.kits.KitEffectType;
+import me.theguyhere.villagerdefense.plugin.game.kits.KitFarmer;
+import me.theguyhere.villagerdefense.plugin.game.kits.KitMerchant;
+import me.theguyhere.villagerdefense.plugin.game.kits.KitNone;
+import me.theguyhere.villagerdefense.plugin.game.kits.KitOrc;
+import me.theguyhere.villagerdefense.plugin.game.kits.KitWitch;
+import me.theguyhere.villagerdefense.plugin.game.kits.Kits;
 import me.theguyhere.villagerdefense.plugin.items.EnchantingBook;
 import me.theguyhere.villagerdefense.plugin.items.GameItems;
-import me.theguyhere.villagerdefense.plugin.game.GameManager;
-import me.theguyhere.villagerdefense.plugin.game.achievements.AchievementChecker;
-import me.theguyhere.villagerdefense.plugin.game.Arena;
-import me.theguyhere.villagerdefense.plugin.game.kits.Kit;
-import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
-import me.theguyhere.villagerdefense.plugin.visuals.InventoryButtons;
+import me.theguyhere.villagerdefense.plugin.items.ItemManager;
 import me.theguyhere.villagerdefense.plugin.visuals.Inventories;
+import me.theguyhere.villagerdefense.plugin.visuals.InventoryButtons;
 import me.theguyhere.villagerdefense.plugin.visuals.InventoryID;
 import me.theguyhere.villagerdefense.plugin.visuals.InventoryMeta;
-import me.theguyhere.villagerdefense.plugin.data.listeners.ChatListener;
-import me.theguyhere.villagerdefense.plugin.items.ItemManager;
-import me.theguyhere.villagerdefense.plugin.game.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.UUID;
 
 public class InventoryListener implements Listener {
 	// Prevent losing items by drag clicking in custom inventory
@@ -3075,33 +3095,31 @@ public class InventoryListener implements Listener {
 			buy = ItemManager.removeLastLore(buy);
 
 			// Make unbreakable for blacksmith (not sharing)
-			if ((Kit.blacksmith().setKitLevel(1).equals(gamer.getKit()) ||
-					Kit.blacksmith().setKitLevel(1).equals(gamer.getKit2())) && !gamer.isSharing())
-				buy = ItemManager.makeUnbreakable(buy);
+			if (gamer.using(KitBlacksmith.class) && !gamer.isSharing()) {
+                buy = ItemManager.makeUnbreakable(buy);
+            }
 
 			// Make unbreakable for successful blacksmith sharing
-			if (random.nextDouble() > Math.pow(.75, arenaInstance.effectShareCount(Kit.EffectType.BLACKSMITH))) {
+			if (arenaInstance.rollEffectShare(KitEffectType.BLACKSMITH)) {
 				buy = ItemManager.makeUnbreakable(buy);
 				PlayerManager.notifySuccess(player, LanguageManager.messages.effectShare);
 			}
 
 			// Make splash potion for witch (not sharing)
-			if ((Kit.witch().setKitLevel(1).equals(gamer.getKit()) ||
-					Kit.witch().setKitLevel(1).equals(gamer.getKit2())) && !gamer.isSharing())
+			if (gamer.using(KitWitch.class) && !gamer.isSharing())
 				buy = ItemManager.makeSplash(buy);
 
 			// Make splash potion for successful witch sharing
-			if (random.nextDouble() > Math.pow(.75, arenaInstance.effectShareCount(Kit.EffectType.WITCH))) {
+			if (arenaInstance.rollEffectShare(KitEffectType.WITCH)) {
 				buy = ItemManager.makeSplash(buy);
 				PlayerManager.notifySuccess(player, LanguageManager.messages.effectShare);
 			}
 
 			// Subtract from balance, apply rebate, and update scoreboard
 			gamer.addGems(-cost);
-			if ((Kit.merchant().setKitLevel(1).equals(gamer.getKit()) ||
-					Kit.merchant().setKitLevel(1).equals(gamer.getKit2())) && !gamer.isSharing())
+			if (gamer.using(KitMerchant.class) && !gamer.isSharing())
 				gamer.addGems(cost / 10);
-			if (random.nextDouble() > Math.pow(.75, arenaInstance.effectShareCount(Kit.EffectType.MERCHANT))) {
+			if (arenaInstance.rollEffectShare(KitEffectType.MERCHANT)) {
 				gamer.addGems(cost / 10);
 				PlayerManager.notifySuccess(player, LanguageManager.messages.effectShare);
 			}
@@ -3255,7 +3273,7 @@ public class InventoryListener implements Listener {
 			Player owner = meta.getPlayer();
 			String name = owner.getName();
 			UUID uuid = owner.getUniqueId();
-			Kit kit = Kit.getKit(buttonName.substring(4));
+			Kit kit = Kits.getByName(buttonName.substring(4));
 
 			if (buttonName.contains(LanguageManager.messages.exit)) {
 				player.openInventory(Inventories.createPlayerStatsMenu(owner));
@@ -3336,7 +3354,7 @@ public class InventoryListener implements Listener {
 				return;
 			}
 
-			Kit kit = Kit.getKit(buttonName.substring(4));
+			Kit kit = Kits.getByName(buttonName.substring(4));
 			UUID uuid = player.getUniqueId();
 
 			// Leave if EXIT
@@ -3356,9 +3374,9 @@ public class InventoryListener implements Listener {
 				return;
 
 			// Set proper kit for gamer
-			if (PlayerDataManager.playerOwnsKit(uuid, kit) || kit.equals(Kit.orc()) ||
-					kit.equals(Kit.farmer()) || kit.equals(Kit.none())) {
-				gamer.setKit(kit.setKitLevel(PlayerDataManager.getPlayerKitLevel(uuid, kit)));
+			if (PlayerDataManager.playerOwnsKit(uuid, kit) || kit instanceof KitOrc
+                    || kit instanceof KitFarmer || kit instanceof KitNone) {
+                gamer.setKit(kit);
 				PlayerManager.notifySuccess(player, LanguageManager.confirms.kitSelect);
 			} else {
 				PlayerManager.notifyFailure(player, LanguageManager.errors.kitSelect);

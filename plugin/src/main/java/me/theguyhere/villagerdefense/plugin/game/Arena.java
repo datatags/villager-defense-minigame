@@ -2,41 +2,66 @@ package me.theguyhere.villagerdefense.plugin.game;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.theguyhere.villagerdefense.common.CommunicationManager;
 import me.theguyhere.villagerdefense.common.Calculator;
-import me.theguyhere.villagerdefense.plugin.data.*;
-import me.theguyhere.villagerdefense.plugin.data.exceptions.BadDataException;
-import me.theguyhere.villagerdefense.plugin.data.exceptions.NoSuchPathException;
-import me.theguyhere.villagerdefense.plugin.structures.*;
-import me.theguyhere.villagerdefense.plugin.game.exceptions.ArenaNotFoundException;
-import me.theguyhere.villagerdefense.plugin.items.ItemManager;
-import me.theguyhere.villagerdefense.plugin.game.kits.Kit;
-import me.theguyhere.villagerdefense.plugin.visuals.InventoryID;
-import me.theguyhere.villagerdefense.plugin.visuals.InventoryType;
-import me.theguyhere.villagerdefense.plugin.visuals.InventoryButtons;
-import me.theguyhere.villagerdefense.plugin.visuals.InventoryMeta;
+import me.theguyhere.villagerdefense.common.CommunicationManager;
 import me.theguyhere.villagerdefense.plugin.Main;
-import me.theguyhere.villagerdefense.plugin.game.events.GameEndEvent;
-import me.theguyhere.villagerdefense.plugin.game.events.LeaveArenaEvent;
-import me.theguyhere.villagerdefense.plugin.structures.events.ReloadBoardsEvent;
-import me.theguyhere.villagerdefense.plugin.game.events.WaveEndEvent;
+import me.theguyhere.villagerdefense.plugin.data.ArenaDataManager;
+import me.theguyhere.villagerdefense.plugin.data.GameDataManager;
+import me.theguyhere.villagerdefense.plugin.data.LanguageManager;
+import me.theguyhere.villagerdefense.plugin.data.NMSVersion;
+import me.theguyhere.villagerdefense.plugin.data.SpawnTableDataManager;
+import me.theguyhere.villagerdefense.plugin.data.exceptions.BadDataException;
 import me.theguyhere.villagerdefense.plugin.data.exceptions.InvalidLocationException;
-import me.theguyhere.villagerdefense.plugin.game.exceptions.InvalidNameException;
+import me.theguyhere.villagerdefense.plugin.data.exceptions.NoSuchPathException;
 import me.theguyhere.villagerdefense.plugin.entities.PlayerNotFoundException;
 import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
-import org.bukkit.*;
+import me.theguyhere.villagerdefense.plugin.game.events.GameEndEvent;
+import me.theguyhere.villagerdefense.plugin.game.events.LeaveArenaEvent;
+import me.theguyhere.villagerdefense.plugin.game.events.WaveEndEvent;
+import me.theguyhere.villagerdefense.plugin.game.exceptions.ArenaNotFoundException;
+import me.theguyhere.villagerdefense.plugin.game.exceptions.InvalidNameException;
+import me.theguyhere.villagerdefense.plugin.game.kits.KitEffectType;
+import me.theguyhere.villagerdefense.plugin.items.ItemManager;
+import me.theguyhere.villagerdefense.plugin.structures.ArenaBoard;
+import me.theguyhere.villagerdefense.plugin.structures.ArenaRecord;
+import me.theguyhere.villagerdefense.plugin.structures.ArenaSpawn;
+import me.theguyhere.villagerdefense.plugin.structures.ArenaSpawnType;
+import me.theguyhere.villagerdefense.plugin.structures.Portal;
+import me.theguyhere.villagerdefense.plugin.structures.events.ReloadBoardsEvent;
+import me.theguyhere.villagerdefense.plugin.visuals.InventoryButtons;
+import me.theguyhere.villagerdefense.plugin.visuals.InventoryID;
+import me.theguyhere.villagerdefense.plugin.visuals.InventoryMeta;
+import me.theguyhere.villagerdefense.plugin.visuals.InventoryType;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Hoglin;
+import org.bukkit.entity.IronGolem;
+import org.bukkit.entity.Monster;
+import org.bukkit.entity.Phantom;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Slime;
+import org.bukkit.entity.Villager;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -1829,34 +1854,18 @@ public class Arena {
      * @param effectType The effect type to look for.
      * @return Number of players sharing the effect type.
      */
-    public int effectShareCount(Kit.EffectType effectType) {
-        Kit effectKit;
+    public long effectShareCount(KitEffectType effectType) {
+        return getActives().stream().filter(VDPlayer::isSharing).filter(player ->
+                player.getActiveKitLevel(effectType.getKitType()) == effectType.getLevel()).count();
+    }
 
-        switch (effectType) {
-            case BLACKSMITH:
-                effectKit = Kit.blacksmith().setKitLevel(1);
-                break;
-            case WITCH:
-                effectKit = Kit.witch().setKitLevel(1);
-                break;
-            case MERCHANT:
-                effectKit = Kit.merchant().setKitLevel(1);
-                break;
-            case VAMPIRE:
-                effectKit = Kit.vampire().setKitLevel(1);
-                break;
-            case GIANT1:
-                effectKit = Kit.giant().setKitLevel(1);
-                break;
-            case GIANT2:
-                effectKit = Kit.giant().setKitLevel(2);
-                break;
-            default:
-                effectKit = Kit.none();
-        }
-
-        return (int) getActives().stream().filter(VDPlayer::isSharing).filter(player ->
-                effectKit.equals(player.getKit()) || effectKit.equals(player.getKit2())).count();
+    /**
+     * Randomly choose whether to award an effect share according to the number of players sharing the effect.
+     * @param effectType The effect type to look for
+     * @return True if the effect share should be awarded.
+     */
+    public boolean rollEffectShare(KitEffectType effectType) {
+        return ThreadLocalRandom.current().nextDouble() > Math.pow(.75, effectShareCount(effectType));
     }
 
     /**

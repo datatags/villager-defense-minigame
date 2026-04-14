@@ -490,43 +490,47 @@ public class LanguageManager {
             witch = new Kit("witch");
         }
 
-        public static class Kit extends Section {
+        public static class KitBase extends Section {
             public final @NotNull String name;
-            public final @NotNull String description;
 
-            private Kit(@NotNull String key) throws InvalidLanguageKeyException {
+            private KitBase(@NotNull String key) throws InvalidLanguageKeyException {
                 setPathPrefix("kits." + key);
 
                 name = getConfigString("name");
+            }
+        }
+
+        public static class Kit extends KitBase {
+            public final @NotNull String description;
+
+            private Kit(@NotNull String key) throws InvalidLanguageKeyException {
+                super(key);
+
                 description = getConfigString("description");
             }
         }
 
-        public static class GiftKit extends Section {
-            public final @NotNull String name;
+        public static class GiftKit extends KitBase {
             public final @NotNull String description;
             public final @NotNull Items items;
 
             private GiftKit(@NotNull String key) throws InvalidLanguageKeyException {
-                setPathPrefix("kits." + key);
+                super(key);
 
-                name = getConfigString("name");
                 description = getConfigString("description");
                 items = new Items(key);
             }
         }
 
-        public static class TieredGiftKit extends Section {
-            public final @NotNull String name;
+        public static class TieredGiftKit extends KitBase {
             public final @NotNull String description1;
             public final @NotNull String description2;
             public final @NotNull String description3;
             public final @NotNull Items items;
 
             private TieredGiftKit(@NotNull String key) throws InvalidLanguageKeyException {
-                setPathPrefix("kits." + key);
+                super(key);
 
-                name = getConfigString("name");
                 description1 = getConfigString("description1");
                 description2 = getConfigString("description2");
                 description3 = getConfigString("description3");

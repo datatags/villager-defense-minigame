@@ -1,38 +1,52 @@
 package me.theguyhere.villagerdefense.plugin.game;
 
 import lombok.Getter;
+import me.theguyhere.villagerdefense.common.Calculator;
 import me.theguyhere.villagerdefense.common.ColoredMessage;
 import me.theguyhere.villagerdefense.common.CommunicationManager;
-import me.theguyhere.villagerdefense.common.Calculator;
+import me.theguyhere.villagerdefense.plugin.Main;
+import me.theguyhere.villagerdefense.plugin.data.LanguageManager;
 import me.theguyhere.villagerdefense.plugin.data.PlayerDataManager;
+import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
 import me.theguyhere.villagerdefense.plugin.game.achievements.Achievement;
 import me.theguyhere.villagerdefense.plugin.game.challenges.Challenge;
-import me.theguyhere.villagerdefense.plugin.visuals.InventoryID;
-import me.theguyhere.villagerdefense.plugin.visuals.InventoryType;
-import me.theguyhere.villagerdefense.plugin.visuals.Inventories;
-import me.theguyhere.villagerdefense.plugin.visuals.InventoryMeta;
-import me.theguyhere.villagerdefense.plugin.Main;
 import me.theguyhere.villagerdefense.plugin.game.events.GameEndEvent;
 import me.theguyhere.villagerdefense.plugin.game.events.LeaveArenaEvent;
 import me.theguyhere.villagerdefense.plugin.game.events.WaveEndEvent;
 import me.theguyhere.villagerdefense.plugin.game.events.WaveStartEvent;
-import me.theguyhere.villagerdefense.plugin.items.GameItems;
 import me.theguyhere.villagerdefense.plugin.game.kits.Kit;
-import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
-import me.theguyhere.villagerdefense.plugin.data.LanguageManager;
+import me.theguyhere.villagerdefense.plugin.game.kits.KitEffectType;
+import me.theguyhere.villagerdefense.plugin.game.kits.KitGiant;
+import me.theguyhere.villagerdefense.plugin.game.kits.KitTrader;
+import me.theguyhere.villagerdefense.plugin.game.kits.Kits;
+import me.theguyhere.villagerdefense.plugin.items.GameItems;
+import me.theguyhere.villagerdefense.plugin.visuals.Inventories;
+import me.theguyhere.villagerdefense.plugin.visuals.InventoryID;
+import me.theguyhere.villagerdefense.plugin.visuals.InventoryMeta;
+import me.theguyhere.villagerdefense.plugin.visuals.InventoryType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.boss.BarColor;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Hoglin;
+import org.bukkit.entity.Monster;
+import org.bukkit.entity.Phantom;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Slime;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+import java.util.UUID;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class Tasks {
@@ -195,39 +209,26 @@ public class Tasks {
 
 				// Give second kit to players with two kit bonus
 				if (player.isBoosted() && PlayerDataManager.getPlayerAchievements(uuid).contains(Achievement.allKits().getID())) {
-					do {
-						second = Kit.randomKit();
-						second.setKitLevel(PlayerDataManager.getPlayerKitLevel(uuid, second));
-						player.setKit2(second);
-					} while (second.equals(player.getKit()));
+                    player.setKit2(Kits.randomKitOtherThan(player.getKit()));
 				}
 
 				// Give all players starting items
 				giveItems(player);
 
 				// Set health for people with giant kits
-				if ((Kit.giant().setKitLevel(1).equals(player.getKit()) ||
-						Kit.giant().setKitLevel(1).equals(player.getKit2())) && !player.isSharing())
-					Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.MAX_HEALTH))
-							.addModifier(new AttributeModifier("Giant1", 2,
-									AttributeModifier.Operation.ADD_NUMBER));
-				else if ((Kit.giant().setKitLevel(2).equals(player.getKit()) ||
-						Kit.giant().setKitLevel(2).equals(player.getKit2())) && !player.isSharing())
-					Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.MAX_HEALTH))
-							.addModifier(new AttributeModifier("Giant2", 4,
-									AttributeModifier.Operation.ADD_NUMBER));
-				else if (r.nextDouble() > Math.pow(.75, arena.effectShareCount(Kit.EffectType.GIANT2))) {
-					Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.MAX_HEALTH))
-							.addModifier(new AttributeModifier("Giant2", 4,
-									AttributeModifier.Operation.ADD_NUMBER));
-					PlayerManager.notifySuccess(player.getPlayer(), LanguageManager.messages.effectShare);
-				}
-				else if (r.nextDouble() > Math.pow(.75, arena.effectShareCount(Kit.EffectType.GIANT1))) {
-					Objects.requireNonNull(player.getPlayer().getAttribute(Attribute.MAX_HEALTH))
-							.addModifier(new AttributeModifier("Giant1", 2,
-									AttributeModifier.Operation.ADD_NUMBER));
-					PlayerManager.notifySuccess(player.getPlayer(), LanguageManager.messages.effectShare);
-				}
+                int giantLevel = 0;
+                if (player.using(KitGiant.class)) {
+                    giantLevel = PlayerDataManager.getPlayerKitLevel(player.getID(), new KitGiant());
+                } else if (arena.rollEffectShare(KitEffectType.GIANT2)) {
+                    giantLevel = 2;
+                } else if (arena.rollEffectShare(KitEffectType.GIANT1)) {
+                    giantLevel = 1;
+                }
+				if (giantLevel > 0) {
+                    player.getPlayer().getAttribute(Attribute.MAX_HEALTH)
+                            .addModifier(new AttributeModifier("Giant" + giantLevel, giantLevel * 2,
+                                    AttributeModifier.Operation.ADD_NUMBER));
+                }
 
 				// Set health for people with health boost and are boosted
 				if (player.isBoosted() && PlayerDataManager.getPlayerAchievements(uuid).contains(Achievement.topWave9().getID())) {
@@ -254,8 +255,7 @@ public class Tasks {
 				}
 
 				// Give Traders their gems
-				if (Kit.trader().setKitLevel(1).equals(player.getKit()) ||
-						Kit.trader().setKitLevel(1).equals(player.getKit2())) {
+				if (player.using(KitTrader.class)) {
 					player.addGems(200);
 				}
 
@@ -365,28 +365,26 @@ public class Tasks {
 				Random r = new Random();
 
 				// Set health for people with giant kits
-				if ((Kit.giant().setKitLevel(1).equals(p.getKit()) ||
-						Kit.giant().setKitLevel(1).equals(p.getKit2())) && !p.isSharing())
-					Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.MAX_HEALTH))
-							.addModifier(new AttributeModifier("Giant1", 2,
-									AttributeModifier.Operation.ADD_NUMBER));
-				else if ((Kit.giant().setKitLevel(2).equals(p.getKit()) ||
-						Kit.giant().setKitLevel(2).equals(p.getKit2())) && !p.isSharing())
-					Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.MAX_HEALTH))
-							.addModifier(new AttributeModifier("Giant2", 4,
-									AttributeModifier.Operation.ADD_NUMBER));
-				else if (r.nextDouble() > Math.pow(.75, arena.effectShareCount(Kit.EffectType.GIANT2))) {
-					Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.MAX_HEALTH))
-							.addModifier(new AttributeModifier("Giant2", 4,
-									AttributeModifier.Operation.ADD_NUMBER));
-					PlayerManager.notifySuccess(p.getPlayer(), LanguageManager.messages.effectShare);
-				}
-				else if (r.nextDouble() > Math.pow(.75, arena.effectShareCount(Kit.EffectType.GIANT1))) {
-					Objects.requireNonNull(p.getPlayer().getAttribute(Attribute.MAX_HEALTH))
-							.addModifier(new AttributeModifier("Giant1", 2,
-									AttributeModifier.Operation.ADD_NUMBER));
-					PlayerManager.notifySuccess(p.getPlayer(), LanguageManager.messages.effectShare);
-				}
+                int giantLevel;
+                boolean shared = false;
+                if (p.using(KitGiant.class)) {
+                    giantLevel = PlayerDataManager.getPlayerKitLevel(p.getID(), new KitGiant());
+                } else if (arena.rollEffectShare(KitEffectType.GIANT2)) {
+                    giantLevel = 2;
+                    shared = true;
+                } else if (arena.rollEffectShare(KitEffectType.GIANT1)) {
+                    giantLevel = 1;
+                    shared = true;
+                } else {
+                    giantLevel = 0;
+                }
+                if (giantLevel > 0) {
+                    p.getPlayer().getAttribute(Attribute.MAX_HEALTH).addModifier(
+                            new AttributeModifier("Giant" + giantLevel, giantLevel * 2, AttributeModifier.Operation.ADD_NUMBER));
+                }
+                if (shared) {
+                    PlayerManager.notifySuccess(p.getPlayer(), LanguageManager.messages.effectShare);
+                }
 
 				// Set health for people with health boost and are boosted
 				if (p.isBoosted() && PlayerDataManager.getPlayerAchievements(p.getID()).contains(Achievement.topWave9().getID())) {
@@ -606,8 +604,14 @@ public class Tasks {
 
 	// Gives items on spawn or respawn based on kit selected
 	public void giveItems(VDPlayer player) {
+        Player p = player.getPlayer();
+        // always put shop in second slot so we usually end up with:
+        // weapon | shop | misc other stuff
+        p.getInventory().setItem(1, GameItems.shop());
+        PlayerManager.giveItem(player.getPlayer(), GameItems.shop(), LanguageManager.errors.inventoryFull);
 		EntityEquipment equipment = player.getPlayer().getEquipment();
-		for (ItemStack item: player.getKit().getItems()) {
+        int level = player.getKitLevel();
+		for (ItemStack item : player.getKit().getItems(level)) {
 			Objects.requireNonNull(equipment);
 
 			// Equip armor if possible, otherwise put in inventory, otherwise drop at feet
@@ -625,24 +629,25 @@ public class Tasks {
 				equipment.setBoots(item);
 			else PlayerManager.giveItem(player.getPlayer(), item, LanguageManager.errors.inventoryFull);
 		}
-		if (player.getKit2() != null)
-			for (ItemStack item: player.getKit2().getItems()) {
+		if (player.getKit2() != null) {
+            int level2 = player.getKit2Level();
+            for (ItemStack item : player.getKit2().getItems(level2)) {
 
-				// Equip armor if possible, otherwise put in inventory, otherwise drop at feet
-				if (Arrays.stream(GameItems.HELMET_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
-						(equipment.getHelmet() == null || equipment.getHelmet().getType() == Material.AIR))
-					equipment.setHelmet(item);
-				else if (Arrays.stream(GameItems.CHESTPLATE_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
-						(equipment.getChestplate() == null || equipment.getChestplate().getType() == Material.AIR))
-					equipment.setChestplate(item);
-				else if (Arrays.stream(GameItems.LEGGING_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
-						(equipment.getLeggings() == null || equipment.getLeggings().getType() == Material.AIR))
-					equipment.setLeggings(item);
-				else if (Arrays.stream(GameItems.BOOTS_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
-						(equipment.getBoots() == null || equipment.getBoots().getType() == Material.AIR))
-					equipment.setBoots(item);
-				else PlayerManager.giveItem(player.getPlayer(), item, LanguageManager.errors.inventoryFull);
-			}
-		PlayerManager.giveItem(player.getPlayer(), GameItems.shop(), LanguageManager.errors.inventoryFull);
+                // Equip armor if possible, otherwise put in inventory, otherwise drop at feet
+                if (Arrays.stream(GameItems.HELMET_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
+                        (equipment.getHelmet() == null || equipment.getHelmet().getType() == Material.AIR))
+                    equipment.setHelmet(item);
+                else if (Arrays.stream(GameItems.CHESTPLATE_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
+                        (equipment.getChestplate() == null || equipment.getChestplate().getType() == Material.AIR))
+                    equipment.setChestplate(item);
+                else if (Arrays.stream(GameItems.LEGGING_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
+                        (equipment.getLeggings() == null || equipment.getLeggings().getType() == Material.AIR))
+                    equipment.setLeggings(item);
+                else if (Arrays.stream(GameItems.BOOTS_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
+                        (equipment.getBoots() == null || equipment.getBoots().getType() == Material.AIR))
+                    equipment.setBoots(item);
+                else PlayerManager.giveItem(player.getPlayer(), item, LanguageManager.errors.inventoryFull);
+            }
+        }
 	}
 }

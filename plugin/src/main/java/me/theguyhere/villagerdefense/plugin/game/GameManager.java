@@ -152,7 +152,7 @@ public class GameManager {
 		StringBuilder kit2 = new StringBuilder("    ");
 		if (player.getKit().isMultiLevel()) {
 			kit.append(" ");
-			for (int i = 0; i < Math.max(0, player.getKit().getLevel()); i++)
+			for (int i = 0; i < Math.max(0, player.getKitLevel()); i++)
 				kit.append("I");
 		}
 		if (player.getKit2() != null) {
@@ -160,7 +160,7 @@ public class GameManager {
 			kit2.append(player.getKit2().getName());
 			if (player.getKit2().isMultiLevel()) {
 				kit2.append(" ");
-				for (int i = 0; i < Math.max(0, player.getKit2().getLevel()); i++)
+				for (int i = 0; i < Math.max(0, player.getKit2Level()); i++)
 					kit2.append("I");
 			}
 		}
