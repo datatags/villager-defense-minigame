@@ -220,22 +220,22 @@ public class KitAbilityListener implements Listener {
 
         // Unequip armor
         if (!(helmet == null || helmet.getType() == Material.AIR)) {
-            PlayerManager.giveItem(player, helmet, LanguageManager.errors.inventoryFull);
+            PlayerManager.giveItem(player, helmet);
             player.getInventory().setHelmet(null);
             PlayerManager.notifyFailure(player, LanguageManager.errors.ninja);
         }
         if (!(chestplate == null || chestplate.getType() == Material.AIR)) {
-            PlayerManager.giveItem(player, chestplate, LanguageManager.errors.inventoryFull);
+            PlayerManager.giveItem(player, chestplate);
             player.getInventory().setChestplate(null);
             PlayerManager.notifyFailure(player, LanguageManager.errors.ninja);
         }
         if (!(leggings == null || leggings.getType() == Material.AIR)) {
-            PlayerManager.giveItem(player, leggings, LanguageManager.errors.inventoryFull);
+            PlayerManager.giveItem(player, leggings);
             player.getInventory().setLeggings(null);
             PlayerManager.notifyFailure(player, LanguageManager.errors.ninja);
         }
         if (!(boots == null || boots.getType() == Material.AIR)) {
-            PlayerManager.giveItem(player, boots, LanguageManager.errors.inventoryFull);
+            PlayerManager.giveItem(player, boots);
             player.getInventory().setBoots(null);
             PlayerManager.notifyFailure(player, LanguageManager.errors.ninja);
         }

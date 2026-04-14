@@ -608,7 +608,6 @@ public class Tasks {
         // always put shop in second slot so we usually end up with:
         // weapon | shop | misc other stuff
         p.getInventory().setItem(1, GameItems.shop());
-        PlayerManager.giveItem(player.getPlayer(), GameItems.shop(), LanguageManager.errors.inventoryFull);
 		EntityEquipment equipment = player.getPlayer().getEquipment();
         int level = player.getKitLevel();
 		for (ItemStack item : player.getKit().getItems(level)) {
@@ -627,7 +626,7 @@ public class Tasks {
 			else if (Arrays.stream(GameItems.BOOTS_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
 					(equipment.getBoots() == null || equipment.getBoots().getType() == Material.AIR))
 				equipment.setBoots(item);
-			else PlayerManager.giveItem(player.getPlayer(), item, LanguageManager.errors.inventoryFull);
+			else PlayerManager.giveItem(player.getPlayer(), item);
 		}
 		if (player.getKit2() != null) {
             int level2 = player.getKit2Level();
@@ -646,7 +645,7 @@ public class Tasks {
                 else if (Arrays.stream(GameItems.BOOTS_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
                         (equipment.getBoots() == null || equipment.getBoots().getType() == Material.AIR))
                     equipment.setBoots(item);
-                else PlayerManager.giveItem(player.getPlayer(), item, LanguageManager.errors.inventoryFull);
+                else PlayerManager.giveItem(player.getPlayer(), item);
             }
         }
 	}

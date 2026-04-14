@@ -211,7 +211,7 @@ public class InventoryListener implements Listener {
 				ItemStack copy = cursor.clone();
 				copy.setItemMeta(itemMeta);
 				ArenaDataManager.setCustomShopItem(meta.getArena().getId(), slot, copy);
-				PlayerManager.giveItem(player, cursor.clone(), LanguageManager.errors.inventoryFull);
+				PlayerManager.giveItem(player, cursor.clone());
 				player.setItemOnCursor(new ItemStack(Material.AIR));
 				player.openInventory(Inventories.createCustomItemsMenu(meta.getArena(), slot));
 				return;
@@ -3146,7 +3146,7 @@ public class InventoryListener implements Listener {
 				equipment.setBoots(buy);
 				PlayerManager.notifySuccess(player, LanguageManager.confirms.boots);
 			} else {
-				PlayerManager.giveItem(player, buy, LanguageManager.errors.inventoryFull);
+				PlayerManager.giveItem(player, buy);
 				PlayerManager.notifySuccess(player, LanguageManager.confirms.buy);
 			}
 		}
@@ -3236,7 +3236,7 @@ public class InventoryListener implements Listener {
 				give = EnchantingBook.mending();
 			else give = null;
 
-			PlayerManager.giveItem(player, give, LanguageManager.errors.inventoryFull);
+			PlayerManager.giveItem(player, give);
 			PlayerManager.notifySuccess(player, LanguageManager.confirms.buy);
 		}
 
@@ -3605,7 +3605,7 @@ public class InventoryListener implements Listener {
 		// Check for community chest with shop inside it
 		if (meta.getInventoryID() == InventoryID.COMMUNITY_CHEST_INVENTORY && e.getInventory().contains(GameItems.shop())) {
 			e.getInventory().removeItem(GameItems.shop());
-			PlayerManager.giveItem((Player) e.getPlayer(), GameItems.shop(), LanguageManager.errors.inventoryFull);
+			PlayerManager.giveItem((Player) e.getPlayer(), GameItems.shop());
 		}
 	}
 

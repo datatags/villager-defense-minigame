@@ -1,15 +1,20 @@
 package me.theguyhere.villagerdefense.plugin.game;
 
+import me.theguyhere.villagerdefense.common.Calculator;
 import me.theguyhere.villagerdefense.common.ColoredMessage;
 import me.theguyhere.villagerdefense.common.CommunicationManager;
-import me.theguyhere.villagerdefense.common.Calculator;
 import me.theguyhere.villagerdefense.nms.common.PacketGroup;
 import me.theguyhere.villagerdefense.plugin.data.LanguageManager;
 import me.theguyhere.villagerdefense.plugin.data.PlayerDataManager;
 import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
-import me.theguyhere.villagerdefense.plugin.items.GameItems;
 import me.theguyhere.villagerdefense.plugin.game.achievements.Achievement;
-import org.bukkit.*;
+import me.theguyhere.villagerdefense.plugin.items.GameItems;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
@@ -21,28 +26,27 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class to manage player manipulations.
  */
 public class PlayerManager {
     // Gives item to player if possible, otherwise drops at feet
-    public static void giveItem(Player player, ItemStack item, String message) {
+    public static void giveItem(Player player, ItemStack item) {
         // Ignore if item is null
-        if (item == null)
+        if (item == null) {
             return;
-
-        // Inventory is full
-        if (player.getInventory().firstEmpty() == -1 && (player.getInventory().first(item.getType()) == -1 ||
-                (player.getInventory().all(new ItemStack(item.getType(), item.getMaxStackSize())).size() ==
-                        player.getInventory().all(item.getType()).size()) &&
-                    !player.getInventory().all(item.getType()).isEmpty())) {
-            player.getWorld().dropItemNaturally(player.getLocation(), item);
-            notifyFailure(player, message);
         }
-
-        // Add item to inventory
-        else player.getInventory().addItem(item);
+        Bukkit.getLogger().info("Begin amount: " + item.getAmount());
+        Map<Integer, ItemStack> remaining = player.getInventory().addItem(item);
+        if (remaining.isEmpty()) {
+            return; // all items given successfully
+        }
+        Bukkit.getLogger().info("End amount: " + item.getAmount());
+        remaining.forEach((slot, stack) -> Bukkit.getLogger().info("End 2: " + stack.getAmount()));
+        player.getWorld().dropItemNaturally(player.getLocation(), item);
+        notifyFailure(player, LanguageManager.errors.inventoryFull);
     }
 
     // Prepares and teleports a player into adventure mode

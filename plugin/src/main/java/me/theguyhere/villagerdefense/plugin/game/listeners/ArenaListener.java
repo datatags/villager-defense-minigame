@@ -1,40 +1,55 @@
 package me.theguyhere.villagerdefense.plugin.game.listeners;
 
+import me.theguyhere.villagerdefense.common.Calculator;
 import me.theguyhere.villagerdefense.common.ColoredMessage;
 import me.theguyhere.villagerdefense.common.CommunicationManager;
-import me.theguyhere.villagerdefense.common.Calculator;
 import me.theguyhere.villagerdefense.plugin.Main;
-import me.theguyhere.villagerdefense.plugin.data.*;
+import me.theguyhere.villagerdefense.plugin.data.LanguageManager;
+import me.theguyhere.villagerdefense.plugin.data.PlayerDataManager;
+import me.theguyhere.villagerdefense.plugin.data.SpawnTableDataManager;
 import me.theguyhere.villagerdefense.plugin.data.exceptions.BadDataException;
 import me.theguyhere.villagerdefense.plugin.data.exceptions.NoSuchPathException;
-import me.theguyhere.villagerdefense.plugin.structures.ArenaRecord;
-import me.theguyhere.villagerdefense.plugin.structures.ArenaSpawn;
-import me.theguyhere.villagerdefense.plugin.structures.ArenaSpawnType;
-import me.theguyhere.villagerdefense.plugin.game.*;
+import me.theguyhere.villagerdefense.plugin.entities.Mobs;
+import me.theguyhere.villagerdefense.plugin.entities.PlayerNotFoundException;
+import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
+import me.theguyhere.villagerdefense.plugin.game.Arena;
+import me.theguyhere.villagerdefense.plugin.game.ArenaStatus;
+import me.theguyhere.villagerdefense.plugin.game.GameManager;
+import me.theguyhere.villagerdefense.plugin.game.PlayerManager;
+import me.theguyhere.villagerdefense.plugin.game.Tasks;
+import me.theguyhere.villagerdefense.plugin.game.WorldManager;
+import me.theguyhere.villagerdefense.plugin.game.achievements.AchievementChecker;
+import me.theguyhere.villagerdefense.plugin.game.challenges.Challenge;
+import me.theguyhere.villagerdefense.plugin.game.events.GameEndEvent;
 import me.theguyhere.villagerdefense.plugin.game.events.JoinArenaEvent;
 import me.theguyhere.villagerdefense.plugin.game.events.LeaveArenaEvent;
 import me.theguyhere.villagerdefense.plugin.game.events.WaveEndEvent;
 import me.theguyhere.villagerdefense.plugin.game.events.WaveStartEvent;
-import me.theguyhere.villagerdefense.plugin.structures.events.ReloadBoardsEvent;
 import me.theguyhere.villagerdefense.plugin.game.exceptions.ArenaNotFoundException;
-import me.theguyhere.villagerdefense.plugin.entities.PlayerNotFoundException;
-import me.theguyhere.villagerdefense.plugin.game.challenges.Challenge;
-import me.theguyhere.villagerdefense.plugin.entities.Mobs;
-import me.theguyhere.villagerdefense.plugin.game.achievements.AchievementChecker;
-import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
-import me.theguyhere.villagerdefense.plugin.game.events.GameEndEvent;
 import me.theguyhere.villagerdefense.plugin.game.kits.events.EndNinjaNerfEvent;
+import me.theguyhere.villagerdefense.plugin.structures.ArenaRecord;
+import me.theguyhere.villagerdefense.plugin.structures.ArenaSpawn;
+import me.theguyhere.villagerdefense.plugin.structures.ArenaSpawnType;
+import me.theguyhere.villagerdefense.plugin.structures.events.ReloadBoardsEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.DisplaySlot;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -721,6 +736,7 @@ public class ArenaListener implements Listener {
 
         // Spawn monsters
         for (int i = 0; i < toSpawn; i++) {
+            PlayerManager.giveItem(Bukkit.getOnlinePlayers().stream().iterator().next(), new ItemStack(Material.SNOWBALL, 63));
             // Update delay
             delay += r.nextInt(spawnDelay(i));
 

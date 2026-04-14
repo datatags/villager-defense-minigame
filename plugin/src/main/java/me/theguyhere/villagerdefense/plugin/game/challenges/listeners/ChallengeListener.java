@@ -63,7 +63,7 @@ public class ChallengeListener implements Listener {
 
         // Unequip off-hand
         if (gamer.getChallenges().contains(Challenge.amputee()) && off.getType() != Material.AIR) {
-            PlayerManager.giveItem(player, off, LanguageManager.errors.inventoryFull);
+            PlayerManager.giveItem(player, off);
             player.getInventory().setItemInOffHand(null);
             PlayerManager.notifyFailure(player, LanguageManager.errors.amputee);
         }
@@ -72,22 +72,22 @@ public class ChallengeListener implements Listener {
         if (!gamer.getChallenges().contains(Challenge.naked()))
             return;
         if (!(helmet == null || helmet.getType() == Material.AIR)) {
-            PlayerManager.giveItem(player, helmet, LanguageManager.errors.inventoryFull);
+            PlayerManager.giveItem(player, helmet);
             player.getInventory().setHelmet(null);
             PlayerManager.notifyFailure(player, LanguageManager.errors.naked);
         }
         if (!(chestplate == null || chestplate.getType() == Material.AIR)) {
-            PlayerManager.giveItem(player, chestplate, LanguageManager.errors.inventoryFull);
+            PlayerManager.giveItem(player, chestplate);
             player.getInventory().setChestplate(null);
             PlayerManager.notifyFailure(player, LanguageManager.errors.naked);
         }
         if (!(leggings == null || leggings.getType() == Material.AIR)) {
-            PlayerManager.giveItem(player, leggings, LanguageManager.errors.inventoryFull);
+            PlayerManager.giveItem(player, leggings);
             player.getInventory().setLeggings(null);
             PlayerManager.notifyFailure(player, LanguageManager.errors.naked);
         }
         if (!(boots == null || boots.getType() == Material.AIR)) {
-            PlayerManager.giveItem(player, boots, LanguageManager.errors.inventoryFull);
+            PlayerManager.giveItem(player, boots);
             player.getInventory().setBoots(null);
             PlayerManager.notifyFailure(player, LanguageManager.errors.naked);
         }
