@@ -9,12 +9,7 @@ import me.theguyhere.villagerdefense.plugin.data.PlayerDataManager;
 import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
 import me.theguyhere.villagerdefense.plugin.game.achievements.Achievement;
 import me.theguyhere.villagerdefense.plugin.items.GameItems;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
@@ -38,13 +33,10 @@ public class PlayerManager {
         if (item == null) {
             return;
         }
-        Bukkit.getLogger().info("Begin amount: " + item.getAmount());
         Map<Integer, ItemStack> remaining = player.getInventory().addItem(item);
         if (remaining.isEmpty()) {
             return; // all items given successfully
         }
-        Bukkit.getLogger().info("End amount: " + item.getAmount());
-        remaining.forEach((slot, stack) -> Bukkit.getLogger().info("End 2: " + stack.getAmount()));
         player.getWorld().dropItemNaturally(player.getLocation(), item);
         notifyFailure(player, LanguageManager.errors.inventoryFull);
     }

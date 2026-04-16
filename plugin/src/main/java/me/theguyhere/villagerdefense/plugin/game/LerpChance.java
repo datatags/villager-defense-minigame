@@ -3,15 +3,11 @@ package me.theguyhere.villagerdefense.plugin.game;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LerpChance<T> {
     private final List<LerpEntry<T>> entries = new ArrayList<>();
-
-    public LerpChance() {
-    }
 
     /**
      * Add an item to the selector.
@@ -28,7 +24,7 @@ public class LerpChance<T> {
                 return this;
             }
         }
-        // List exhauted, add it on the end
+        // List exhausted, add it on the end
         entries.add(entry);
         return this;
     }
