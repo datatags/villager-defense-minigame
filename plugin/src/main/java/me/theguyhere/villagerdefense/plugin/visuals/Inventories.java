@@ -2,11 +2,7 @@ package me.theguyhere.villagerdefense.plugin.visuals;
 
 import me.theguyhere.villagerdefense.common.CommunicationManager;
 import me.theguyhere.villagerdefense.common.Constants;
-import me.theguyhere.villagerdefense.plugin.data.ArenaDataManager;
-import me.theguyhere.villagerdefense.plugin.data.GameDataManager;
-import me.theguyhere.villagerdefense.plugin.data.LanguageManager;
-import me.theguyhere.villagerdefense.plugin.data.NMSVersion;
-import me.theguyhere.villagerdefense.plugin.data.PlayerDataManager;
+import me.theguyhere.villagerdefense.plugin.data.*;
 import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
 import me.theguyhere.villagerdefense.plugin.game.Arena;
 import me.theguyhere.villagerdefense.plugin.game.GameManager;
@@ -24,11 +20,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 public class Inventories {
@@ -1451,7 +1443,7 @@ public class Inventories {
 		// Fill in range
 		List<ItemStack> ranges = new ArrayList<>();
 		for (int i = 0; i < 5; i++)
-			ranges.add(GameItems.randRange(level));
+			ranges.add(GameItems.RANGED.getRandom(level));
 		sort(ranges);
 		for (int i = 0; i < 5; i++)
 			inv.setItem(i + 9, modifyPrice(ranges.get(i), modifier));
@@ -1459,7 +1451,7 @@ public class Inventories {
 		// Fill in ammo
 		List<ItemStack> ammo = new ArrayList<>();
 		for (int i = 0; i < 3; i++)
-			ammo.add(GameItems.randAmmo(level));
+			ammo.add(GameItems.AMMO.getRandom(level));
 		sort(ammo);
 		for (int i = 0; i < 3; i++)
 			inv.setItem(i + 15, modifyPrice(ammo.get(i), modifier));
@@ -1541,7 +1533,7 @@ public class Inventories {
 		// Fill in food
 		List<ItemStack> foods = new ArrayList<>();
 		for (int i = 0; i < 4; i++)
-			foods.add(GameItems.randFood(level));
+			foods.add(GameItems.FOOD.getRandom(level));
 		sort(foods);
 		for (int i = 0; i < 4; i++)
 			inv.setItem(i, modifyPrice(foods.get(i), modifier));
@@ -1549,7 +1541,7 @@ public class Inventories {
 		// Fill in other
 		List<ItemStack> others = new ArrayList<>();
 		for (int i = 0; i < 9; i++)
-			others.add(GameItems.randOther(level));
+			others.add(GameItems.OTHER.getRandom(level));
 		sort(others);
 		for (int i = 0; i < 4; i++)
 			inv.setItem(i + 5, modifyPrice(others.get(i), modifier));

@@ -15,7 +15,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("SpellCheckingInspection")
@@ -765,706 +768,122 @@ public class GameItems {
 		return item == null ? new ItemStack(Material.AIR) : item;
 	}
 
-	// Random generation of items
-	public static @NotNull ItemStack randWeapon(int level) {
-		Random r = new Random();
-		double chance = r.nextDouble();
-		switch (level) {
-			case 1:
-				if (chance < .4)
-					return sword(level);
-				else if (chance < .75)
-					return axe(level);
-				else if (chance < .9)
-					return bow(level);
-				else return arrows();
-			case 2:
-				if (chance < .35)
-					return sword(level);
-				else if (chance < .7)
-					return axe(level);
-				else if (chance < .8)
-					return shield(level);
-				else if (chance < .9)
-					return bow(level);
-				else if (chance < .96)
-					return arrows();
-				else return arrowsP();
-			case 3:
-				if (chance < .3)
-					return sword(level);
-				else if (chance < .6)
-					return axe(level);
-				else if (chance < .7)
-					return bow(level);
-				else if (chance < .8)
-					return shield(level);
-				else if (chance < .9)
-					return crossbow(level);
-				else if (chance < .93)
-					return arrows();
-				else if (chance < .96)
-					return arrowsP();
-				else if (chance < .98)
-					return arrowsS();
-				else if (chance < .99)
-					return arrowsW();
-				else return arrowsD();
-			case 4:
-				if (chance < .3)
-					return sword(level);
-				else if (chance < .55)
-					return axe(level);
-				else if (chance < .65)
-					return bow(level);
-				else if (chance < .75)
-					return shield(level);
-				else if (chance < .85)
-					return crossbow(level);
-				else if (chance < .9)
-					return arrows();
-				else if (chance < .93)
-					return arrowsPPlus();
-				else if (chance < .95)
-					return arrowsS();
-				else if (chance < .97)
-					return arrowsW();
-				else if (chance < .99)
-					return arrowsD();
-				else return rockets();
-			case 5:
-				if (chance < .2)
-					return sword(level);
-				else if (chance < .4)
-					return axe(level);
-				else if (chance < .5)
-					return shield(level);
-				else if (chance < .6)
-					return bow(level);
-				else if (chance < .7)
-					return crossbow(level);
-				else if (chance < .8)
-					return trident(level);
-				else if (chance < .85)
-					return arrows();
-				else if (chance < .89)
-					return arrowsPPlus();
-				else if (chance < .92)
-					return arrowsSPlus();
-				else if (chance < .94)
-					return arrowsWPlus();
-				else if (chance < .96)
-					return arrowsD();
-				else if (chance < .98)
-					return rockets();
-				else return rocketsPlus();
-			default:
-				if (chance < .2)
-					return sword(level);
-				else if (chance < .4)
-					return axe(level);
-				else if (chance < .5)
-					return shield(level);
-				else if (chance < .6)
-					return bow(level);
-				else if (chance < .7)
-					return crossbow(level);
-				else if (chance < .8)
-					return trident(level);
-				else if (chance < .85)
-					return arrows();
-				else if (chance < .89)
-					return arrowsPPlus();
-				else if (chance < .92)
-					return arrowsSPlus();
-				else if (chance < .95)
-					return arrowsWPlus();
-				else if (chance < .98)
-					return arrowsDPlus();
-				else return rocketsPlus();
-		}
-	}
-	public static @NotNull ItemStack randRange(int level) {
-		Random r = new Random();
-		double chance = r.nextDouble();
-		switch (level) {
-			case 1:
-				return bow(level);
-			case 2:
-				if (chance < .5)
-					return bow(level);
-				else if (chance < .75)
-					return crossbow(level);
-				else return shield(level);
-			case 3:
-				if (chance < .33)
-					return bow(level);
-				else if (chance < .67)
-					return crossbow(level);
-				else return shield(level);
-			case 4:
-				if (chance < .3)
-					return bow(level);
-				else if (chance < .6)
-					return crossbow(level);
-				else if (chance < .9)
-					return shield(level);
-				else return trident(level);
-			default:
-				if (chance < .25)
-					return bow(level);
-				else if (chance < .5)
-					return crossbow(level);
-				else if (chance < .75)
-					return shield(level);
-				else return trident(level);
-		}
-	}
-	public static @NotNull ItemStack randAmmo(int level) {
-		Random r = new Random();
-		double chance = r.nextDouble();
-		switch (level) {
-			case 1:
-				return arrows();
-			case 2:
-				if (chance < .6)
-					return arrows();
-				else return arrowsP();
-			case 3:
-				if (chance < .3)
-					return arrows();
-				else if (chance < .6)
-					return arrowsP();
-				else if (chance < .8)
-					return arrowsS();
-				else if (chance < .9)
-					return arrowsW();
-				else return arrowsD();
-			case 4:
-				if (chance < .35)
-					return arrows();
-				else if (chance < .55)
-					return arrowsPPlus();
-				else if (chance < .7)
-					return arrowsSPlus();
-				else if (chance < .8)
-					return arrowsW();
-				else if (chance < .9)
-					return arrowsD();
-				else return rockets();
-			default:
-				if (chance < .25)
-					return arrows();
-				else if (chance < .5)
-					return arrowsPPlus();
-				else if (chance < .7)
-					return arrowsSPlus();
-				else if (chance < .8)
-					return arrowsWPlus();
-				else if (chance < .9)
-					return arrowsDPlus();
-				else return rocketsPlus();
-		}
-	}
-	public static @NotNull ItemStack randArmor(int level) {
-		Random r = new Random();
-		int chance = r.nextInt(4);
-		switch (chance) {
-			case 0:
-				return helmet(level);
-			case 1:
-				return chestplate(level);
-			case 2:
-				return leggings(level);
-			default:
-				return boots(level);
-		}
-	}
-	public static @NotNull ItemStack randConsumable(int level) {
-		Random r = new Random();
-		double chance = r.nextDouble();
-		switch (level) {
-			case 1:
-				if (chance < .25)
-					return beetroot();
-				else if (chance < .5)
-					return carrot();
-				else if (chance < .65)
-					return bread();
-				else if (chance < .725)
-					return health();
-				else if (chance < .775)
-					return speed();
-				else if (chance < .85)
-					return wolf();
-				else if (chance < .9)
-					return experience();
-				else return smallCare();
-			case 2:
-				if (chance < .15)
-					return carrot();
-				else if (chance < .3)
-					return bread();
-				else if (chance < .4)
-					return mutton();
-				else if (chance < .45)
-					return steak();
-				else if (chance < .475)
-					return milk();
-				else if (chance < .55)
-					return health();
-				else if (chance < .6)
-					return speed();
-				else if (chance < .65)
-					return strength();
-				else if (chance < .7)
-					return regen();
-				else if (chance < .775)
-					return wolf();
-				else if (chance < .825)
-					return experience();
-				else if (chance < .9)
-					return smallCare();
-				else return mediumCare();
-			case 3:
-				if (chance < .1)
-					return bread();
-				else if (chance < .2)
-					return mutton();
-				else if (chance < .3)
-					return steak();
-				else if (chance < .4)
-					return gcarrot();
-				else if (chance < .425)
-					return milk();
-				else if (chance < .475)
-					return health2();
-				else if (chance < .525)
-					return speed2();
-				else if (chance < .575)
-					return strength();
-				else if (chance < .625)
-					return regen();
-				else if (chance < .725)
-					return wolf();
-				else if (chance < .775)
-					return golem();
-				else if (chance < .825)
-					return experience();
-				else if (chance < .875)
-					return smallCare();
-				else if (chance < .925)
-					return mediumCare();
-				else return largeCare();
-			case 4:
-				if (chance < .1)
-					return mutton();
-				else if (chance < .2)
-					return steak();
-				else if (chance < .3)
-					return gcarrot();
-				else if (chance < .4)
-					return gapple();
-				else if (chance < .42)
-					return milk();
-				else if (chance < .45)
-					return health2();
-				else if (chance < .475)
-					return health3();
-				else if (chance < .525)
-					return speed2();
-				else if (chance < .575)
-					return strength2();
-				else if (chance < .625)
-					return regen2();
-				else if (chance < .7)
-					return wolf();
-				else if (chance < .775)
-					return golem();
-				else if (chance < .825)
-					return experience();
-				else if (chance < .85)
-					return mediumCare();
-				else if (chance < .925)
-					return largeCare();
-				else return extraCare();
-			case 5:
-				if (chance < .05)
-					return mutton();
-				else if (chance < .15)
-					return steak();
-				else if (chance < .25)
-					return gcarrot();
-				else if (chance < .35)
-					return gapple();
-				else if (chance < .4)
-					return egapple();
-				else if (chance < .45)
-					return totem();
-				else if (chance < .47)
-					return milk();
-				else if (chance < .5)
-					return health2();
-				else if (chance < .525)
-					return health3();
-				else if (chance < .575)
-					return speed2();
-				else if (chance < .625)
-					return strength2();
-				else if (chance < .675)
-					return regen2();
-				else if (chance < .75)
-					return wolf();
-				else if (chance < .825)
-					return golem();
-				else if (chance < .875)
-					return experience();
-				else if (chance < .925)
-					return largeCare();
-				else return extraCare();
-			default:
-				if (chance < .05)
-					return steak();
-				else if (chance < .2)
-					return gcarrot();
-				else if (chance < .3)
-					return gapple();
-				else if (chance < .4)
-					return egapple();
-				else if (chance < .45)
-					return totem();
-				else if (chance < .47)
-					return milk();
-				else if (chance < .5)
-					return health2();
-				else if (chance < .525)
-					return health3();
-				else if (chance < .575)
-					return speed2();
-				else if (chance < .625)
-					return strength2();
-				else if (chance < .675)
-					return regen2();
-				else if (chance < .75)
-					return wolf();
-				else if (chance < .825)
-					return golem();
-				else if (chance < .875)
-					return experience();
-				else if (chance < .925)
-					return largeCare();
-				else return extraCare();
-		}
-	}
-	public static @NotNull ItemStack randFood(int level) {
-		Random r = new Random();
-		double chance = r.nextDouble();
-		switch (level) {
-			case 1:
-				if (chance < .4)
-					return beetroot();
-				else if (chance < .8)
-					return carrot();
-				else return bread();
-			case 2:
-				if (chance < .325)
-					return carrot();
-				else if (chance < .65)
-					return bread();
-				else if (chance < .85)
-					return mutton();
-				else return steak();
-			case 3:
-				if (chance < .25)
-					return bread();
-				else if (chance < .5)
-					return mutton();
-				else if (chance < .75)
-					return steak();
-				else return gcarrot();
-			case 4:
-				if (chance < .25)
-					return mutton();
-				else if (chance < .5)
-					return steak();
-				else if (chance < .75)
-					return gcarrot();
-				else return gapple();
-			default:
-				if (chance < .15)
-					return mutton();
-				else if (chance < .4)
-					return steak();
-				else if (chance < .65)
-					return gcarrot();
-				else if (chance < .9)
-					return gapple();
-				else return egapple();
-		}
-	}
-	public static @NotNull ItemStack randOther(int level) {
-		Random r = new Random();
-		double chance = r.nextDouble();
-		switch (level) {
-			case 1:
-				if (chance < .35)
-					return smallCare();
-				else if (chance < .65)
-					return wolf();
-				else if (chance < .75)
-					return experience();
-				else if (chance < .9)
-					return health();
-				else return speed();
-			case 2:
-				if (chance < .15)
-					return smallCare();
-				else if (chance < .45)
-					return mediumCare();
-				else if (chance < .6)
-					return wolf();
-				else if (chance < .7)
-					return experience();
-				else if (chance < .75)
-					return milk();
-				else if (chance < .85)
-					return health();
-				else if (chance < .9)
-					return speed();
-				else if (chance < .95)
-					return strength();
-				else return regen();
-			case 3:
-				if (chance < .15)
-					return mediumCare();
-				else if (chance < .4)
-					return largeCare();
-				else if (chance < .5)
-					return wolf();
-				else if (chance < .6)
-					return golem();
-				else if (chance < .7)
-					return experience();
-				else if (chance < .75)
-					return milk();
-				else if (chance < .85)
-					return health2();
-				else if (chance < .9)
-					return speed2();
-				else if (chance < .95)
-					return strength();
-				else return regen();
-			case 4:
-				if (chance < .15)
-					return largeCare();
-				else if (chance < .4)
-					return extraCare();
-				else if (chance < .5)
-					return wolf();
-				else if (chance < .6)
-					return golem();
-				else if (chance < .7)
-					return experience();
-				else if (chance < .75)
-					return milk();
-				else if (chance < .85)
-					return health2();
-				else if (chance < .9)
-					return speed2();
-				else if (chance < .95)
-					return strength2();
-				else return regen2();
-			default:
-				if (chance < .3)
-					return extraCare();
-				else if (chance < .45)
-					return wolf();
-				else if (chance < .6)
-					return golem();
-				else if (chance < .7)
-					return experience();
-				else if (chance < .75)
-					return milk();
-				else if (chance < .85)
-					return health2();
-				else if (chance < .9)
-					return speed2();
-				else if (chance < .95)
-					return strength2();
-				else return regen2();
-		}
-	}
-	public static @NotNull ItemStack randCare(int level) {
-		double chance = ThreadLocalRandom.current().nextDouble();
-		switch (level) {
-			case 1:
-				return smallCare();
-			case 2:
-				if (chance < .35)
-					return smallCare();
-				else return mediumCare();
-			case 3:
-				if (chance < .35)
-					return mediumCare();
-				else return largeCare();
-			case 4:
-				if (chance < .35)
-					return largeCare();
-				else return extraCare();
-			default:
-				return extraCare();
-		}
-	}
-	public static @NotNull ItemStack randNotCare(int level) {
-		Random r = new Random();
-		double chance = r.nextDouble();
-		switch (level) {
-			case 1:
-				if (chance < .25)
-					return beetroot();
-				else if (chance < .5)
-					return carrot();
-				else if (chance < .7)
-					return bread();
-				else if (chance < .8)
-					return health();
-				else if (chance < .85)
-					return speed();
-				else if (chance < .95)
-					return wolf();
-				else return experience();
-			case 2:
-				if (chance < .2)
-					return carrot();
-				else if (chance < .35)
-					return bread();
-				else if (chance < .475)
-					return mutton();
-				else if (chance < .55)
-					return steak();
-				else if (chance < .575)
-					return milk();
-				else if (chance < .625)
-					return health();
-				else if (chance < .675)
-					return speed();
-				else if (chance < .725)
-					return strength();
-				else if (chance < .775)
-					return regen();
-				else if (chance < .9)
-					return wolf();
-				else return experience();
-			case 3:
-				if (chance < .125)
-					return bread();
-				else if (chance < .25)
-					return mutton();
-				else if (chance < .35)
-					return steak();
-				else if (chance < .45)
-					return gcarrot();
-				else if (chance < .475)
-					return milk();
-				else if (chance < .525)
-					return health2();
-				else if (chance < .575)
-					return speed2();
-				else if (chance < .65)
-					return strength();
-				else if (chance < .7)
-					return regen();
-				else if (chance < .8)
-					return wolf();
-				else if (chance < .9)
-					return golem();
-				else return experience();
-			case 4:
-				if (chance < .1)
-					return mutton();
-				else if (chance < .225)
-					return steak();
-				else if (chance < .35)
-					return gcarrot();
-				else if (chance < .45)
-					return gapple();
-				else if (chance < .47)
-					return milk();
-				else if (chance < .52)
-					return health2();
-				else if (chance < .55)
-					return health3();
-				else if (chance < .6)
-					return speed2();
-				else if (chance < .65)
-					return strength2();
-				else if (chance < .7)
-					return regen2();
-				else if (chance < .8)
-					return wolf();
-				else if (chance < .9)
-					return golem();
-				else return experience();
-			case 5:
-				if (chance < .05)
-					return mutton();
-				else if (chance < .15)
-					return steak();
-				else if (chance < .25)
-					return gcarrot();
-				else if (chance < .35)
-					return gapple();
-				else if (chance < .4)
-					return egapple();
-				else if (chance < .45)
-					return totem();
-				else if (chance < .475)
-					return milk();
-				else if (chance < .55)
-					return health2();
-				else if (chance < .6)
-					return health3();
-				else if (chance < .65)
-					return speed2();
-				else if (chance < .7)
-					return strength2();
-				else if (chance < .75)
-					return regen2();
-				else if (chance < .85)
-					return wolf();
-				else if (chance < .925)
-					return golem();
-				else return experience();
-			default:
-				if (chance < .05)
-					return steak();
-				else if (chance < .2)
-					return gcarrot();
-				else if (chance < .3)
-					return gapple();
-				else if (chance < .4)
-					return egapple();
-				else if (chance < .45)
-					return totem();
-				else if (chance < .47)
-					return milk();
-				else if (chance < .52)
-					return health2();
-				else if (chance < .55)
-					return health3();
-				else if (chance < .6)
-					return speed2();
-				else if (chance < .65)
-					return strength2();
-				else if (chance < .7)
-					return regen2();
-				else if (chance < .8)
-					return wolf();
-				else if (chance < .9)
-					return golem();
-				else return experience();
-		}
-	}
+    public static final LevelledWeightedRandom<ItemStack> WEAPON = new LevelledWeightedRandom.Builder<ItemStack>()
+            .add(GameItems::sword, 40).add(GameItems::axe, 35).add(GameItems::bow, 15).add(GameItems::arrows, 10).nextLevel()
+            .add(GameItems::sword, 35).add(GameItems::axe, 35).add(GameItems::shield, 10)
+                .add(GameItems::bow, 10).add(GameItems::arrows, 6).add(GameItems::arrowsP, 4).nextLevel()
+            .add(GameItems::sword, 30).add(GameItems::axe, 30).add(GameItems::bow, 10).add(GameItems::shield, 10).add(GameItems::crossbow, 10)
+                .add(GameItems::arrows, 3).add(GameItems::arrowsP, 3).add(GameItems::arrowsS, 2).add(GameItems::arrowsW, 1).add(GameItems::arrowsD, 1).nextLevel()
+            .add(GameItems::sword, 30).add(GameItems::axe, 25).add(GameItems::bow, 10).add(GameItems::shield, 10)
+                .add(GameItems::crossbow, 10).add(GameItems::arrows, 5).add(GameItems::arrowsPPlus, 3).add(GameItems::arrowsS, 2)
+                .add(GameItems::arrowsW, 2).add(GameItems::arrowsD, 2).add(GameItems::rockets, 1).nextLevel()
+            .add(GameItems::sword, 20).add(GameItems::axe, 20).add(GameItems::shield, 10).add(GameItems::bow, 10)
+                .add(GameItems::crossbow, 10).add(GameItems::trident, 10).add(GameItems::arrows, 5).add(GameItems::arrowsPPlus, 4)
+                .add(GameItems::arrowsSPlus, 3).add(GameItems::arrowsWPlus, 2).add(GameItems::arrowsD, 2).add(GameItems::rockets, 2)
+                .add(GameItems::rocketsPlus, 2).nextLevel()
+            .add(GameItems::sword, 20).add(GameItems::axe, 20).add(GameItems::shield, 10).add(GameItems::bow, 10)
+                .add(GameItems::crossbow, 10).add(GameItems::trident, 10).add(GameItems::arrows, 5).add(GameItems::arrowsPPlus, 4)
+                .add(GameItems::arrowsSPlus, 3).add(GameItems::arrowsWPlus, 3).add(GameItems::arrowsDPlus, 3).add(GameItems::rocketsPlus, 2)
+            .build();
+
+    public static final LevelledWeightedRandom<ItemStack> RANGED = new LevelledWeightedRandom.Builder<ItemStack>()
+            .add(GameItems::bow, 100).nextLevel()
+            .add(GameItems::bow, 50).add(GameItems::crossbow, 25).add(GameItems::shield, 25).nextLevel()
+            .add(GameItems::bow, 33).add(GameItems::crossbow, 33).add(GameItems::shield, 34).nextLevel()
+            .add(GameItems::bow, 30).add(GameItems::crossbow, 30).add(GameItems::shield, 30).add(GameItems::trident, 10).nextLevel()
+            .add(GameItems::bow, 25).add(GameItems::crossbow, 25).add(GameItems::shield, 25).add(GameItems::trident, 25).build();
+
+    public static final LevelledWeightedRandom<ItemStack> AMMO = new LevelledWeightedRandom.Builder<ItemStack>()
+            .add(GameItems::arrows, 100).nextLevel()
+            .add(GameItems::arrows, 60).add(GameItems::arrowsP, 40).nextLevel()
+            .add(GameItems::arrows, 30).add(GameItems::arrowsP, 30).add(GameItems::arrowsS, 20).add(GameItems::arrowsW, 10)
+                .add(GameItems::arrowsD, 10).nextLevel()
+            .add(GameItems::arrows, 35).add(GameItems::arrowsPPlus, 20).add(GameItems::arrowsSPlus, 15).add(GameItems::arrowsW, 10)
+                .add(GameItems::arrowsD, 10).add(GameItems::rockets, 10).nextLevel()
+            .add(GameItems::arrows, 25).add(GameItems::arrowsPPlus, 25).add(GameItems::arrowsSPlus, 20).add(GameItems::arrowsWPlus, 10)
+                .add(GameItems::arrowsDPlus, 10).add(GameItems::rocketsPlus, 10).build();
+
+    public static final LevelledWeightedRandom<ItemStack> ARMOR = new LevelledWeightedRandom.Builder<ItemStack>()
+            .add(GameItems::helmet, 1).add(GameItems::chestplate, 1).add(GameItems::leggings, 1).add(GameItems::boots, 1).build();
+
+    public static final LevelledWeightedRandom<ItemStack> CONSUMABLE = new LevelledWeightedRandom.Builder<ItemStack>(1000)
+            .add(GameItems::beetroot, 250).add(GameItems::carrot, 250).add(GameItems::bread, 150).add(GameItems::health, 75)
+                .add(GameItems::speed, 50).add(GameItems::wolf, 75).add(GameItems::experience, 50).add(GameItems::smallCare, 100).nextLevel()
+            .add(GameItems::carrot, 150).add(GameItems::bread, 150).add(GameItems::mutton, 100).add(GameItems::steak, 50)
+                .add(GameItems::milk, 25).add(GameItems::health, 75).add(GameItems::speed, 50).add(GameItems::strength, 50)
+                .add(GameItems::regen, 50).add(GameItems::wolf, 75).add(GameItems::experience, 50).add(GameItems::smallCare, 75)
+                .add(GameItems::mediumCare, 100).nextLevel()
+            .add(GameItems::bread, 100).add(GameItems::mutton, 100).add(GameItems::steak, 100).add(GameItems::gcarrot, 100)
+                .add(GameItems::milk, 25).add(GameItems::health2, 50).add(GameItems::speed2, 50).add(GameItems::strength, 50)
+                .add(GameItems::regen, 50).add(GameItems::wolf, 100).add(GameItems::golem, 50).add(GameItems::experience, 50)
+                .add(GameItems::smallCare, 50).add(GameItems::mediumCare, 50).add(GameItems::largeCare, 75).nextLevel()
+            .add(GameItems::mutton, 100).add(GameItems::steak, 100).add(GameItems::gcarrot, 100).add(GameItems::gapple, 100)
+                .add(GameItems::milk, 20).add(GameItems::health2, 30).add(GameItems::health3, 25).add(GameItems::speed2, 50)
+                .add(GameItems::strength2, 50).add(GameItems::regen2, 50).add(GameItems::wolf, 75).add(GameItems::golem, 75)
+                .add(GameItems::experience, 50).add(GameItems::mediumCare, 25).add(GameItems::largeCare, 75).add(GameItems::extraCare, 75).nextLevel()
+            .add(GameItems::mutton, 50).add(GameItems::steak, 100).add(GameItems::gcarrot, 100).add(GameItems::gapple, 100)
+                .add(GameItems::egapple, 50).add(GameItems::totem, 50).add(GameItems::milk, 20).add(GameItems::health2, 30)
+                .add(GameItems::health3, 25).add(GameItems::speed2, 50).add(GameItems::strength2, 50).add(GameItems::regen2, 50)
+                .add(GameItems::wolf, 75).add(GameItems::golem, 75).add(GameItems::experience, 50).add(GameItems::largeCare, 50)
+                .add(GameItems::extraCare, 75).nextLevel()
+            .add(GameItems::steak, 50).add(GameItems::gcarrot, 150).add(GameItems::gapple, 100).add(GameItems::egapple, 100)
+                .add(GameItems::totem, 50).add(GameItems::milk, 20).add(GameItems::health2, 30).add(GameItems::health3, 25)
+                .add(GameItems::speed2, 50).add(GameItems::strength2, 50).add(GameItems::regen2, 50).add(GameItems::wolf, 75)
+                .add(GameItems::golem, 75).add(GameItems::experience, 50).add(GameItems::largeCare, 50).add(GameItems::extraCare, 75)
+            .build();
+
+    public static final LevelledWeightedRandom<ItemStack> FOOD = new LevelledWeightedRandom.Builder<ItemStack>(1000)
+            .add(GameItems::beetroot, 400).add(GameItems::carrot, 400).add(GameItems::bread, 200).nextLevel()
+            .add(GameItems::carrot, 325).add(GameItems::bread, 325).add(GameItems::mutton, 200).add(GameItems::steak, 150).nextLevel()
+            .add(GameItems::bread, 250).add(GameItems::mutton, 250).add(GameItems::steak, 250).add(GameItems::gcarrot, 250).nextLevel()
+            .add(GameItems::mutton, 250).add(GameItems::steak, 250).add(GameItems::gcarrot, 250).add(GameItems::gapple, 250).nextLevel()
+            .add(GameItems::mutton, 150).add(GameItems::steak, 250).add(GameItems::gcarrot, 250).add(GameItems::gapple, 250)
+                .add(GameItems::egapple, 100).build();
+
+    public static final LevelledWeightedRandom<ItemStack> OTHER = new LevelledWeightedRandom.Builder<ItemStack>(100)
+            .add(GameItems::smallCare, 35).add(GameItems::wolf, 30).add(GameItems::experience, 10).add(GameItems::health, 15)
+                .add(GameItems::speed, 10).nextLevel()
+            .add(GameItems::smallCare, 15).add(GameItems::mediumCare, 30).add(GameItems::wolf, 15).add(GameItems::experience, 10)
+                .add(GameItems::milk, 5).add(GameItems::health, 10).add(GameItems::speed, 5).add(GameItems::strength, 5)
+                .add(GameItems::regen, 5).nextLevel()
+            .add(GameItems::mediumCare, 15).add(GameItems::largeCare, 25).add(GameItems::wolf, 10).add(GameItems::golem, 10)
+                .add(GameItems::experience, 10).add(GameItems::milk, 5).add(GameItems::health2, 10).add(GameItems::speed2, 5)
+                .add(GameItems::strength, 5).add(GameItems::regen, 5).nextLevel()
+            .add(GameItems::largeCare, 15).add(GameItems::extraCare, 25).add(GameItems::wolf, 10).add(GameItems::golem, 10)
+                .add(GameItems::experience, 10).add(GameItems::milk, 5).add(GameItems::health2, 10).add(GameItems::speed2, 5)
+                .add(GameItems::strength2, 5).add(GameItems::regen2, 5).nextLevel()
+            .add(GameItems::extraCare, 30).add(GameItems::wolf, 15).add(GameItems::golem, 15).add(GameItems::experience, 10)
+                .add(GameItems::milk, 5).add(GameItems::health2, 10).add(GameItems::speed2, 5).add(GameItems::strength2, 5)
+                .add(GameItems::regen2, 5).build();
+
+    public static final LevelledWeightedRandom<ItemStack> CARE = new LevelledWeightedRandom.Builder<ItemStack>(100)
+            .add(GameItems::smallCare, 100).nextLevel()
+            .add(GameItems::smallCare, 35).add(GameItems::mediumCare, 65).nextLevel()
+            .add(GameItems::mediumCare, 35).add(GameItems::largeCare, 65).nextLevel()
+            .add(GameItems::largeCare, 35).add(GameItems::extraCare, 65).nextLevel()
+            .add(GameItems::extraCare, 100).build();
+
+    public static final LevelledWeightedRandom<ItemStack> NOT_CARE = new LevelledWeightedRandom.Builder<ItemStack>(1000)
+            .add(GameItems::beetroot, 250).add(GameItems::carrot, 250).add(GameItems::bread, 200).add(GameItems::health, 100)
+                .add(GameItems::speed, 50).add(GameItems::wolf, 100).add(GameItems::experience, 50).nextLevel()
+            .add(GameItems::carrot, 200).add(GameItems::bread, 150).add(GameItems::mutton, 125).add(GameItems::steak, 75)
+                .add(GameItems::milk, 25).add(GameItems::health, 50).add(GameItems::speed, 50).add(GameItems::strength, 50)
+                .add(GameItems::regen, 50).add(GameItems::wolf, 125).add(GameItems::experience, 100).nextLevel()
+            .add(GameItems::bread, 125).add(GameItems::mutton, 125).add(GameItems::steak, 100).add(GameItems::gcarrot, 100)
+                .add(GameItems::milk, 25).add(GameItems::health2, 50).add(GameItems::speed2, 50).add(GameItems::strength, 75)
+                .add(GameItems::regen, 50).add(GameItems::wolf, 100).add(GameItems::golem, 100).add(GameItems::experience, 100).nextLevel()
+            .add(GameItems::mutton, 100).add(GameItems::steak, 125).add(GameItems::gcarrot, 125).add(GameItems::gapple, 100)
+                .add(GameItems::milk, 20).add(GameItems::health2, 50).add(GameItems::health3, 30).add(GameItems::speed2, 50)
+                .add(GameItems::strength2, 50).add(GameItems::regen2, 50).add(GameItems::wolf, 100).add(GameItems::golem, 100)
+                .add(GameItems::experience, 100).nextLevel()
+            .add(GameItems::mutton, 50).add(GameItems::steak, 100).add(GameItems::gcarrot, 100).add(GameItems::gapple, 100)
+                .add(GameItems::egapple, 50).add(GameItems::totem, 50).add(GameItems::milk, 25).add(GameItems::health2, 75)
+                .add(GameItems::health3, 50).add(GameItems::speed2, 50).add(GameItems::strength2, 50).add(GameItems::regen2, 50)
+                .add(GameItems::wolf, 100).add(GameItems::golem, 75).add(GameItems::experience, 75).nextLevel()
+            .add(GameItems::steak, 50).add(GameItems::gcarrot, 150).add(GameItems::gapple, 100).add(GameItems::egapple, 100)
+                .add(GameItems::totem, 50).add(GameItems::milk, 20).add(GameItems::health2, 50).add(GameItems::health3, 30)
+                .add(GameItems::speed2, 50).add(GameItems::strength2, 50).add(GameItems::regen2, 50).add(GameItems::wolf, 100)
+                .add(GameItems::golem, 100).add(GameItems::experience, 100).build();
 
 	// Easy way to get a string for a toggle status
 	private static String getToggleStatus(boolean status) {
