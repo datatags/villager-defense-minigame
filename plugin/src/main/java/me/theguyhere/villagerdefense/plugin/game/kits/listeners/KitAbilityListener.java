@@ -20,14 +20,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Hoglin;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Mob;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Slime;
-import org.bukkit.entity.Wolf;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -38,7 +31,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -71,11 +63,11 @@ public class KitAbilityListener implements Listener {
 
         // Avoid accidental usage when holding food, shop, ranged weapons, potions, or care packages
         if (GameItems.shop().equals(main) ||
-                Arrays.stream(GameItems.FOOD_MATERIALS).anyMatch(m -> m == main.getType()) ||
-                Arrays.stream(GameItems.ARMOR_MATERIALS).anyMatch(m -> m == main.getType()) ||
-                Arrays.stream(GameItems.CARE_MATERIALS).anyMatch(m -> m == main.getType()) ||
-                Arrays.stream(GameItems.CLICKABLE_WEAPON_MATERIALS).anyMatch(m -> m == main.getType()) ||
-                Arrays.stream(GameItems.CLICKABLE_CONSUME_MATERIALS).anyMatch(m -> m == main.getType()))
+                GameItems.FOOD_MATERIALS.contains(main.getType()) ||
+                GameItems.ARMOR_MATERIALS.contains(main.getType()) ||
+                GameItems.CARE_MATERIALS.contains(main.getType()) ||
+                GameItems.CLICKABLE_WEAPON_MATERIALS.contains(main.getType()) ||
+                GameItems.CLICKABLE_CONSUME_MATERIALS.contains(main.getType()))
             return;
 
         if (gamer.getKit() instanceof AbilityKit) {

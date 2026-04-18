@@ -477,12 +477,12 @@ public class GameListener implements Listener {
             item = Objects.requireNonNull(player.getEquipment()).getItemInOffHand();
 
             // Check for other clickables in main hand
-            if (Arrays.asList(GameItems.ABILITY_ITEMS).contains(item) ||
-                    Arrays.asList(GameItems.FOOD_MATERIALS).contains(item.getType()) ||
-                    Arrays.asList(GameItems.ARMOR_MATERIALS).contains(item.getType()) ||
-                    Arrays.asList(GameItems.CARE_MATERIALS).contains(item.getType()) ||
-                    Arrays.asList(GameItems.CLICKABLE_WEAPON_MATERIALS).contains(item.getType()) ||
-                    Arrays.asList(GameItems.CLICKABLE_CONSUME_MATERIALS).contains(item.getType())) {
+            if (GameItems.ABILITY_ITEMS.contains(item) ||
+                    GameItems.FOOD_MATERIALS.contains(item.getType()) ||
+                    GameItems.ARMOR_MATERIALS.contains(item.getType()) ||
+                    GameItems.CARE_MATERIALS.contains(item.getType()) ||
+                    GameItems.CLICKABLE_WEAPON_MATERIALS.contains(item.getType()) ||
+                    GameItems.CLICKABLE_CONSUME_MATERIALS.contains(item.getType())) {
                 return;
             }
         } else {
@@ -881,11 +881,12 @@ public class GameListener implements Listener {
         }
 
         // Avoid false consume
-        if (main.equals(GameItems.shop()) || Arrays.asList(GameItems.ABILITY_ITEMS).contains(main) ||
-                Arrays.stream(GameItems.FOOD_MATERIALS).anyMatch(m -> m == main.getType()) ||
-                Arrays.stream(GameItems.ARMOR_MATERIALS).anyMatch(m -> m == main.getType()) ||
-                Arrays.stream(GameItems.CLICKABLE_WEAPON_MATERIALS).anyMatch(m -> m == main.getType()) ||
-                (Arrays.stream(GameItems.CLICKABLE_CONSUME_MATERIALS).anyMatch(m -> m == main.getType()) &&
+        if (main.equals(GameItems.shop()) ||
+                GameItems.ABILITY_ITEMS.contains(main) ||
+                GameItems.FOOD_MATERIALS.contains(main.getType()) ||
+                GameItems.ARMOR_MATERIALS.contains(main.getType()) ||
+                GameItems.CLICKABLE_WEAPON_MATERIALS.contains(main.getType()) ||
+                (GameItems.CLICKABLE_CONSUME_MATERIALS.contains(main.getType()) &&
                         main.getType() != GameItems.wolf().getType() && main.getType() != GameItems.golem().getType())) {
             return;
         }
@@ -1362,12 +1363,13 @@ public class GameListener implements Listener {
         }
 
         // Avoid false consume
-        if (main.equals(GameItems.shop()) || Arrays.asList(GameItems.ABILITY_ITEMS).contains(main) ||
-                Arrays.stream(GameItems.FOOD_MATERIALS).anyMatch(m -> m == main.getType()) ||
-                Arrays.stream(GameItems.ARMOR_MATERIALS).anyMatch(m -> m == main.getType()) ||
-                Arrays.stream(GameItems.CARE_MATERIALS).anyMatch(m -> m == main.getType()) ||
-                Arrays.stream(GameItems.CLICKABLE_WEAPON_MATERIALS).anyMatch(m -> m == main.getType()) ||
-                Arrays.stream(GameItems.CLICKABLE_CONSUME_MATERIALS).anyMatch(m -> m == main.getType())) {
+        if (main.equals(GameItems.shop()) ||
+                GameItems.ABILITY_ITEMS.contains(main) ||
+                GameItems.FOOD_MATERIALS.contains(main.getType()) ||
+                GameItems.ARMOR_MATERIALS.contains(main.getType()) ||
+                GameItems.CARE_MATERIALS.contains(main.getType()) ||
+                GameItems.CLICKABLE_WEAPON_MATERIALS.contains(main.getType()) ||
+                GameItems.CLICKABLE_CONSUME_MATERIALS.contains(main.getType())) {
             e.setCancelled(true);
         }
     }

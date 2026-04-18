@@ -2,24 +2,25 @@ package me.theguyhere.villagerdefense.plugin;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.theguyhere.villagerdefense.common.CommunicationManager;
 import me.theguyhere.villagerdefense.common.Calculator;
+import me.theguyhere.villagerdefense.common.CommunicationManager;
 import me.theguyhere.villagerdefense.nms.common.NMSManager;
-import me.theguyhere.villagerdefense.plugin.data.*;
-import me.theguyhere.villagerdefense.plugin.game.achievements.listeners.BonusListener;
-import me.theguyhere.villagerdefense.plugin.game.listeners.ArenaListener;
-import me.theguyhere.villagerdefense.plugin.data.listeners.*;
-import me.theguyhere.villagerdefense.plugin.game.challenges.listeners.ChallengeListener;
-import me.theguyhere.villagerdefense.plugin.commands.VDTabCompleter;
 import me.theguyhere.villagerdefense.plugin.commands.VDCommandExecutor;
+import me.theguyhere.villagerdefense.plugin.commands.VDTabCompleter;
+import me.theguyhere.villagerdefense.plugin.data.*;
 import me.theguyhere.villagerdefense.plugin.data.exceptions.InvalidLanguageKeyException;
-import me.theguyhere.villagerdefense.plugin.structures.listeners.InteractionListener;
-import me.theguyhere.villagerdefense.plugin.game.listeners.GameListener;
-import me.theguyhere.villagerdefense.plugin.items.GameItems;
+import me.theguyhere.villagerdefense.plugin.data.listeners.ChatListener;
+import me.theguyhere.villagerdefense.plugin.data.listeners.PacketListenerImp;
+import me.theguyhere.villagerdefense.plugin.data.listeners.WorldListener;
 import me.theguyhere.villagerdefense.plugin.game.GameManager;
-import me.theguyhere.villagerdefense.plugin.visuals.listeners.InventoryListener;
+import me.theguyhere.villagerdefense.plugin.game.achievements.listeners.BonusListener;
+import me.theguyhere.villagerdefense.plugin.game.challenges.listeners.ChallengeListener;
 import me.theguyhere.villagerdefense.plugin.game.kits.listeners.KitAbilityListener;
+import me.theguyhere.villagerdefense.plugin.game.listeners.ArenaListener;
+import me.theguyhere.villagerdefense.plugin.game.listeners.GameListener;
+import me.theguyhere.villagerdefense.plugin.structures.listeners.InteractionListener;
 import me.theguyhere.villagerdefense.plugin.structures.listeners.UpdateListener;
+import me.theguyhere.villagerdefense.plugin.visuals.listeners.InventoryListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -87,7 +88,6 @@ public class Main extends JavaPlugin {
 		// Set up initial classes
 		saveDefaultConfig();
 		PluginManager pm = getServer().getPluginManager();
-		GameItems.init();
 
 		// Register event listeners
 		pm.registerEvents(new InventoryListener(), this);

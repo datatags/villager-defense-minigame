@@ -14,11 +14,7 @@ import me.theguyhere.villagerdefense.plugin.game.events.GameEndEvent;
 import me.theguyhere.villagerdefense.plugin.game.events.LeaveArenaEvent;
 import me.theguyhere.villagerdefense.plugin.game.events.WaveEndEvent;
 import me.theguyhere.villagerdefense.plugin.game.events.WaveStartEvent;
-import me.theguyhere.villagerdefense.plugin.game.kits.Kit;
-import me.theguyhere.villagerdefense.plugin.game.kits.KitEffectType;
-import me.theguyhere.villagerdefense.plugin.game.kits.KitGiant;
-import me.theguyhere.villagerdefense.plugin.game.kits.KitTrader;
-import me.theguyhere.villagerdefense.plugin.game.kits.Kits;
+import me.theguyhere.villagerdefense.plugin.game.kits.*;
 import me.theguyhere.villagerdefense.plugin.items.GameItems;
 import me.theguyhere.villagerdefense.plugin.visuals.Inventories;
 import me.theguyhere.villagerdefense.plugin.visuals.InventoryID;
@@ -30,23 +26,13 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.boss.BarColor;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Hoglin;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Phantom;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Slime;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class Tasks {
@@ -608,45 +594,26 @@ public class Tasks {
         // always put shop in second slot so we usually end up with:
         // weapon | shop | misc other stuff
         p.getInventory().setItem(1, GameItems.shop());
-		EntityEquipment equipment = player.getPlayer().getEquipment();
-        int level = player.getKitLevel();
-		for (ItemStack item : player.getKit().getItems(level)) {
-			Objects.requireNonNull(equipment);
-
+		EntityEquipment equipment = Objects.requireNonNull(player.getPlayer().getEquipment());
+        List<ItemStack> items = new ArrayList<>(player.getKit().getItems(player.getKitLevel()));
+        if (player.getKit2() != null) {
+            items.addAll(player.getKit2().getItems(player.getKit2Level()));
+        }
+        for (ItemStack item : items) {
 			// Equip armor if possible, otherwise put in inventory, otherwise drop at feet
-			if (Arrays.stream(GameItems.HELMET_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
+			if (GameItems.HELMET_MATERIALS.contains(item.getType()) &&
 					(equipment.getHelmet() == null || equipment.getHelmet().getType() == Material.AIR))
 				equipment.setHelmet(item);
-			else if (Arrays.stream(GameItems.CHESTPLATE_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
+			else if (GameItems.CHESTPLATE_MATERIALS.contains(item.getType()) &&
 					(equipment.getChestplate() == null || equipment.getChestplate().getType() == Material.AIR))
 				equipment.setChestplate(item);
-			else if (Arrays.stream(GameItems.LEGGING_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
+			else if (GameItems.LEGGING_MATERIALS.contains(item.getType()) &&
 					(equipment.getLeggings() == null || equipment.getLeggings().getType() == Material.AIR))
 				equipment.setLeggings(item);
-			else if (Arrays.stream(GameItems.BOOTS_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
+			else if (GameItems.BOOTS_MATERIALS.contains(item.getType()) &&
 					(equipment.getBoots() == null || equipment.getBoots().getType() == Material.AIR))
 				equipment.setBoots(item);
 			else PlayerManager.giveItem(player.getPlayer(), item);
 		}
-		if (player.getKit2() != null) {
-            int level2 = player.getKit2Level();
-            for (ItemStack item : player.getKit2().getItems(level2)) {
-
-                // Equip armor if possible, otherwise put in inventory, otherwise drop at feet
-                if (Arrays.stream(GameItems.HELMET_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
-                        (equipment.getHelmet() == null || equipment.getHelmet().getType() == Material.AIR))
-                    equipment.setHelmet(item);
-                else if (Arrays.stream(GameItems.CHESTPLATE_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
-                        (equipment.getChestplate() == null || equipment.getChestplate().getType() == Material.AIR))
-                    equipment.setChestplate(item);
-                else if (Arrays.stream(GameItems.LEGGING_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
-                        (equipment.getLeggings() == null || equipment.getLeggings().getType() == Material.AIR))
-                    equipment.setLeggings(item);
-                else if (Arrays.stream(GameItems.BOOTS_MATERIALS).anyMatch(mat -> mat == item.getType()) &&
-                        (equipment.getBoots() == null || equipment.getBoots().getType() == Material.AIR))
-                    equipment.setBoots(item);
-                else PlayerManager.giveItem(player.getPlayer(), item);
-            }
-        }
 	}
 }

@@ -15,59 +15,60 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class GameItems {
 	private static final boolean[] FLAGS = {false, false};
 
-	// Categories of items
-	public static ItemStack[] ABILITY_ITEMS;
-	public static Material[] FOOD_MATERIALS;
-	public static Material[] HELMET_MATERIALS;
-	public static Material[] CHESTPLATE_MATERIALS;
-	public static Material[] LEGGING_MATERIALS;
-	public static Material[] BOOTS_MATERIALS;
-	public static Material[] ARMOR_MATERIALS;
-	public static Material[] CARE_MATERIALS;
-	public static Material[] CLICKABLE_WEAPON_MATERIALS;
-	public static Material[] CLICKABLE_CONSUME_MATERIALS;
+    private static <T> Set<T> makeSet(T... args) {
+        Set<T> set = new HashSet<>();
+        for (T arg : args) {
+            set.add(arg);
+        }
+        return Collections.unmodifiableSet(set);
+    }
 
-	public static void init() {
+	// Categories of items
+	public static final Set<ItemStack> ABILITY_ITEMS;
+	public static final Set<Material> FOOD_MATERIALS;
+	public static final Set<Material> HELMET_MATERIALS;
+	public static final Set<Material> CHESTPLATE_MATERIALS;
+	public static final Set<Material> LEGGING_MATERIALS;
+	public static final Set<Material> BOOTS_MATERIALS;
+	public static final Set<Material> CARE_MATERIALS;
+    public static final Set<Material> CLICKABLE_WEAPON_MATERIALS;
+    public static final Set<Material> CLICKABLE_CONSUME_MATERIALS;
+    public static final Set<Material> ARMOR_MATERIALS;
+
+	static {
 		// Initialize constant arrays
-		ABILITY_ITEMS = new ItemStack[]{mage(), ninja(), templar(), warrior(), knight(),
-				priest(), siren(), monk(), messenger()};
-		FOOD_MATERIALS = new Material[]{Material.BEETROOT, Material.CARROT, Material.BREAD,
+		ABILITY_ITEMS = makeSet(mage(), ninja(), templar(), warrior(), knight(), priest(), siren(), monk(), messenger());
+		FOOD_MATERIALS = makeSet(Material.BEETROOT, Material.CARROT, Material.BREAD,
 				Material.MUTTON, Material.COOKED_BEEF, Material.GOLDEN_CARROT, Material.GOLDEN_APPLE,
-				Material.ENCHANTED_GOLDEN_APPLE};
-		HELMET_MATERIALS = new Material[]{Material.LEATHER_HELMET, Material.GOLDEN_HELMET,
-				Material.CHAINMAIL_HELMET, Material.IRON_HELMET, Material.DIAMOND_HELMET, Material.NETHERITE_HELMET,
-				Material.TURTLE_HELMET};
-		CHESTPLATE_MATERIALS = new Material[]{Material.LEATHER_CHESTPLATE, Material.GOLDEN_CHESTPLATE,
-				Material.CHAINMAIL_CHESTPLATE, Material.IRON_CHESTPLATE, Material.DIAMOND_CHESTPLATE,
-				Material.NETHERITE_HELMET};
-		LEGGING_MATERIALS = new Material[]{Material.LEATHER_LEGGINGS, Material.GOLDEN_LEGGINGS,
-				Material.CHAINMAIL_LEGGINGS, Material.IRON_LEGGINGS, Material.DIAMOND_LEGGINGS,
-				Material.NETHERITE_LEGGINGS};
-		BOOTS_MATERIALS = new Material[]{Material.LEATHER_BOOTS, Material.GOLDEN_BOOTS,
-				Material.CHAINMAIL_BOOTS, Material.IRON_BOOTS, Material.DIAMOND_BOOTS, Material.NETHERITE_BOOTS};
-		ARMOR_MATERIALS = new Material[]{Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE,
-				Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS, Material.CHAINMAIL_HELMET, Material.CHAINMAIL_CHESTPLATE,
-				Material.CHAINMAIL_LEGGINGS, Material.CHAINMAIL_BOOTS, Material.IRON_HELMET, Material.IRON_CHESTPLATE,
-				Material.IRON_LEGGINGS, Material.IRON_BOOTS, Material.DIAMOND_HELMET, Material.DIAMOND_CHESTPLATE,
-				Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS, Material.NETHERITE_HELMET, Material.NETHERITE_CHESTPLATE,
-				Material.NETHERITE_LEGGINGS, Material.NETHERITE_BOOTS};
-		CARE_MATERIALS = new Material[]{Material.COAL_BLOCK, Material.IRON_BLOCK,
-				Material.DIAMOND_BLOCK, Material.BEACON};
-		CLICKABLE_WEAPON_MATERIALS = new Material[]{Material.BOW, Material.CROSSBOW,
-				Material.TRIDENT};
-		CLICKABLE_CONSUME_MATERIALS = new Material[]{Material.GLASS_BOTTLE,
-				Material.POTION, Material.SPLASH_POTION, Material.LINGERING_POTION, Material.EXPERIENCE_BOTTLE,
-				Material.MILK_BUCKET, Material.GHAST_SPAWN_EGG, Material.WOLF_SPAWN_EGG};
+				Material.ENCHANTED_GOLDEN_APPLE);
+		HELMET_MATERIALS = makeSet(Material.LEATHER_HELMET, Material.GOLDEN_HELMET, Material.CHAINMAIL_HELMET,
+                Material.IRON_HELMET, Material.DIAMOND_HELMET, Material.NETHERITE_HELMET, Material.TURTLE_HELMET);
+		CHESTPLATE_MATERIALS = makeSet(Material.LEATHER_CHESTPLATE, Material.GOLDEN_CHESTPLATE,
+                Material.CHAINMAIL_CHESTPLATE, Material.IRON_CHESTPLATE, Material.DIAMOND_CHESTPLATE,
+                Material.NETHERITE_HELMET);
+		LEGGING_MATERIALS = makeSet(Material.LEATHER_LEGGINGS, Material.GOLDEN_LEGGINGS, Material.CHAINMAIL_LEGGINGS,
+                Material.IRON_LEGGINGS, Material.DIAMOND_LEGGINGS, Material.NETHERITE_LEGGINGS);
+		BOOTS_MATERIALS = makeSet(Material.LEATHER_BOOTS, Material.GOLDEN_BOOTS, Material.CHAINMAIL_BOOTS,
+                Material.IRON_BOOTS, Material.DIAMOND_BOOTS, Material.NETHERITE_BOOTS);
+		CARE_MATERIALS = makeSet(Material.COAL_BLOCK, Material.IRON_BLOCK, Material.DIAMOND_BLOCK, Material.BEACON);
+		CLICKABLE_WEAPON_MATERIALS = makeSet(Material.BOW, Material.CROSSBOW, Material.TRIDENT);
+		CLICKABLE_CONSUME_MATERIALS = makeSet(Material.GLASS_BOTTLE, Material.POTION, Material.SPLASH_POTION,
+                Material.LINGERING_POTION, Material.EXPERIENCE_BOTTLE, Material.MILK_BUCKET, Material.GHAST_SPAWN_EGG,
+                Material.WOLF_SPAWN_EGG);
+
+        Set<Material> armor = new HashSet<>();
+        armor.addAll(HELMET_MATERIALS);
+        armor.addAll(CHESTPLATE_MATERIALS);
+        armor.addAll(LEGGING_MATERIALS);
+        armor.addAll(BOOTS_MATERIALS);
+        ARMOR_MATERIALS = Collections.unmodifiableSet(armor);
 	}
 
 	// Standard game items
