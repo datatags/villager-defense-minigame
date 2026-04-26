@@ -5,11 +5,7 @@ import lombok.Setter;
 import me.theguyhere.villagerdefense.common.Calculator;
 import me.theguyhere.villagerdefense.common.CommunicationManager;
 import me.theguyhere.villagerdefense.plugin.Main;
-import me.theguyhere.villagerdefense.plugin.data.ArenaDataManager;
-import me.theguyhere.villagerdefense.plugin.data.GameDataManager;
-import me.theguyhere.villagerdefense.plugin.data.LanguageManager;
-import me.theguyhere.villagerdefense.plugin.data.NMSVersion;
-import me.theguyhere.villagerdefense.plugin.data.SpawnTableDataManager;
+import me.theguyhere.villagerdefense.plugin.data.*;
 import me.theguyhere.villagerdefense.plugin.data.exceptions.BadDataException;
 import me.theguyhere.villagerdefense.plugin.data.exceptions.InvalidLocationException;
 import me.theguyhere.villagerdefense.plugin.data.exceptions.NoSuchPathException;
@@ -22,45 +18,23 @@ import me.theguyhere.villagerdefense.plugin.game.exceptions.ArenaNotFoundExcepti
 import me.theguyhere.villagerdefense.plugin.game.exceptions.InvalidNameException;
 import me.theguyhere.villagerdefense.plugin.game.kits.KitEffectType;
 import me.theguyhere.villagerdefense.plugin.items.ItemManager;
-import me.theguyhere.villagerdefense.plugin.structures.ArenaBoard;
-import me.theguyhere.villagerdefense.plugin.structures.ArenaRecord;
-import me.theguyhere.villagerdefense.plugin.structures.ArenaSpawn;
-import me.theguyhere.villagerdefense.plugin.structures.ArenaSpawnType;
-import me.theguyhere.villagerdefense.plugin.structures.Portal;
+import me.theguyhere.villagerdefense.plugin.structures.*;
 import me.theguyhere.villagerdefense.plugin.structures.events.ReloadBoardsEvent;
-import me.theguyhere.villagerdefense.plugin.visuals.InventoryButtons;
-import me.theguyhere.villagerdefense.plugin.visuals.InventoryID;
-import me.theguyhere.villagerdefense.plugin.visuals.InventoryMeta;
-import me.theguyhere.villagerdefense.plugin.visuals.InventoryType;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import me.theguyhere.villagerdefense.plugin.visuals.CommunityChestMeta;
+import me.theguyhere.villagerdefense.plugin.visuals.inventories.shop.*;
+import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Hoglin;
-import org.bukkit.entity.IronGolem;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Phantom;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Slime;
-import org.bukkit.entity.Villager;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -68,7 +42,7 @@ import java.util.stream.Stream;
 /**
  * A class managing data about a Villager Defense arena.
  */
-public class Arena {
+public class Arena implements Comparable<Arena> {
     /** Arena id.*/
     @Getter
     private final int id;
@@ -115,19 +89,18 @@ public class Arena {
     private final List<VDPlayer> players = new ArrayList<>();
     /** Weapon shop inventory.*/
     @Getter
-    @Setter
     private Inventory weaponShop;
     /** Armor shop inventory.*/
-    @Setter
     @Getter
     private Inventory armorShop;
     /** Consumables shop inventory.*/
-    @Setter
     @Getter
     private Inventory consumeShop;
-    /** Community chest inventory.*/
-    @Setter
     @Getter
+    private Inventory enchantShop;
+    @Getter
+    private Inventory customShop;
+    /** Community chest inventory.*/
     private Inventory communityChest;
     /** Time limit bar object.*/
     @Getter
@@ -1226,6 +1199,14 @@ public class Arena {
         ArenaDataManager.setEnchants(id, enchants);
     }
 
+    public void updateShops(int level) {
+        weaponShop = new WeaponShopMenu(this, level).getInventory();
+        armorShop = new ArmorShopMenu(this, level).getInventory();
+        consumeShop = new ConsumableShopMenu(this, level).getInventory();
+        enchantShop = new EnchantShopMenu(this).getInventory();
+        customShop = new CustomShopMenu(this).getInventory();
+    }
+
     public boolean hasCustom() {
         try {
             return ArenaDataManager.hasCustom(id);
@@ -1487,6 +1468,49 @@ public class Arena {
         ArenaDataManager.setLateArrival(id, bool);
     }
 
+    /**
+     * Get the reason why this arena cannot be opened.
+     * @return The reason this arena cannot be opened, or null if it can be opened.
+     */
+    public String getClosedReason() {
+        // No lobby
+        if (!GameDataManager.hasLobby()) {
+            return "Arena cannot open without a lobby!";
+        }
+
+        // No arena portal
+        if (getPortalLocation() == null) {
+            return "Arena cannot open without a portal!";
+        }
+
+        // No player spawn
+        if (getPlayerSpawn() == null) {
+            return "Arena cannot open without a player spawn!";
+        }
+
+        // No monster spawn
+        if (getMonsterSpawns().isEmpty()) {
+            return "Arena cannot open without a monster spawn!";
+        }
+
+        // No villager spawn
+        if (getVillagerSpawns().isEmpty()) {
+            return "Arena cannot open without a villager spawn!";
+        }
+
+        // No shops
+        if (!hasCustom() && !hasNormal()) {
+            return "Arena cannot open without a shop!";
+        }
+
+        // Invalid arena bounds
+        if (getCorner1() == null || getCorner2() == null || getCorner1().getWorld() != getCorner2().getWorld()) {
+            return "Arena cannot open without valid arena bounds!";
+        }
+
+        return null; // arena is OK to open
+    }
+
     public boolean isClosed() {
         try {
             return ArenaDataManager.getArenaClosed(id);
@@ -1674,80 +1698,6 @@ public class Arena {
 
     public int getSpectatorCount() {
         return getSpectators().size();
-    }
-
-    public Inventory getCustomShopEditorMenu() {
-        // Create inventory
-        Inventory inv = Bukkit.createInventory(
-                new InventoryMeta(InventoryID.CUSTOM_SHOP_EDITOR_MENU, InventoryType.MENU, this),
-                54,
-                CommunicationManager.format("&6&lCustom Shop Editor: " + getName())
-        );
-
-        // Set exit option
-        for (int i = 45; i < 54; i++)
-            inv.setItem(i, InventoryButtons.exit());
-
-        // Get items from stored inventory
-        try {
-            ArenaDataManager.getCustomShop(id).forEach(inv::setItem);
-        } catch (BadDataException e) {
-            CommunicationManager.debugError(
-                CommunicationManager.DebugLevel.NORMAL, String.format("Attempted to retrieve the custom shop inventory of %s but encountered an error.", getName())
-            );
-        }
-
-        return inv;
-    }
-
-    public Inventory getCustomShop() {
-        // Create inventory
-        Inventory inv = Bukkit.createInventory(
-                new InventoryMeta(InventoryID.CUSTOM_SHOP_MENU, InventoryType.MENU, this),
-                54,
-                CommunicationManager.format("&6&l") + LanguageManager.names.customShop
-        );
-
-        // Set exit option
-        inv.setItem(49, InventoryButtons.exit());
-
-        // Get items from stored inventory
-        try {
-            ArenaDataManager.getCustomShop(id).forEach(inv::setItem);
-        } catch (BadDataException e) {
-            CommunicationManager.debugError(
-                CommunicationManager.DebugLevel.NORMAL, String.format("Attempted to retrieve the custom shop inventory of %s but encountered an error.", getName())
-            );
-        }
-
-        return inv;
-    }
-
-    /**
-     * Retrieves a mockup of the custom shop for presenting arena information.
-     * @return Mock custom shop {@link Inventory}
-     */
-    public Inventory getMockCustomShop() {
-        // Create inventory
-        Inventory inv = Bukkit.createInventory(
-                new InventoryMeta(InventoryID.MOCK_CUSTOM_SHOP_MENU, InventoryType.MENU, this),
-                54,
-                CommunicationManager.format("&6&l" + LanguageManager.names.customShop + ": " + getName())
-        );
-
-        // Set exit option
-        inv.setItem(49, InventoryButtons.exit());
-
-        // Get items from stored inventory
-        try {
-            ArenaDataManager.getCustomShop(id).forEach(inv::setItem);
-        } catch (BadDataException e) {
-            CommunicationManager.debugError(
-                CommunicationManager.DebugLevel.NORMAL, String.format("Attempted to retrieve the custom shop inventory of %s but encountered an error.", getName())
-            );
-        }
-
-        return inv;
     }
 
     /**
@@ -2004,5 +1954,33 @@ public class Arena {
         cancelMonsterParticles();
         cancelVillagerParticles();
         cancelBorderParticles();
+    }
+
+    @Override
+    public int compareTo(@NotNull Arena o) {
+        return Integer.compare(id, o.id);
+    }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
+
+    public Map<Integer,ItemStack> getCustomShopItems() {
+        try {
+            return ArenaDataManager.getCustomShop(id);
+        } catch (BadDataException e) {
+            return new HashMap<>();
+        }
+    }
+
+    public Inventory getCommunityChest() {
+        if (communityChest == null) {
+            CommunityChestMeta meta = new CommunityChestMeta();
+            communityChest = Bukkit.createInventory(meta, 54,
+                    CommunicationManager.format("&d&l" + LanguageManager.names.communityChest));
+            meta.setInventory(communityChest);
+        }
+        return communityChest;
     }
 }

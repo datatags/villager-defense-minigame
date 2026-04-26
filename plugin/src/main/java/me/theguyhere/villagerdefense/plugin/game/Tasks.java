@@ -16,10 +16,6 @@ import me.theguyhere.villagerdefense.plugin.game.events.WaveEndEvent;
 import me.theguyhere.villagerdefense.plugin.game.events.WaveStartEvent;
 import me.theguyhere.villagerdefense.plugin.game.kits.*;
 import me.theguyhere.villagerdefense.plugin.items.GameItems;
-import me.theguyhere.villagerdefense.plugin.visuals.Inventories;
-import me.theguyhere.villagerdefense.plugin.visuals.InventoryID;
-import me.theguyhere.villagerdefense.plugin.visuals.InventoryMeta;
-import me.theguyhere.villagerdefense.plugin.visuals.InventoryType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -251,17 +247,8 @@ public class Tasks {
                     PlayerDataManager.getPlayerCrystals(uuid) - player.getGemBoost() * 5);
             });
 
-			// Initiate community chest
-			arena.setCommunityChest(Bukkit.createInventory(
-					new InventoryMeta(InventoryID.COMMUNITY_CHEST_INVENTORY, InventoryType.CONTROLLED, arena),
-					54,
-					CommunicationManager.format("&d&l" + LanguageManager.names.communityChest)
-			));
-
 			// Initiate shops
-			arena.setWeaponShop(Inventories.createWeaponShopMenu(1, arena));
-			arena.setArmorShop(Inventories.createArmorShopMenu(1, arena));
-			arena.setConsumeShop(Inventories.createConsumableShopMenu(1, arena));
+            arena.updateShops(1);
 
 			// Start dialogue, then trigger WaveEndEvent
 			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, () -> {
@@ -451,9 +438,7 @@ public class Tasks {
 			// Regenerate shops when time and notify players of it
 			if (currentWave % 10 == 0 && currentWave != 0) {
 				int level = currentWave / 10 + 1;
-				arena.setWeaponShop(Inventories.createWeaponShopMenu(level, arena));
-				arena.setArmorShop(Inventories.createArmorShopMenu(level, arena));
-				arena.setConsumeShop(Inventories.createConsumableShopMenu(level, arena));
+                arena.updateShops(level);
 				Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, () -> arena.getActives().forEach(player ->
 						player.getPlayer().sendTitle(CommunicationManager.format(
 								"&6" + LanguageManager.messages.shopUpgrade),

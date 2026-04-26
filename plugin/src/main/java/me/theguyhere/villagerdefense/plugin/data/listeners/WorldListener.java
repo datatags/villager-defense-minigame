@@ -1,8 +1,8 @@
 package me.theguyhere.villagerdefense.plugin.data.listeners;
 
+import me.theguyhere.villagerdefense.common.CommunicationManager;
 import me.theguyhere.villagerdefense.plugin.Main;
 import me.theguyhere.villagerdefense.plugin.game.GameManager;
-import me.theguyhere.villagerdefense.common.CommunicationManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -18,7 +18,6 @@ public class WorldListener implements Listener {
         if (Main.plugin.getUnloadedWorlds().contains(worldName)) {
             Main.plugin.loadWorld(worldName);
             Main.plugin.resetGameManager();
-            GameManager.reloadLobby();
             GameManager.refreshAll();
         }
     }

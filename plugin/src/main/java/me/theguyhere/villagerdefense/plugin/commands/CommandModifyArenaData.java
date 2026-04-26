@@ -14,7 +14,7 @@ import me.theguyhere.villagerdefense.plugin.game.GameManager;
 import me.theguyhere.villagerdefense.plugin.game.PlayerManager;
 import me.theguyhere.villagerdefense.plugin.game.exceptions.ArenaNotFoundException;
 import me.theguyhere.villagerdefense.plugin.game.exceptions.InvalidNameException;
-import me.theguyhere.villagerdefense.plugin.visuals.Inventories;
+import me.theguyhere.villagerdefense.plugin.visuals.inventories.ConfirmationMenu;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -26,332 +26,325 @@ import java.util.Objects;
  * Executes commands to modify arena data without the admin GUI.
  */
 class CommandModifyArenaData {
-	static final String CREATE = "create";
-	static final String COMMAND_FORMAT = "/vd admin [arena, infoBoard, leaderboard, lobby] [extra arguments]";
+    static final String CREATE = "create";
+    static final String COMMAND_FORMAT = "/vd admin [arena, infoBoard, leaderboard, lobby] [extra arguments]";
 
-	static void execute(String[] args, CommandSender sender) throws CommandException {
-		// Guard clauses
-		if (!GuardClause.checkArg(args, 0, VDCommandExecutor.Argument.ADMIN.getArg()) ||
-			GuardClause.checkArgsLengthLess(args, 2))
-			return;
-		GuardClause.checkSenderPermissions(sender, Permission.ADMIN);
+    static void execute(String[] args, CommandSender sender) throws CommandException {
+        // Guard clauses
+        if (!GuardClause.checkArg(args, 0, VDCommandExecutor.Argument.ADMIN.getArg()) ||
+                GuardClause.checkArgsLengthLess(args, 2))
+            return;
+        GuardClause.checkSenderPermissions(sender, Permission.ADMIN);
 
-		// Execute sub commands
-		modifyLobby(args, sender);
-		modifyInfoBoard(args, sender);
-		modifyLeaderboard(args, sender);
-		modifyArena(args, sender);
+        // Execute sub commands
+        modifyLobby(args, sender);
+        modifyInfoBoard(args, sender);
+        modifyLeaderboard(args, sender);
+        modifyArena(args, sender);
 
-		// No valid commend sent
-		if (Arrays
-			.stream(Argument.values())
-			.noneMatch(arg -> GuardClause.checkArg(args, 1, arg.getArg())))
-			VDCommandExecutor.notifyFailure(sender, COMMAND_FORMAT);
-	}
+        // No valid commend sent
+        if (Arrays
+                .stream(Argument.values())
+                .noneMatch(arg -> GuardClause.checkArg(args, 1, arg.getArg())))
+            VDCommandExecutor.notifyFailure(sender, COMMAND_FORMAT);
+    }
 
-	enum Argument {
-		LOBBY("lobby"),
-		INFO_BOARD("infoBoard"),
-		LEADERBOARD("leaderboard"),
-		ARENA("arena");
-		private final String arg;
+    enum Argument {
+        LOBBY("lobby"),
+        INFO_BOARD("infoBoard"),
+        LEADERBOARD("leaderboard"),
+        ARENA("arena");
+        private final String arg;
 
-		Argument(String arg) {
-			this.arg = arg;
-		}
+        Argument(String arg) {
+            this.arg = arg;
+        }
 
-		String getArg() {
-			return arg;
-		}
-	}
+        String getArg() {
+            return arg;
+        }
+    }
 
-	enum LocationOptionArgument {
-		SET("set"),
-		TELEPORT("teleport"),
-		CENTER("center"),
-		REMOVE("remove");
-		private final String arg;
+    enum LocationOptionArgument {
+        SET("set"),
+        TELEPORT("teleport"),
+        CENTER("center"),
+        REMOVE("remove");
+        private final String arg;
 
-		LocationOptionArgument(String arg) {
-			this.arg = arg;
-		}
+        LocationOptionArgument(String arg) {
+            this.arg = arg;
+        }
 
-		String getArg() {
-			return arg;
-		}
-	}
+        String getArg() {
+            return arg;
+        }
+    }
 
-	enum LeaderboardTypeArgument {
-		TOP_BALANCE("topBalance"),
-		TOP_KILLS("topKills"),
-		TOP_WAVE("topWave"),
-		TOTAL_GEMS("totalGems"),
-		TOTAL_KILLS("totalKills");
-		private final String arg;
+    enum LeaderboardTypeArgument {
+        TOP_BALANCE("topBalance"),
+        TOP_KILLS("topKills"),
+        TOP_WAVE("topWave"),
+        TOTAL_GEMS("totalGems"),
+        TOTAL_KILLS("totalKills");
+        private final String arg;
 
-		LeaderboardTypeArgument(String arg) {
-			this.arg = arg;
-		}
+        LeaderboardTypeArgument(String arg) {
+            this.arg = arg;
+        }
 
-		String getArg() {
-			return arg;
-		}
-	}
+        String getArg() {
+            return arg;
+        }
+    }
 
-	enum ArenaOperationArgument {
-		CLOSE("close"),
-		OPEN("open"),
-		RENAME("rename"),
-		PORTAL("portal-"),
-		REMOVE("remove"),
-		LEADERBOARD("leaderboard-"),
-		PLAYER_SPAWN("playerSpawn-"),
-		WAITING_ROOM("waitingRoom-"),
-		SPAWN_PARTICLES("spawnParticles-"),
-		MAX_PLAYERS("maxPlayers-"),
-		MIN_PLAYERS("minPlayers-"),
-		MONSTER_SPAWN_PARTICLES("monsterSpawnParticles-"),
-		VILLAGER_SPAWN_PARTICLES("villagerSpawnParticles-"),
-		DYNAMIC_MOB_COUNT("dynamicMobCount-"),
-		DEFAULT_SHOP("defaultShop-"),
-		CUSTOM_SHOP("customShop-"),
-		ENCHANT_SHOP("enchantShop-"),
-		COMMUNITY_CHEST("communityChest-"),
-		DYNAMIC_PRICES("dynamicPrices-"),
-		DYNAMIC_TIME_LIMIT("dynamicTimeLimit-"),
-		DYNAMIC_DIFFICULTY("dynamicDifficulty-"),
-		LATE_ARRIVAL("lateArrival-"),
-		EXPERIENCE_DROP("experienceDrop-"),
-		ITEM_DROP("itemDrop-"),
-		MAX_WAVES("maxWaves-"),
-		WAVE_TIME_LIMIT("waveTimeLimit-"),
-		WOLF_CAP("wolfCap-"),
-		GOLEM_CAP("golemCap-"),
-		DIFFICULTY_LABEL("difficultyLabel-"),
-		DIFFICULTY_MULTIPLIER("difficultyMultiplier");
-		private final String arg;
+    enum ArenaOperationArgument {
+        CLOSE("close"),
+        OPEN("open"),
+        RENAME("rename"),
+        PORTAL("portal-"),
+        REMOVE("remove"),
+        LEADERBOARD("leaderboard-"),
+        PLAYER_SPAWN("playerSpawn-"),
+        WAITING_ROOM("waitingRoom-"),
+        SPAWN_PARTICLES("spawnParticles-"),
+        MAX_PLAYERS("maxPlayers-"),
+        MIN_PLAYERS("minPlayers-"),
+        MONSTER_SPAWN_PARTICLES("monsterSpawnParticles-"),
+        VILLAGER_SPAWN_PARTICLES("villagerSpawnParticles-"),
+        DYNAMIC_MOB_COUNT("dynamicMobCount-"),
+        DEFAULT_SHOP("defaultShop-"),
+        CUSTOM_SHOP("customShop-"),
+        ENCHANT_SHOP("enchantShop-"),
+        COMMUNITY_CHEST("communityChest-"),
+        DYNAMIC_PRICES("dynamicPrices-"),
+        DYNAMIC_TIME_LIMIT("dynamicTimeLimit-"),
+        DYNAMIC_DIFFICULTY("dynamicDifficulty-"),
+        LATE_ARRIVAL("lateArrival-"),
+        EXPERIENCE_DROP("experienceDrop-"),
+        ITEM_DROP("itemDrop-"),
+        MAX_WAVES("maxWaves-"),
+        WAVE_TIME_LIMIT("waveTimeLimit-"),
+        WOLF_CAP("wolfCap-"),
+        GOLEM_CAP("golemCap-"),
+        DIFFICULTY_LABEL("difficultyLabel-"),
+        DIFFICULTY_MULTIPLIER("difficultyMultiplier");
+        private final String arg;
 
-		ArenaOperationArgument(String arg) {
-			this.arg = arg;
-		}
+        ArenaOperationArgument(String arg) {
+            this.arg = arg;
+        }
 
-		String getArg() {
-			return arg;
-		}
-	}
+        String getArg() {
+            return arg;
+        }
+    }
 
-	private enum ToggleArgument {
-		ON("on"),
-		OFF("off");
-		private final String arg;
+    private enum ToggleArgument {
+        ON("on"),
+        OFF("off");
+        private final String arg;
 
-		ToggleArgument(String arg) {
-			this.arg = arg;
-		}
+        ToggleArgument(String arg) {
+            this.arg = arg;
+        }
 
-		private String getArg() {
-			return arg;
-		}
-	}
+        private String getArg() {
+            return arg;
+        }
+    }
 
-	private enum DifficultyLabelArgument {
-		EASY("easy"),
-		MEDIUM("medium"),
-		HARD("hard"),
-		INSANE("insane"),
-		NONE("none");
-		private final String arg;
+    private enum DifficultyLabelArgument {
+        EASY("easy"),
+        MEDIUM("medium"),
+        HARD("hard"),
+        INSANE("insane"),
+        NONE("none");
+        private final String arg;
 
-		DifficultyLabelArgument(String arg) {
-			this.arg = arg;
-		}
+        DifficultyLabelArgument(String arg) {
+            this.arg = arg;
+        }
 
-		private String getArg() {
-			return arg;
-		}
-	}
+        private String getArg() {
+            return arg;
+        }
+    }
 
-	private static void modifyLobby(String[] args, CommandSender sender) throws CommandException {
-		final String COMMAND_FORMAT = "/vd admin lobby [center, remove, set, teleport]";
+    private static void modifyLobby(String[] args, CommandSender sender) throws CommandException {
+        final String COMMAND_FORMAT = "/vd admin lobby [center, remove, set, teleport]";
 
-		// Guard clauses
-		if (!GuardClause.checkArg(args, 1, Argument.LOBBY.arg))
-			return;
-		if (!GuardClause.checkArgsLengthMatch(args, 3))
-			throw new WrongFormatException(COMMAND_FORMAT);
+        // Guard clauses
+        if (!GuardClause.checkArg(args, 1, Argument.LOBBY.arg))
+            return;
+        if (!GuardClause.checkArgsLengthMatch(args, 3))
+            throw new WrongFormatException(COMMAND_FORMAT);
 
-		Player player;
+        Player player;
 
-		if (GuardClause.checkArg(args, 2, LocationOptionArgument.SET.arg)) {
-			player = GuardClause.checkSenderPlayer(sender);
+        if (GuardClause.checkArg(args, 2, LocationOptionArgument.SET.arg)) {
+            player = GuardClause.checkSenderPlayer(sender);
 
-			GameManager.saveLobby(player.getLocation());
-			PlayerManager.notifySuccess(player, "Lobby set!");
-		}
-		else if (GuardClause.checkArg(args, 2, LocationOptionArgument.TELEPORT.arg)) {
-			player = GuardClause.checkSenderPlayer(sender);
-			try {
-				player.teleport(GameDataManager.getLobbyLocation());
-			} catch (BadDataException | NoSuchPathException e) {
-				PlayerManager.notifyFailure(player, "No lobby to teleport to!");
-			}
-		}
-		else if (GuardClause.checkArg(args, 2, LocationOptionArgument.CENTER.arg)) {
-			try {
-				GameDataManager.centerLobbyLocation();
-				VDCommandExecutor.notifySuccess(sender, "Lobby centered!");
-			} catch (BadDataException | NoSuchPathException e) {
-				VDCommandExecutor.notifyFailure(sender, "No lobby to center!");
-			}
-		}
-		else if (GuardClause.checkArg(args, 2, LocationOptionArgument.REMOVE.arg)) {
-			player = GuardClause.checkSenderPlayer(sender);
+            GameDataManager.setLobbyLocation(player.getLocation());
+            PlayerManager.notifySuccess(player, "Lobby set!");
+        } else if (GuardClause.checkArg(args, 2, LocationOptionArgument.TELEPORT.arg)) {
+            player = GuardClause.checkSenderPlayer(sender);
+            try {
+                player.teleport(GameDataManager.getLobbyLocation());
+            } catch (BadDataException | NoSuchPathException e) {
+                PlayerManager.notifyFailure(player, "No lobby to teleport to!");
+            }
+        } else if (GuardClause.checkArg(args, 2, LocationOptionArgument.CENTER.arg)) {
+            try {
+                GameDataManager.centerLobbyLocation();
+                VDCommandExecutor.notifySuccess(sender, "Lobby centered!");
+            } catch (BadDataException | NoSuchPathException e) {
+                VDCommandExecutor.notifyFailure(sender, "No lobby to center!");
+            }
+        } else if (GuardClause.checkArg(args, 2, LocationOptionArgument.REMOVE.arg)) {
+            player = GuardClause.checkSenderPlayer(sender);
 
-			if (GameManager
-				.getArenas()
-				.values()
-				.stream()
-				.filter(Objects::nonNull)
-				.anyMatch(arenaInstance -> !arenaInstance.isClosed())) {
-				PlayerManager.notifyFailure(player, "All arenas must be closed to modify this!");
-			}
-			else if (GameDataManager.hasLobby()) {
-				player.openInventory(Inventories.createLobbyConfirmMenu());
-			}
-			else {
-				PlayerManager.notifyFailure(player, "No lobby to remove!");
-			}
-		}
-		else throw new WrongFormatException(COMMAND_FORMAT);
-	}
+            if (GameManager
+                    .getArenas()
+                    .values()
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .anyMatch(arenaInstance -> !arenaInstance.isClosed())) {
+                PlayerManager.notifyFailure(player, "All arenas must be closed to modify this!");
+            } else if (GameDataManager.hasLobby()) {
+                new ConfirmationMenu("&4&lRemove Lobby?", p -> {
+                    GameDataManager.removeLobbyLocation();
+                    PlayerManager.notifySuccess(player, "Lobby removed!");
+                }).open(player);
+            } else {
+                PlayerManager.notifyFailure(player, "No lobby to remove!");
+            }
+        } else throw new WrongFormatException(COMMAND_FORMAT);
+    }
 
-	private static void modifyInfoBoard(String[] args, CommandSender sender) throws CommandException {
-		final String COMMAND_FORMAT = "/vd admin infoBoard [create, [info board id]] [center, remove, set, teleport]";
+    private static void modifyInfoBoard(String[] args, CommandSender sender) throws CommandException {
+        final String COMMAND_FORMAT = "/vd admin infoBoard [create, [info board id]] [center, remove, set, teleport]";
 
-		// Guard clauses
-		if (!GuardClause.checkArg(args, 1, Argument.INFO_BOARD.arg))
-			return;
-		if (GuardClause.checkArgsLengthGreater(args, 4) ||
-			GuardClause.checkArgsLengthLess(args, 3))
-			throw new WrongFormatException(COMMAND_FORMAT);
+        // Guard clauses
+        if (!GuardClause.checkArg(args, 1, Argument.INFO_BOARD.arg))
+            return;
+        if (GuardClause.checkArgsLengthGreater(args, 4) ||
+                GuardClause.checkArgsLengthLess(args, 3))
+            throw new WrongFormatException(COMMAND_FORMAT);
 
-		Player player;
-		int infoBoardID;
+        Player player;
+        int infoBoardID;
 
-		if (GuardClause.checkArg(args, 2, CommandModifyArenaData.CREATE)) {
-			player = GuardClause.checkSenderPlayer(sender);
+        if (GuardClause.checkArg(args, 2, CommandModifyArenaData.CREATE)) {
+            player = GuardClause.checkSenderPlayer(sender);
 
-			GameManager.setInfoBoard(GameManager.newInfoBoardID(), player.getLocation());
-			PlayerManager.notifySuccess(player, "Info board set!");
-			return;
-		}
+            GameManager.setInfoBoard(GameManager.newInfoBoardID(), player.getLocation());
+            PlayerManager.notifySuccess(player, "Info board set!");
+            return;
+        }
 
-		// Get info board ID
-		try {
-			infoBoardID = Integer.parseInt(args[2]);
-		}
-		catch (Exception e) {
-			throw new WrongFormatException(COMMAND_FORMAT);
-		}
+        // Get info board ID
+        try {
+            infoBoardID = Integer.parseInt(args[2]);
+        } catch (Exception e) {
+            throw new WrongFormatException(COMMAND_FORMAT);
+        }
 
-		// Check for valid info board ID, then set path and location
-		if (!GameDataManager.hasInfoBoard(infoBoardID)) {
-			VDCommandExecutor.notifyFailure(sender, "Invalid info board id.");
-			return;
-		}
+        // Check for valid info board ID, then set path and location
+        if (!GameDataManager.hasInfoBoard(infoBoardID)) {
+            VDCommandExecutor.notifyFailure(sender, "Invalid info board id.");
+            return;
+        }
 
-		if (GuardClause.checkArg(args, 3, LocationOptionArgument.SET.arg)) {
-			player = GuardClause.checkSenderPlayer(sender);
+        if (GuardClause.checkArg(args, 3, LocationOptionArgument.SET.arg)) {
+            player = GuardClause.checkSenderPlayer(sender);
 
-			GameManager.setInfoBoard(infoBoardID, player.getLocation());
-			PlayerManager.notifySuccess(player, "Info board set!");
-		}
-		else if (GuardClause.checkArg(args, 3, LocationOptionArgument.TELEPORT.arg)) {
-			player = GuardClause.checkSenderPlayer(sender);
-			try {
-				player.teleport(GameDataManager.getInfoBoardLocation(infoBoardID));
-			} catch (BadDataException | NoSuchPathException e) {
-				PlayerManager.notifyFailure(player, "No info board to teleport to!");
-			}
-		}
-		else if (GuardClause.checkArg(args, 3, LocationOptionArgument.CENTER.arg)) {
-			try {
-				GameDataManager.centerInfoBoardLocation(infoBoardID);
-				VDCommandExecutor.notifySuccess(sender, "Info board centered!");
-			} catch (BadDataException | NoSuchPathException e) {
-				VDCommandExecutor.notifyFailure(sender, "No info board to center!");
-			}
-		}
-		else if (GuardClause.checkArg(args, 3, LocationOptionArgument.REMOVE.arg)) {
-			player = GuardClause.checkSenderPlayer(sender);
+            GameManager.setInfoBoard(infoBoardID, player.getLocation());
+            PlayerManager.notifySuccess(player, "Info board set!");
+        } else if (GuardClause.checkArg(args, 3, LocationOptionArgument.TELEPORT.arg)) {
+            player = GuardClause.checkSenderPlayer(sender);
+            try {
+                player.teleport(GameDataManager.getInfoBoardLocation(infoBoardID));
+            } catch (BadDataException | NoSuchPathException e) {
+                PlayerManager.notifyFailure(player, "No info board to teleport to!");
+            }
+        } else if (GuardClause.checkArg(args, 3, LocationOptionArgument.CENTER.arg)) {
+            try {
+                GameDataManager.centerInfoBoardLocation(infoBoardID);
+                VDCommandExecutor.notifySuccess(sender, "Info board centered!");
+            } catch (BadDataException | NoSuchPathException e) {
+                VDCommandExecutor.notifyFailure(sender, "No info board to center!");
+            }
+        } else if (GuardClause.checkArg(args, 3, LocationOptionArgument.REMOVE.arg)) {
+            player = GuardClause.checkSenderPlayer(sender);
 
-			if (GameDataManager.hasInfoBoard(infoBoardID)) {
-				player.openInventory(Inventories.createInfoBoardConfirmMenu(infoBoardID));
-			}
-			else {
-				PlayerManager.notifyFailure(player, "No info board to remove!");
-			}
-		}
-		else throw new WrongFormatException(COMMAND_FORMAT);
-	}
+            if (GameDataManager.hasInfoBoard(infoBoardID)) {
+                new ConfirmationMenu("&4&lRemove Info Board?", p -> GameManager.removeInfoBoard(infoBoardID)).open(player);
+            } else {
+                PlayerManager.notifyFailure(player, "No info board to remove!");
+            }
+        } else throw new WrongFormatException(COMMAND_FORMAT);
+    }
 
-	private static void modifyLeaderboard(String[] args, CommandSender sender) throws CommandException {
-		final String COMMAND_FORMAT = "/vd admin leaderboard [leaderboard type] [center, remove, set, teleport]";
+    private static void modifyLeaderboard(String[] args, CommandSender sender) throws CommandException {
+        final String COMMAND_FORMAT = "/vd admin leaderboard [leaderboard type] [center, remove, set, teleport]";
 
-		// Guard clauses
-		if (!GuardClause.checkArg(args, 1, Argument.LEADERBOARD.arg))
-			return;
-		if (!GuardClause.checkArgsLengthMatch(args, 4))
-			throw new WrongFormatException(COMMAND_FORMAT);
+        // Guard clauses
+        if (!GuardClause.checkArg(args, 1, Argument.LEADERBOARD.arg))
+            return;
+        if (!GuardClause.checkArgsLengthMatch(args, 4))
+            throw new WrongFormatException(COMMAND_FORMAT);
 
-		// Check for type validity
-		if (Arrays
-			.stream(LeaderboardTypeArgument.values())
-			.noneMatch(type -> GuardClause.checkArg(args, 2, type.arg))) {
-			VDCommandExecutor.notifyFailure(sender, "Invalid leaderboard.");
-			return;
-		}
+        // Check for type validity
+        if (Arrays
+                .stream(LeaderboardTypeArgument.values())
+                .noneMatch(type -> GuardClause.checkArg(args, 2, type.arg))) {
+            VDCommandExecutor.notifyFailure(sender, "Invalid leaderboard.");
+            return;
+        }
 
-		Player player;
-		String type = args[2];
+        Player player;
+        String type = args[2];
 
-		if (GuardClause.checkArg(args, 3, LocationOptionArgument.SET.arg)) {
-			player = GuardClause.checkSenderPlayer(sender);
+        if (GuardClause.checkArg(args, 3, LocationOptionArgument.SET.arg)) {
+            player = GuardClause.checkSenderPlayer(sender);
 
-			GameManager.setLeaderboard(type, player.getLocation());
-			PlayerManager.notifySuccess(player, "Leaderboard set!");
-		}
-		else if (GuardClause.checkArg(args, 3, LocationOptionArgument.TELEPORT.arg)) {
-			player = GuardClause.checkSenderPlayer(sender);
-			try {
-				player.teleport(GameDataManager.getLeaderboardLocation(type));
-			} catch (BadDataException | NoSuchPathException e) {
-				PlayerManager.notifyFailure(player, "No leaderboard to teleport to!");
-			}
-		}
-		else if (GuardClause.checkArg(args, 3, LocationOptionArgument.CENTER.arg)) {
-			try {
-				GameDataManager.centerLeaderboardLocation(type);
-				VDCommandExecutor.notifySuccess(sender, "Leaderboard centered!");
-			} catch (BadDataException | NoSuchPathException e) {
-				VDCommandExecutor.notifyFailure(sender, "No leaderboard to center!");
-			}
-		}
-		else if (GuardClause.checkArg(args, 3, LocationOptionArgument.REMOVE.arg)) {
-			player = GuardClause.checkSenderPlayer(sender);
+            GameManager.setLeaderboard(type, player.getLocation());
+            PlayerManager.notifySuccess(player, "Leaderboard set!");
+        } else if (GuardClause.checkArg(args, 3, LocationOptionArgument.TELEPORT.arg)) {
+            player = GuardClause.checkSenderPlayer(sender);
+            try {
+                player.teleport(GameDataManager.getLeaderboardLocation(type));
+            } catch (BadDataException | NoSuchPathException e) {
+                PlayerManager.notifyFailure(player, "No leaderboard to teleport to!");
+            }
+        } else if (GuardClause.checkArg(args, 3, LocationOptionArgument.CENTER.arg)) {
+            try {
+                GameDataManager.centerLeaderboardLocation(type);
+                VDCommandExecutor.notifySuccess(sender, "Leaderboard centered!");
+            } catch (BadDataException | NoSuchPathException e) {
+                VDCommandExecutor.notifyFailure(sender, "No leaderboard to center!");
+            }
+        } else if (GuardClause.checkArg(args, 3, LocationOptionArgument.REMOVE.arg)) {
+            player = GuardClause.checkSenderPlayer(sender);
 
 
-			if (GameDataManager.hasLeaderboard(type)) {
-				if (GuardClause.checkArg(args, 2, LeaderboardTypeArgument.TOP_BALANCE.arg))
-					player.openInventory(Inventories.createTopBalanceConfirmMenu());
-				else if (GuardClause.checkArg(args, 2, LeaderboardTypeArgument.TOP_KILLS.arg))
-					player.openInventory(Inventories.createTopKillsConfirmMenu());
-				else if (GuardClause.checkArg(args, 2, LeaderboardTypeArgument.TOP_WAVE.arg))
-					player.openInventory(Inventories.createTopWaveConfirmMenu());
-				else if (GuardClause.checkArg(args, 2, LeaderboardTypeArgument.TOTAL_GEMS.arg))
-					player.openInventory(Inventories.createTotalGemsConfirmMenu());
-				else if (GuardClause.checkArg(args, 2, LeaderboardTypeArgument.TOTAL_KILLS.arg))
-					player.openInventory(Inventories.createTotalKillsConfirmMenu());
+            if (GameDataManager.hasLeaderboard(type)) {
+                String boardName;
+                if (GuardClause.checkArg(args, 2, LeaderboardTypeArgument.TOP_BALANCE.arg)) {
+                    boardName = "topBalance";
+                }  else if (GuardClause.checkArg(args, 2, LeaderboardTypeArgument.TOP_KILLS.arg)) {
+                    boardName = "topKills";
+                }  else if (GuardClause.checkArg(args, 2, LeaderboardTypeArgument.TOP_WAVE.arg)) {
+                    boardName = "topWave";
+				} else if (GuardClause.checkArg(args, 2, LeaderboardTypeArgument.TOTAL_GEMS.arg)) {
+					boardName = "totalGems";
+				} else if (GuardClause.checkArg(args, 2, LeaderboardTypeArgument.TOTAL_KILLS.arg)) {
+					boardName = "totalKills";
+                } else {
+                    return;
+                }
+                new ConfirmationMenu("Remove " + boardName + "?", p -> GameManager.removeLeaderboard(boardName)).open(player);
 			}
 			else PlayerManager.notifyFailure(player, "No leaderboard to remove!");
 		}
@@ -531,9 +524,11 @@ class CommandModifyArenaData {
 			else if (LocationOptionArgument.REMOVE.arg.equalsIgnoreCase(value)) {
 				player = GuardClause.checkSenderPlayer(sender);
 
-				if (arena.getPortal() != null)
-					player.openInventory(Inventories.createPortalConfirmMenu(arena));
-				else PlayerManager.notifyFailure(player, "No portal to remove!");
+				if (arena.getPortal() != null) {
+                    new ConfirmationMenu("Remove portal?", p -> arena.removePortal()).open(player);
+                } else {
+                    PlayerManager.notifyFailure(player, "No portal to remove!");
+                }
 			}
 			else VDCommandExecutor.notifyFailure(sender, "Invalid operation value. Valid values: " +
 					Arrays.toString(Arrays
@@ -571,9 +566,11 @@ class CommandModifyArenaData {
 			else if (LocationOptionArgument.REMOVE.arg.equalsIgnoreCase(value)) {
 				player = GuardClause.checkSenderPlayer(sender);
 
-				if (arena.getArenaBoard() != null)
-					player.openInventory(Inventories.createArenaBoardConfirmMenu(arena));
-				else PlayerManager.notifyFailure(player, "No leaderboard to remove!");
+				if (arena.getArenaBoard() != null) {
+                    new ConfirmationMenu("&4&lRemove Leaderboard?", p -> arena.removeArenaBoard()).open(player);
+                } else {
+                    PlayerManager.notifyFailure(player, "No leaderboard to remove!");
+                }
 			}
 			else VDCommandExecutor.notifyFailure(sender, "Invalid operation value. Valid values: " +
 					Arrays.toString(Arrays
@@ -613,9 +610,11 @@ class CommandModifyArenaData {
 			else if (LocationOptionArgument.REMOVE.arg.equalsIgnoreCase(value)) {
 				player = GuardClause.checkSenderPlayer(sender);
 
-				if (arena.getPlayerSpawn() != null)
-					player.openInventory(Inventories.createSpawnConfirmMenu(arena));
-				else PlayerManager.notifyFailure(player, "No spawn to remove!");
+				if (arena.getPlayerSpawn() != null) {
+                    new ConfirmationMenu("&4&lRemove Spawn?", p -> arena.setPlayerSpawn(null)).open(player);
+                } else {
+                    PlayerManager.notifyFailure(player, "No spawn to remove!");
+                }
 			}
 			else VDCommandExecutor.notifyFailure(sender, "Invalid operation value. Valid values: " +
 					Arrays.toString(Arrays
@@ -654,9 +653,11 @@ class CommandModifyArenaData {
 			else if (LocationOptionArgument.REMOVE.arg.equalsIgnoreCase(value)) {
 				player = GuardClause.checkSenderPlayer(sender);
 
-				if (arena.getWaitingRoom() != null)
-					player.openInventory(Inventories.createWaitingConfirmMenu(arena));
-				else PlayerManager.notifyFailure(player, "No waiting room to remove!");
+				if (arena.getWaitingRoom() != null) {
+                    new ConfirmationMenu("&4&lRemove Waiting Room?", p -> arena.setWaitingRoom(null)).open(player);
+                } else {
+                    PlayerManager.notifyFailure(player, "No waiting room to remove!");
+                }
 			}
 			else VDCommandExecutor.notifyFailure(sender, "Invalid operation value. Valid values: " +
 					Arrays.toString(Arrays
@@ -1363,8 +1364,7 @@ class CommandModifyArenaData {
 		}
 		else if (GuardClause.checkArg(args, 2, ArenaOperationArgument.REMOVE.arg)) {
 			player = GuardClause.checkSenderPlayer(sender);
-
-			player.openInventory(Inventories.createArenaConfirmMenu(arena));
+            new ConfirmationMenu("&4&lRemove " + arena.getName() + '?', p -> GameManager.removeArena(arena.getId())).open(player);
 		}
 
 		// No valid command

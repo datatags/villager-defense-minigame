@@ -24,6 +24,9 @@ public class PlayerDataManager {
     }
 
     public static boolean playerOwnsKit(UUID uuid, Kit kit) {
+        if (kit != null && kit.isAutoOwned()) {
+            return true;
+        }
         try {
             return yamlManager.getSoftBoolean(uuid + ".kits." + kit.getName());
         } catch (NoSuchPathException e) {

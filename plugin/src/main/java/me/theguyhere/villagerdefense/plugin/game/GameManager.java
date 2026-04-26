@@ -1,18 +1,21 @@
 package me.theguyhere.villagerdefense.plugin.game;
 
 import lombok.Getter;
-import me.theguyhere.villagerdefense.common.CommunicationManager;
 import me.theguyhere.villagerdefense.common.Calculator;
+import me.theguyhere.villagerdefense.common.CommunicationManager;
 import me.theguyhere.villagerdefense.plugin.Main;
-import me.theguyhere.villagerdefense.plugin.data.*;
+import me.theguyhere.villagerdefense.plugin.data.ArenaDataManager;
+import me.theguyhere.villagerdefense.plugin.data.GameDataManager;
+import me.theguyhere.villagerdefense.plugin.data.LanguageManager;
+import me.theguyhere.villagerdefense.plugin.data.NMSVersion;
 import me.theguyhere.villagerdefense.plugin.data.exceptions.BadDataException;
-import me.theguyhere.villagerdefense.plugin.data.exceptions.NoSuchPathException;
-import me.theguyhere.villagerdefense.plugin.game.exceptions.ArenaNotFoundException;
 import me.theguyhere.villagerdefense.plugin.data.exceptions.InvalidLocationException;
+import me.theguyhere.villagerdefense.plugin.data.exceptions.NoSuchPathException;
+import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
 import me.theguyhere.villagerdefense.plugin.game.challenges.Challenge;
+import me.theguyhere.villagerdefense.plugin.game.exceptions.ArenaNotFoundException;
 import me.theguyhere.villagerdefense.plugin.structures.InfoBoard;
 import me.theguyhere.villagerdefense.plugin.structures.Leaderboard;
-import me.theguyhere.villagerdefense.plugin.entities.VDPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -27,8 +30,6 @@ public class GameManager {
     private static final Map<Integer, Arena> arenas = new HashMap<>();
 	private static final Map<Integer, InfoBoard> infoBoards = new HashMap<>();
 	private static final Map<String, Leaderboard> leaderboards = new HashMap<>();
-	@Getter
-    private static Location lobby;
 	@Getter
     private static final List<String> validSounds = new LinkedList<>(Arrays.asList("blocks", "cat", "chirp", "far",
 			"mall", "mellohi", "pigstep", "stal", "strad", "wait", "ward"));
@@ -65,17 +66,6 @@ public class GameManager {
 		}
 		catch (InvalidLocationException | NoSuchPathException e) {
 			CommunicationManager.debugErrorShouldNotHappen();
-		}
-
-		try {
-			lobby = GameDataManager.getLobbyLocation();
-		}
-		catch (BadDataException e) {
-			// TODO
-			CommunicationManager.debugErrorShouldNotHappen();
-		}
-		catch (NoSuchPathException e) {
-			lobby = null;
 		}
 
 		Main.plugin.setLoaded(true);
@@ -222,20 +212,15 @@ public class GameManager {
 		player.getPlayer().setScoreboard(board);
 	}
 
-	/**
-	 * Saves a new lobby for the server and updates the cached lobby.
-	 * @param location Lobby location
-	 */
-	public static void saveLobby(Location location) {
-		GameDataManager.setLobbyLocation(location);
-		lobby = GameManager.getLobby();
-	}
-
-	/**
-	 * Reloads the cached lobby location.
-	 */
-	public static void reloadLobby() {
-		lobby = GameManager.getLobby();
+	public static Location getLobby() {
+        try {
+            return GameDataManager.getLobbyLocation();
+        }
+        catch (BadDataException | NoSuchPathException e) {
+            // TODO
+            CommunicationManager.debugErrorShouldNotHappen();
+            return null;
+        }
 	}
 
 	/**

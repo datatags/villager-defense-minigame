@@ -1,12 +1,12 @@
 package me.theguyhere.villagerdefense.plugin.structures.listeners;
 
 import me.theguyhere.villagerdefense.plugin.Main;
+import me.theguyhere.villagerdefense.plugin.game.Arena;
+import me.theguyhere.villagerdefense.plugin.game.GameManager;
 import me.theguyhere.villagerdefense.plugin.game.events.JoinArenaEvent;
 import me.theguyhere.villagerdefense.plugin.structures.events.LeftClickNPCEvent;
 import me.theguyhere.villagerdefense.plugin.structures.events.RightClickNPCEvent;
-import me.theguyhere.villagerdefense.plugin.game.GameManager;
-import me.theguyhere.villagerdefense.plugin.game.Arena;
-import me.theguyhere.villagerdefense.plugin.visuals.Inventories;
+import me.theguyhere.villagerdefense.plugin.visuals.inventories.ArenaInfoMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -52,6 +52,6 @@ public class InteractionListener implements Listener {
 		}
 
 		// Open inventory
-		e.getPlayer().openInventory(Inventories.createArenaInfoMenu(arena));
+        new ArenaInfoMenu(arena).open(e.getPlayer());
 	}
 }

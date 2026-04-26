@@ -2,7 +2,7 @@ package me.theguyhere.villagerdefense.plugin.commands;
 
 import me.theguyhere.villagerdefense.plugin.commands.exceptions.CommandException;
 import me.theguyhere.villagerdefense.plugin.commands.exceptions.WrongFormatException;
-import me.theguyhere.villagerdefense.plugin.visuals.Inventories;
+import me.theguyhere.villagerdefense.plugin.visuals.inventories.PlayerAchievementsMenu;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -21,6 +21,6 @@ class CommandCheckAchievements {
 			throw new WrongFormatException(COMMAND_FORMAT);
 
 		// Open achievements menu
-		player.openInventory(Inventories.createPlayerAchievementsMenu(player));
+        new PlayerAchievementsMenu(player).open(player);
 	}
 }

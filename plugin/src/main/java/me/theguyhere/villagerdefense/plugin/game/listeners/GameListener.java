@@ -32,7 +32,10 @@ import me.theguyhere.villagerdefense.plugin.items.GameItemType;
 import me.theguyhere.villagerdefense.plugin.items.GameItems;
 import me.theguyhere.villagerdefense.plugin.items.ItemManager;
 import me.theguyhere.villagerdefense.plugin.structures.events.ReloadBoardsEvent;
-import me.theguyhere.villagerdefense.plugin.visuals.Inventories;
+import me.theguyhere.villagerdefense.plugin.visuals.inventories.ArenaShopMenu;
+import me.theguyhere.villagerdefense.plugin.visuals.inventories.CrystalConvertMenu;
+import me.theguyhere.villagerdefense.plugin.visuals.inventories.SelectChallengesMenu;
+import me.theguyhere.villagerdefense.plugin.visuals.inventories.SelectKitsMenu;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -491,17 +494,17 @@ public class GameListener implements Listener {
 
         // Open shop inventory
         if (GameItemType.SHOP.is(item)) {
-            player.openInventory(Inventories.createShopMenu(arena.getCurrentWave() / 10 + 1, arena));
+            new ArenaShopMenu(arena).open(player);
         }
 
         // Open kit selection menu
         else if (GameItemType.KIT_SELECTOR.is(item)) {
-            player.openInventory(Inventories.createSelectKitsMenu(player, arena));
+            new SelectKitsMenu(arena, player).open(player);
         }
 
         // Open challenge selection menu
         else if (GameItemType.CHALLENGE_SELECTOR.is(item)) {
-            player.openInventory(Inventories.createSelectChallengesMenu(gamer, arena));
+            new SelectChallengesMenu(arena, gamer).open(player);
         }
 
         // Toggle boost
@@ -518,7 +521,7 @@ public class GameListener implements Listener {
 
         // Open crystal convert menu
         else if (GameItemType.CRYSTAL_CONVERTER.is(item)) {
-            player.openInventory(Inventories.createCrystalConvertMenu(gamer));
+            new CrystalConvertMenu(gamer).open(player);
         }
 
         // Make player leave

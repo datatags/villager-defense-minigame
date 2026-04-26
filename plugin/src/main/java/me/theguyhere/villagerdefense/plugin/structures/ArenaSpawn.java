@@ -1,12 +1,12 @@
 package me.theguyhere.villagerdefense.plugin.structures;
 
 import lombok.Getter;
-import me.theguyhere.villagerdefense.plugin.data.exceptions.InvalidLocationException;
 import me.theguyhere.villagerdefense.common.CommunicationManager;
+import me.theguyhere.villagerdefense.plugin.data.exceptions.InvalidLocationException;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
-public class ArenaSpawn {
+public class ArenaSpawn implements Comparable<ArenaSpawn> {
     /** Location of the arena spawn.*/
     @NotNull private final Location location;
     /** Type of arena spawn.*/
@@ -68,5 +68,10 @@ public class ArenaSpawn {
             case VILLAGER: return CommunicationManager.format("&aVillager Spawn " + id);
             default: return null;
         }
+    }
+
+    @Override
+    public int compareTo(@NotNull ArenaSpawn o) {
+        return Integer.compare(id, o.id);
     }
 }

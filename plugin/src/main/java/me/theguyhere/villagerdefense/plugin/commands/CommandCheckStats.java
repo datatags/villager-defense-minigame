@@ -6,13 +6,11 @@ import me.theguyhere.villagerdefense.plugin.commands.exceptions.WrongFormatExcep
 import me.theguyhere.villagerdefense.plugin.data.LanguageManager;
 import me.theguyhere.villagerdefense.plugin.data.PlayerDataManager;
 import me.theguyhere.villagerdefense.plugin.game.PlayerManager;
-import me.theguyhere.villagerdefense.plugin.visuals.Inventories;
+import me.theguyhere.villagerdefense.plugin.visuals.inventories.PlayerStatsMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Objects;
 
 /**
  * Executes command to check player statistics.
@@ -31,12 +29,12 @@ class CommandCheckStats {
 
 		// Open stats display
 		if (GuardClause.checkArgsLengthMatch(args, 1)) {
-			player.openInventory(Inventories.createPlayerStatsMenu(player));
+            new PlayerStatsMenu(player).open(player);
+            return;
 		}
-		else if (PlayerDataManager.hasPlayer(Bukkit.getOfflinePlayer(args[1]).getUniqueId())) {
-
-			player.openInventory(Inventories.createPlayerStatsMenu(
-				Objects.requireNonNull(Bukkit.getPlayer(args[1]))));
+        Player target = Bukkit.getPlayer(args[1]);
+		if (target != null && PlayerDataManager.hasPlayer(target.getUniqueId())) {
+            new PlayerStatsMenu(target).open(player);
 		}
 		else {
 			PlayerManager.notifyFailure(player, LanguageManager.messages.noStats,

@@ -7,17 +7,9 @@ import me.theguyhere.villagerdefense.plugin.data.LanguageManager;
 import me.theguyhere.villagerdefense.plugin.items.ItemManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * A class representing kits in Villager Defense. Comes with static methods for the following kits:<br/>
@@ -68,7 +60,6 @@ public abstract class Kit {
     private final Map<Integer, Integer> pricesMap = new HashMap<>();
     /** A mapping between kit level and an array of {@link ItemStack} the player would receive.*/
     private final Map<Integer, List<ItemStack>> itemsMap = new HashMap<>();
-    /** The level of this instance of the kit.*/
 
     public Kit(String name, KitCategory category, Material buttonMaterial) {
         this.name = name;
@@ -96,6 +87,10 @@ public abstract class Kit {
     @Override
     public int hashCode() {
         return Objects.hash(name, kitCategory, masterDescription, descriptionsMap, buttonMaterial, pricesMap, itemsMap);
+    }
+
+    public boolean isAutoOwned() {
+        return pricesMap.isEmpty() || pricesMap.get(1) == 0;
     }
 
     /**
@@ -204,6 +199,28 @@ public abstract class Kit {
         }
     }
 
+    public ItemStack getDisplayItem(boolean active) {
+        if (kitCategory == KitCategory.NONE) {
+            return ItemManager.createItem(buttonMaterial,
+                    CommunicationManager.format(kitCategory.getPrefix() + name), ItemManager.BUTTON_FLAGS,
+                    null);
+        }
+
+        List<String> lores;
+        if (isMultiLevel()) {
+            lores = new ArrayList<>();
+            descriptionsMap.forEach((level, description) -> {
+                lores.add(CommunicationManager.format("&f" + LanguageManager.messages.level + " " + level));
+                lores.addAll(description);
+            });
+        } else {
+            lores = masterDescription;
+        }
+        return ItemManager.createItem(buttonMaterial,
+                CommunicationManager.format((active ? kitCategory.getPrefix() : "&4&l") + name),
+                ItemManager.BUTTON_FLAGS, active ? ItemManager.glow() : null, lores);
+    }
+
     /**
      * Returns an {@link ItemStack} for a GUI button.<br/>
      * <br/>Use -1 as purchasedLevel if the button is for display only.
@@ -213,87 +230,49 @@ public abstract class Kit {
      * @return GUI button.
      */
     public ItemStack getButton(int purchasedLevel, boolean purchaseMode) {
-        HashMap<Enchantment, Integer> enchants = new HashMap<>();
-        enchants.put(Enchantment.UNBREAKING, 1);
-
         if (kitCategory == KitCategory.NONE) {
             return ItemManager.createItem(buttonMaterial,
-                    CommunicationManager.format(kitCategory.getPrefix() + name), ItemManager.BUTTON_FLAGS,
-                    null);
+                    CommunicationManager.format(kitCategory.getPrefix() + name), ItemManager.BUTTON_FLAGS, null);
         }
-        else if (isMultiLevel()) {
-            List<String> lores = new ArrayList<>();
-            if (purchasedLevel == 0) {
-                lores.addAll(masterDescription);
-                lores.add(CommunicationManager.format("&c" + LanguageManager.messages.level + " 1"));
-                lores.addAll(getLevelDescription(1));
-                lores.add(purchaseMode ? CommunicationManager.format("&c" +
-                        LanguageManager.messages.purchase + ": &b" + getPrice(1) + " " +
-                        LanguageManager.names.crystals) : CommunicationManager.format(ChatColor.RED +
-                        LanguageManager.messages.unavailable));
-            }
-            else if (purchasedLevel == pricesMap.size()) {
-                lores.addAll(masterDescription);
-                lores.add(CommunicationManager.format("&a" + LanguageManager.messages.level + " " +
-                        pricesMap.size()));
-                lores.addAll(getLevelDescription(pricesMap.size()));
-                lores.add(purchaseMode ? CommunicationManager.format(ChatColor.GREEN +
-                        LanguageManager.messages.purchased) : CommunicationManager.format(ChatColor.GREEN +
-                        LanguageManager.messages.available));
-            }
-            else if (purchasedLevel == -1) {
-                lores.addAll(masterDescription);
-                descriptionsMap.forEach((level, description) -> {
-                    lores.add(CommunicationManager.format("&f" + LanguageManager.messages.level + " " + level));
-                    lores.addAll(description);
-                });
-                return ItemManager.createItem(buttonMaterial,
-                        CommunicationManager.format((purchaseMode ? kitCategory.getPrefix() : "&4&l") + name),
-                        ItemManager.BUTTON_FLAGS, purchaseMode ? enchants : null, lores);
-            }
-            else {
-                lores.addAll(masterDescription);
-                lores.add(CommunicationManager.format("&a" + LanguageManager.messages.level + " " +
-                        purchasedLevel));
-                lores.addAll(getLevelDescription(purchasedLevel));
-                if (purchaseMode) {
-                    lores.add(CommunicationManager.format("&c" + LanguageManager.messages.level +
-                            " " + ++purchasedLevel));
-                    lores.addAll(getLevelDescription(purchasedLevel));
-                    lores.add(CommunicationManager.format("&c" +
-                            LanguageManager.messages.purchase + ": &b" + getPrice(purchasedLevel) +
-                            " " + LanguageManager.names.crystals));
-                } else lores.add(CommunicationManager.format(ChatColor.GREEN +
-                        LanguageManager.messages.available));
-            }
 
+        List<String> lores = new ArrayList<>(masterDescription);
+        if (!purchaseMode) {
+            String msg;
+            if (purchasedLevel > 0) {
+                msg = ChatColor.GREEN + LanguageManager.messages.available;
+            } else {
+                msg = ChatColor.RED + LanguageManager.messages.unavailable;
+            }
             return ItemManager.createItem(buttonMaterial,
                     CommunicationManager.format(kitCategory.getPrefix() + name), ItemManager.BUTTON_FLAGS,
-                    null, lores);
-        } else {
-            if (purchasedLevel == -1)
-                return ItemManager.createItem(buttonMaterial,
-                        CommunicationManager.format((purchaseMode ? kitCategory.getPrefix(): "&4&l") + name),
-                        ItemManager.BUTTON_FLAGS, purchaseMode ? enchants : null, masterDescription);
-            else if (pricesMap.get(1) == 0)
-                return ItemManager.createItem(buttonMaterial,
-                        CommunicationManager.format(kitCategory.getPrefix() + name), ItemManager.BUTTON_FLAGS,
-                        null, masterDescription, purchaseMode ?
-                                CommunicationManager.format(ChatColor.GREEN + LanguageManager.messages.free) :
-                                CommunicationManager.format(ChatColor.GREEN + LanguageManager.messages.available));
-            else return ItemManager.createItem(buttonMaterial,
-                    CommunicationManager.format(kitCategory.getPrefix() + name), ItemManager.BUTTON_FLAGS,
-                        null, masterDescription, purchasedLevel == 1 ?
-                                (purchaseMode ?
-                                        CommunicationManager.format(ChatColor.GREEN +
-                                                LanguageManager.messages.purchased) :
-                                        CommunicationManager.format(ChatColor.GREEN +
-                                                LanguageManager.messages.available)) :
-                                (purchaseMode ? CommunicationManager.format("&c" +
-                                        LanguageManager.messages.purchase + ": &b" +
-                                        getPrice(1) + " " + LanguageManager.names.crystals) :
-                                        CommunicationManager.format(ChatColor.RED +
-                                                LanguageManager.messages.unavailable)));
+                    null, lores, CommunicationManager.format(msg));
         }
+
+        if (purchasedLevel > pricesMap.size()) {
+            purchasedLevel = pricesMap.size();
+        }
+        if (pricesMap.get(1) == 0) { // if kit is free
+            lores.add(CommunicationManager.format(ChatColor.GREEN + LanguageManager.messages.free));
+        } else if (purchasedLevel > 0 && isMultiLevel()) {
+            // Show description of highest purchased kit level for multi-level kits
+            lores.add(CommunicationManager.format("&a" + LanguageManager.messages.level + " " + purchasedLevel));
+            lores.addAll(getLevelDescription(purchasedLevel));
+        }
+
+        if (purchasedLevel < pricesMap.size()) { // some levels remain to be purchased
+            int buyLevel = purchasedLevel + 1;
+            if (isMultiLevel()) {
+                lores.add(CommunicationManager.format("&c" + LanguageManager.messages.level + " " + buyLevel));
+                lores.addAll(getLevelDescription(buyLevel));
+            }
+            lores.add(CommunicationManager.format("&c" +
+                    LanguageManager.messages.purchase + ": &b" + getPrice(buyLevel) +
+                    " " + LanguageManager.names.crystals));
+        } else { // all kit levels purchased
+            lores.add(CommunicationManager.format(ChatColor.GREEN + LanguageManager.messages.purchased));
+        }
+
+        return ItemManager.createItem(buttonMaterial,
+                CommunicationManager.format(kitCategory.getPrefix() + name), ItemManager.BUTTON_FLAGS, null, lores);
     }
 }

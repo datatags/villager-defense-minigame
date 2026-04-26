@@ -135,8 +135,9 @@ public class VDPlayer {
     }
 
     public void addChallenge(Challenge toBeAdded) {
-        if (!challenge.contains(toBeAdded))
+        if (!challenge.contains(toBeAdded)) {
             challenge.add(toBeAdded);
+            }
     }
 
     public void removeChallenge(Challenge toBeRemoved) {
@@ -144,7 +145,7 @@ public class VDPlayer {
     }
 
     public void resetChallenges() {
-        challenge = new ArrayList<>();
+        challenge.clear();
     }
 
     public void addEnemy(UUID toBeAdded) {
