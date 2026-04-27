@@ -499,6 +499,7 @@ messages:
   waitingForPlayers: "Waiting for more players to start the game."
   warning: "WARNING: WORKS ON ANY ITEM"
   wave: "Wave"
+  win: "You win!"
 names:
   abilityKits: "Ability Kits"
   armorShop: "Armor Shop"

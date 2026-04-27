@@ -769,6 +769,7 @@ public class LanguageManager {
         public final @NotNull String waitingForPlayers;
         public final @NotNull String warning;
         public final @NotNull String wave;
+        public final @NotNull String win;
 
         private Messages() throws InvalidLanguageKeyException {
             setPathPrefix("messages");
@@ -875,6 +876,7 @@ public class LanguageManager {
             waitingForPlayers = getConfigString("waitingForPlayers");
             warning = getConfigString("warning");
             wave = getConfigString("wave");
+            win = getConfigString("win");
         }
     }
 

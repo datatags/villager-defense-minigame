@@ -543,12 +543,6 @@ public class ArenaListener implements Listener {
         // Set the arena to ending
         arena.setStatus(ArenaStatus.ENDING);
 
-        // Notify players that the game has ended (Title)
-        arena.getPlayers().forEach(player ->
-                player.getPlayer().sendTitle(CommunicationManager.format("&4&l" +
-                        LanguageManager.messages.gameOver), " ", Calculator.secondsToTicks(.5),
-                        Calculator.secondsToTicks(2.5), Calculator.secondsToTicks(1)));
-
         // Notify players that the game has ended (Chat)
         arena.getPlayers().forEach(player ->
                 PlayerManager.notifyAlert(
@@ -561,13 +555,23 @@ public class ArenaListener implements Listener {
         // Set all players to invincible
         arena.getAlives().forEach(player -> player.getPlayer().setInvulnerable(true));
 
-        // Play sound if turned on and arena is either not winning or has unlimited waves
-        if (arena.hasLoseSound() && (arena.getCurrentWave() <= arena.getMaxWaves() || arena.getMaxWaves() < 0)) {
-            for (VDPlayer vdPlayer : arena.getPlayers()) {
-                vdPlayer.getPlayer().playSound(arena.getPlayerSpawn().getLocation(),
-                        Sound.ENTITY_ENDER_DRAGON_DEATH, 10, .5f);
+        String endingTitle;
+        if (arena.getCurrentWave() == arena.getMaxWaves() + 1) {
+            endingTitle = "&a&l" + LanguageManager.messages.win;
+        } else { // unlimited waves or game lost
+            endingTitle = "&4&l" + LanguageManager.messages.gameOver;
+            if (arena.hasLoseSound()) {
+                for (VDPlayer vdPlayer : arena.getPlayers()) {
+                    vdPlayer.getPlayer().playSound(arena.getPlayerSpawn().getLocation(),
+                            Sound.ENTITY_ENDER_DRAGON_DEATH, 10, .5f);
+                }
             }
         }
+
+        // Notify players that the game has ended (Title)
+        arena.getPlayers().forEach(player ->
+                player.getPlayer().sendTitle(CommunicationManager.format(endingTitle), " ", Calculator.secondsToTicks(.5),
+                        Calculator.secondsToTicks(2.5), Calculator.secondsToTicks(1)));
 
         if (arena.getActiveCount() > 0) {
             // Check for record
