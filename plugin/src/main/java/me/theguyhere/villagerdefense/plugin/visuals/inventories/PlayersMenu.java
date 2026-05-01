@@ -10,7 +10,8 @@ public class PlayersMenu extends ArenaMenu {
 
         // Option to edit player spawn
         addNavigation(Material.END_PORTAL_FRAME,
-                () -> new LocationMenu("&d&lPlayer Spawn: " + arena.getName(), () -> arena.getPlayerSpawn().getLocation(), arena::setPlayerSpawn),
+                () -> new LocationMenu("&d&lPlayer Spawn: " + arena.getName(),
+                        () -> arena.getPlayerSpawn() == null ? null : arena.getPlayerSpawn().getLocation(), arena::setPlayerSpawn),
                 "&5&lPlayer Spawn");
 
         // Option to toggle player spawn particles
@@ -32,7 +33,7 @@ public class PlayersMenu extends ArenaMenu {
 
         // Option to edit min players
         addButton(Material.NETHERITE_BOOTS, ifClosed(p -> open(p, new IncrementMenu("&2&lMinimum Players", arena::getMinPlayers, arena::setMinPlayers))),
-                () -> "&2&lMinimum Players" + arena.getMinPlayers(),
+                () -> "&2&lMinimum Players: " + arena.getMinPlayers(),
                 "&7Minimum players needed for game to start");
     }
 }

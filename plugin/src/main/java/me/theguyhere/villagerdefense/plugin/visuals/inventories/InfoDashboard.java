@@ -6,7 +6,7 @@ import org.bukkit.Material;
 
 public class InfoDashboard extends LocationDashboard {
     public InfoDashboard() {
-        super("&6&lInfo Board", "Info Board", Material.BIRCH_SIGN, GameDataManager.getInfoBoardIDs(),
+        super("&6&lInfo Board", "Info Board", Material.BIRCH_SIGN, () -> GameDataManager.getInfoBoardIDs().stream(),
                 GameDataManager::getInfoBoardLocation, GameManager::setInfoBoard, GameManager::newInfoBoardID);
     }
 }

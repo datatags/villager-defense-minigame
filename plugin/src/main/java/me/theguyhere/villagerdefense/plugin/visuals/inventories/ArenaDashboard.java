@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 
 public class ArenaDashboard extends DataStructureDashboard<Arena> {
     public ArenaDashboard() {
-        super("&9&lArenas", "Arena", Material.EMERALD_BLOCK, GameManager.getArenas().values().stream(), ArenaEditMenu::new);
+        super("&9&lArenas", "Arena", Material.EMERALD_BLOCK, () -> GameManager.getArenas().values().stream(), ArenaEditMenu::new);
     }
 
     @Override

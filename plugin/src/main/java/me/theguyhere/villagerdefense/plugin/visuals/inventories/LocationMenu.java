@@ -15,14 +15,35 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class LocationMenu extends Menu {
+    private final LocationGetter getter;
+    private final Consumer<Location> setter;
+    private final Function<Player, Boolean> isModifyAllowed;
+    private final boolean simple;
+
     LocationMenu(@NotNull String name, LocationGetter getter, Consumer<Location> setter, Function<Player,Boolean> isModifyAllowed, boolean simple) {
         super(name, new SingleRowLayout(true));
+        this.getter = getter;
+        this.setter = setter;
+        this.isModifyAllowed = isModifyAllowed;
+        this.simple = simple;
+    }
+
+    LocationMenu(@NotNull String name, LocationGetter getter, Consumer<Location> setter, Function<Player,Boolean> isModifyAllowed) {
+        this(name, getter, setter, isModifyAllowed, false);
+    }
+
+    LocationMenu(@NotNull String name, LocationGetter getter, Consumer<Location> setter) {
+        this(name, getter, setter, p -> true);
+    }
+
+    @Override
+    protected void updateInventory() {
+        clear();
 
         // Option to create or relocate the location
         boolean exists;
         try {
-            getter.get();
-            exists = true;
+            exists = getter.get() != null;
         } catch (BadDataException | NoSuchPathException e) {
             exists = false;
         }
@@ -75,13 +96,7 @@ public class LocationMenu extends Menu {
                 }
             });
         }
-    }
 
-    LocationMenu(@NotNull String name, LocationGetter getter, Consumer<Location> setter, Function<Player,Boolean> isModifyAllowed) {
-        this(name, getter, setter, isModifyAllowed, false);
-    }
-
-    LocationMenu(@NotNull String name, LocationGetter getter, Consumer<Location> setter) {
-        this(name, getter, setter, p -> true);
+        super.updateInventory();
     }
 }

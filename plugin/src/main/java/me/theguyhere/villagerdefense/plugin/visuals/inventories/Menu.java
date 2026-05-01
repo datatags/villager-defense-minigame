@@ -88,6 +88,12 @@ public abstract class Menu {
         return addButton(mat, p -> open(p, other.get()), name, lore);
     }
 
+    protected void clear() {
+        layout.clear();
+        buttonActions.clear();
+        buttonUpdaters.clear();
+    }
+
     public void open(Player player) {
         Bukkit.getScheduler().runTask(Main.plugin, () -> player.openInventory(getInventory()));
     }

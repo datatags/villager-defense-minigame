@@ -36,7 +36,7 @@ public class AllowedKitsMenu extends ArenaMenu {
                 arena.setBannedKits(b);
             });
             buttonUpdaters.put(item, i -> {
-                swapMeta(i, kit.getDisplayItem(arena.getBannedKits().contains(name)).getItemMeta());
+                swapMeta(i, kit.getDisplayItem(!arena.getBannedKits().contains(name)).getItemMeta());
             });
         };
 

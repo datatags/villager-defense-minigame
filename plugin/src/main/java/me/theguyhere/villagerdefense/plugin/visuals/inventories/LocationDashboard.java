@@ -6,18 +6,18 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class LocationDashboard extends DataStructureDashboard<LocationDashboard.LocationStructure> {
     private final NumberedLocationGetter getter;
     private final BiConsumer<Integer, Location> setter;
     private final Supplier<Integer> newId;
 
-    public LocationDashboard(String name, String dataStructure, Material buttonType, Collection<Integer> ids,
+    public LocationDashboard(String name, String dataStructure, Material buttonType, Supplier<Stream<Integer>> ids,
                              NumberedLocationGetter getter, BiConsumer<Integer, Location> setter, Supplier<Integer> newId) {
-        super(name, dataStructure, buttonType, ids.stream().map(id -> new LocationStructure(id, name, getter, setter)), LocationStructure::makeMenu);
+        super(name, dataStructure, buttonType, () -> ids.get().map(id -> new LocationStructure(id, name, getter, setter)), LocationStructure::makeMenu);
 
         this.getter = getter;
         this.setter = setter;
