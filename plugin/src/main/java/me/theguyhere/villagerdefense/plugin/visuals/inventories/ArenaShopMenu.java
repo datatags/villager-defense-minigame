@@ -20,8 +20,7 @@ public class ArenaShopMenu extends ArenaMenu {
     private final String disabled = " &4&l[" + LanguageManager.messages.disabled + "]";
     private final int level;
     private ArenaShopMenu(Arena arena, int level) {
-        super("&2&l" + LanguageManager.messages.level + " &9&l" + level + " &2&l" + LanguageManager.names.itemShop,
-                arena, new ManualLayout());
+        super("", arena, new ManualLayout()); // name specified in getName() override
         this.level = level;
 
         addShop(0, Material.GOLDEN_SWORD, '4', true, LanguageManager.names.weaponShop, Arena::hasNormal, Arena::getWeaponShop);
@@ -61,5 +60,11 @@ public class ArenaShopMenu extends ArenaMenu {
             meta.setDisplayName(CommunicationManager.format(itemName));
             i.setItemMeta(meta);
         });
+    }
+
+    @Override
+    public String getName() {
+        // override so the arena name doesn't get added
+        return "&2&l" + LanguageManager.messages.level + " &9&l" + level + " &2&l" + LanguageManager.names.itemShop;
     }
 }
