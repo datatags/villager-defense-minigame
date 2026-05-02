@@ -1,6 +1,7 @@
 package me.theguyhere.villagerdefense.plugin.visuals.inventories;
 
 import me.theguyhere.villagerdefense.common.CommunicationManager;
+import me.theguyhere.villagerdefense.plugin.Main;
 import me.theguyhere.villagerdefense.plugin.data.listeners.ChatListener;
 import me.theguyhere.villagerdefense.plugin.game.Arena;
 import me.theguyhere.villagerdefense.plugin.game.GameManager;
@@ -8,6 +9,7 @@ import me.theguyhere.villagerdefense.plugin.game.PlayerManager;
 import me.theguyhere.villagerdefense.plugin.game.exceptions.InvalidNameException;
 import me.theguyhere.villagerdefense.plugin.visuals.InventoryButtons;
 import me.theguyhere.villagerdefense.plugin.visuals.layout.DynamicSizeLayout;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -58,7 +60,11 @@ public class ArenaEditMenu extends ArenaMenu {
                 CommunicationManager.debugInfo(CommunicationManager.DebugLevel.VERBOSE, "Name changed for arena %s!",
                         String.valueOf(arena.getId())
                 );
-                updateInventory();
+                Bukkit.getScheduler().runTask(Main.plugin, () -> {
+                    if (player.getOpenInventory().getTopInventory() == getInventory()) {
+                        player.getOpenInventory().setTitle(getName());
+                    }
+                });
                 open(player);
             }
             catch (InvalidNameException err) {
