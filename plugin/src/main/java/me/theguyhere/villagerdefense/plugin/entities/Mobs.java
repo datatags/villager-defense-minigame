@@ -80,6 +80,7 @@ public class Mobs {
         livingEntity.setMetadata("VD_Monster", new FixedMetadataValue(Main.plugin, true));
         livingEntity.setRemoveWhenFarAway(false);
         livingEntity.setCanPickupItems(false);
+        livingEntity.setPersistent(false);
 
         EntityEquipment equipment = livingEntity.getEquipment();
         if (equipment != null && (equipment.getHelmet() == null || equipment.getHelmet().getType() == Material.AIR)) {
@@ -403,6 +404,7 @@ public class Mobs {
         villager.setCustomName(healthBar(1, 1, 5));
         villager.setCustomNameVisible(true);
         villager.setMetadata("VD", new FixedMetadataValue(Main.plugin, arena.getId()));
+        villager.setPersistent(false);
     }
 
     public static void setZombie(Arena arena, Zombie zombie) {
