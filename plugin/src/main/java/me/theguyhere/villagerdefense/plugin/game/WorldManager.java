@@ -19,25 +19,14 @@ public class WorldManager {
      * @param corner2 Second bounding corner
      */
     public static void clear(Location corner1, Location corner2) {
-        Collection<Entity> entities;
-
-        // Get all entities near spawn
-        try {
-            entities = Objects.requireNonNull(corner1.getWorld()).getNearbyEntities(BoundingBox.of(corner1, corner2));
-        } catch (Exception e) {
-            return;
-        }
+        Collection<Entity> entities = corner1.getWorld().getNearbyEntities(BoundingBox.of(corner1, corner2));
 
         // Clear the arena for living entities
-        entities.forEach(ent -> {
-            if (ent instanceof LivingEntity && !(ent instanceof Player))
-                ent.remove();
-        });
+        entities.stream().filter(e -> e instanceof LivingEntity && !(e instanceof Player))
+                .filter(e -> e.hasMetadata("VD")).forEach(Entity::remove);
 
         // Clear the arena for items and experience orbs
-        entities.forEach(ent -> {
-            if (ent instanceof Item || ent instanceof ExperienceOrb) ent.remove();
-        });
+        entities.stream().filter(e -> e instanceof Item || e instanceof ExperienceOrb).forEach(Entity::remove);
     }
 
     // Get nearby players
@@ -59,15 +48,14 @@ public class WorldManager {
     public static List<Wolf> getPets(Player player) {
         return player.getNearbyEntities(150, 50, 150).stream().filter(Objects::nonNull)
                 .filter(ent -> ent instanceof Wolf)
-                .map(ent -> (Wolf) ent).filter(wolf -> Objects.equals(wolf.getOwner(), player))
+                .map(ent -> (Wolf) ent).filter(wolf -> wolf.getOwner() == player)
                 .collect(Collectors.toList());
     }
 
     // Get nearby monsters
     public static List<LivingEntity> getNearbyMonsters(Player player, double range) {
         return player.getNearbyEntities(range, range, range).stream().filter(Objects::nonNull)
-                .filter(ent -> ent instanceof Monster ||
-                        ent instanceof Slime || ent instanceof Hoglin || ent instanceof Phantom).map(ent -> (LivingEntity) ent)
+                .filter(e -> e.hasMetadata("VD_Monster")).map(ent -> (LivingEntity) ent)
                 .collect(Collectors.toList());
     }
 }

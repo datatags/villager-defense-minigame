@@ -52,6 +52,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.BoundingBox;
 
 import java.util.*;
@@ -1535,6 +1536,20 @@ public class GameListener implements Listener {
         if (GameManager.checkPlayer(player)) {
             CommunicationManager.debugInfo(CommunicationManager.DebugLevel.VERBOSE, "%s logged out mid-game.", player.getName());
             PlayerDataManager.setLoggers(loggers);
+        }
+    }
+
+    @EventHandler
+    public void onSpawn(CreatureSpawnEvent e) {
+        if (e.getSpawnReason() != CreatureSpawnEvent.SpawnReason.DROWNED
+                && e.getSpawnReason() != CreatureSpawnEvent.SpawnReason.SPELL) {
+            return;
+        }
+        for (Arena arena : GameManager.getArenas().values()) {
+            if (arena.getBounds().contains(e.getLocation().toVector())) {
+                e.getEntity().setMetadata("VD", new FixedMetadataValue(Main.plugin, arena.getId()));
+                break;
+            }
         }
     }
 }
