@@ -40,31 +40,25 @@ public class InventoryListener implements Listener {
         e.setCancelled(true);
     }
 
-	@EventHandler
-	public void onClickOther(InventoryClickEvent e) {
-		// Ignore plugin inventories
-		if (e.getInventory().getHolder() instanceof InventoryMeta) {
-            return;
-        }
-
-		// Ignore players that aren't part of an arena
-		Player player = (Player) e.getWhoClicked();
-		try {
-			GameManager.getArena(player);
-		} catch (ArenaNotFoundException err) {
-            return;
-		}
-        e.setCancelled(true);
-	}
-
 	// All click events in the inventories
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {
 		// Get inventory title
 		String title = e.getView().getTitle();
 
-		// Ignore non-plugin inventories
 		if (!(e.getInventory().getHolder() instanceof InventoryMeta)) {
+            // Prevent players using inventories other than their own during the game.
+            if (e.getInventory().getType() == InventoryType.PLAYER || e.getView().getType() == InventoryType.CRAFTING) {
+                return;
+            }
+
+            // Ignore players that aren't part of an arena
+            Player player = (Player) e.getWhoClicked();
+            try {
+                GameManager.getArena(player);
+                e.setCancelled(true);
+            } catch (ArenaNotFoundException ignored) {
+            }
             return;
         }
 
