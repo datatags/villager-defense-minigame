@@ -11,7 +11,6 @@ public class KitBlacksmith extends Kit {
 
         setMasterDescription(LanguageManager.kits.blacksmith.description);
         setPrice(7500);
-        clearItems();
-        addItems(ItemManager.makeUnbreakable(new ItemStack(Material.WOODEN_SWORD)));
+        defaultWeapon = ItemManager.makeUnbreakable(new ItemStack(Material.WOODEN_SWORD));
     }
 }

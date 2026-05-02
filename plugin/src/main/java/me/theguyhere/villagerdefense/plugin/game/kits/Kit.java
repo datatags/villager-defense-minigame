@@ -60,15 +60,14 @@ public abstract class Kit {
     private final Map<Integer, Integer> pricesMap = new HashMap<>();
     /** A mapping between kit level and an array of {@link ItemStack} the player would receive.*/
     private final Map<Integer, List<ItemStack>> itemsMap = new HashMap<>();
+    protected ItemStack defaultWeapon = new ItemStack(Material.WOODEN_SWORD);
 
     public Kit(String name, KitCategory category, Material buttonMaterial) {
         this.name = name;
         this.kitCategory = category;
         this.buttonMaterial = buttonMaterial;
 
-        List<ItemStack> first = new ArrayList<>();
-        first.add(new ItemStack(Material.WOODEN_SWORD));
-        itemsMap.put(1, first);
+        itemsMap.put(1, new ArrayList<>());
     }
 
     public Kit(String name, Material buttonMaterial) {
@@ -164,13 +163,6 @@ public abstract class Kit {
     }
 
     /**
-     * Remove all items from the kit, including the default wooden sword
-     */
-    protected void clearItems() {
-        itemsMap.clear();
-    }
-
-    /**
      * Adds a kit level-items pair into the items map.
      * @param level Kit level.
      * @param items Items to be received by the player.
@@ -191,12 +183,13 @@ public abstract class Kit {
      * Returns the items a player would receive.
      * @return Items to be received by the player.
      */
-    public List<ItemStack> getItems(int level) {
-        if (itemsMap.containsKey(level)) {
-            return Collections.unmodifiableList(itemsMap.get(level));
-        } else {
-            return Collections.unmodifiableList(itemsMap.get(1));
+    public List<ItemStack> getItems(int level, boolean defaultWeapon) {
+        List<ItemStack> items = new ArrayList<>();
+        if (defaultWeapon && this.defaultWeapon != null) {
+            items.add(this.defaultWeapon);
         }
+        items.addAll(itemsMap.getOrDefault(level, itemsMap.get(1)));
+        return items;
     }
 
     public ItemStack getDisplayItem(boolean active) {

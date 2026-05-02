@@ -1468,6 +1468,15 @@ public class Arena implements Comparable<Arena> {
         ArenaDataManager.setLateArrival(id, bool);
     }
 
+    public boolean hasDefaultWeapon() {
+        try {
+            return ArenaDataManager.hasDefaultWeapon(id);
+        }
+        catch (NoSuchPathException e) {
+            return true;
+        }
+    }
+
     /**
      * Get the reason why this arena cannot be opened.
      * @return The reason this arena cannot be opened, or null if it can be opened.

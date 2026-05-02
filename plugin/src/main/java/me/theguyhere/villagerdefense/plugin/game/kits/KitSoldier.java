@@ -12,7 +12,7 @@ public class KitSoldier extends Kit {
 
         setMasterDescription(LanguageManager.kits.soldier.description);
         setPrice(250);
-        clearItems(); // clear wooden sword
+        defaultWeapon = null;
         addItems(ItemManager.createItem(Material.STONE_SWORD, new ColoredMessage(ChatColor.GREEN,
                 LanguageManager.kits.soldier.items.sword).toString()));
     }

@@ -24,7 +24,7 @@ public class KitReaper extends Kit {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         enchants.put(Enchantment.SHARPNESS, 3);
 
-        clearItems();
+        defaultWeapon = null;
         addItems(1, ItemManager.createItem(
                 Material.NETHERITE_HOE,
                 new ColoredMessage(ChatColor.GREEN, LanguageManager.kits.reaper.items.scythe).toString(),

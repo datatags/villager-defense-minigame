@@ -335,6 +335,10 @@ public class ArenaDataManager {
         yamlManager.setBoolean("arena." + id + ".lateArrival", toggle);
     }
 
+    public static boolean hasDefaultWeapon(int id) throws NoSuchPathException {
+        return yamlManager.getBoolean("arena." + id + ".defaultWeapon");
+    }
+
     public static String getDifficultyLabel(int id) {
         try {
             return yamlManager.getString("arena." + id + ".difficultyLabel");

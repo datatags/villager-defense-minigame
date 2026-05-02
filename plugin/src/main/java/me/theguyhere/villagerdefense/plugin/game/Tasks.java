@@ -580,9 +580,9 @@ public class Tasks {
         // weapon | shop | misc other stuff
         p.getInventory().setItem(1, GameItems.shop());
 		EntityEquipment equipment = Objects.requireNonNull(player.getPlayer().getEquipment());
-        List<ItemStack> items = new ArrayList<>(player.getKit().getItems(player.getKitLevel()));
+        List<ItemStack> items = new ArrayList<>(player.getKit().getItems(player.getKitLevel(), arena.hasDefaultWeapon()));
         if (player.getKit2() != null) {
-            items.addAll(player.getKit2().getItems(player.getKit2Level()));
+            items.addAll(player.getKit2().getItems(player.getKit2Level(), arena.hasDefaultWeapon()));
         }
         for (ItemStack item : items) {
 			// Equip armor if possible, otherwise put in inventory, otherwise drop at feet
