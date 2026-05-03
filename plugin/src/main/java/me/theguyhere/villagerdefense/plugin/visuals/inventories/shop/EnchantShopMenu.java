@@ -52,7 +52,7 @@ public class EnchantShopMenu extends ShopMenu {
 
     private void addEnchant(int slot, Material mat, String displayName, int cost) {
         ItemStack item = ItemManager.createItem(mat,
-                CommunicationManager.format("&a&lIncrease " + displayName),
+                CommunicationManager.format("&a&l" + displayName),
                 CommunicationManager.format("&2Costs " + cost + " XP Levels"));
         addItem(slot, item);
     }
@@ -72,7 +72,6 @@ public class EnchantShopMenu extends ShopMenu {
             PlayerManager.notifyFailure(player, LanguageManager.errors.buy);
             return;
         }
-        player.setLevel(player.getLevel() - cost);
 
         // Give book
         String enchant;
@@ -126,6 +125,7 @@ public class EnchantShopMenu extends ShopMenu {
             give = EnchantingBook.mending();
         else give = null;
 
+        player.setLevel(player.getLevel() - cost);
         PlayerManager.giveItem(player, give);
         PlayerManager.notifySuccess(player, LanguageManager.confirms.buy);
     }
