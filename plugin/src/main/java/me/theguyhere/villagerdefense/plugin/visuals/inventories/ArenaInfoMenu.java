@@ -29,12 +29,6 @@ public class ArenaInfoMenu extends ArenaMenu {
                         + (arena.getMaxWaves() > 0 ? arena.getMaxWaves() : LanguageManager.messages.unlimited),
                 format(LanguageManager.arenaStats.maxWaves.description));
 
-        String limit;
-        if (arena.getWaveTimeLimit() < 0) {
-            limit = LanguageManager.messages.unlimited;
-        } else {
-            limit = arena.getWaveTimeLimit() + " minute(s)";
-        }
         addButton(Material.CLOCK, NO_OP,
                 () -> "&9&l" + LanguageManager.arenaStats.timeLimit.name + ": &9"
                         + (arena.getWaveTimeLimit() > 0 ? arena.getWaveTimeLimit() + " minute(s)" : LanguageManager.messages.unlimited),
@@ -93,6 +87,12 @@ public class ArenaInfoMenu extends ArenaMenu {
 
         addButton(Material.EMERALD_BLOCK, NO_OP,
                 () -> "&6&l" + LanguageManager.names.defaultShop + ": " + getToggleStatus(arena.hasNormal()));
+
+        addButton(Material.GOLDEN_CHESTPLATE, NO_OP,
+                () -> "&6&l" + LanguageManager.names.armorShop + ": " + getToggleStatus(arena.hasArmor()));
+
+        addButton(Material.GOLDEN_APPLE, NO_OP,
+                () -> "&6&l" + LanguageManager.names.consumableShop + ": " + getToggleStatus(arena.hasConsumables()));
 
         addButton(Material.QUARTZ_BLOCK, NO_OP,
                 () -> "&2&l" + LanguageManager.names.customShop + ": " + getToggleStatus(arena.hasCustom()));

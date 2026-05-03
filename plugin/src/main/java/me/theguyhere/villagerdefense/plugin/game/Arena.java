@@ -21,6 +21,7 @@ import me.theguyhere.villagerdefense.plugin.items.ItemManager;
 import me.theguyhere.villagerdefense.plugin.structures.*;
 import me.theguyhere.villagerdefense.plugin.structures.events.ReloadBoardsEvent;
 import me.theguyhere.villagerdefense.plugin.visuals.CommunityChestMeta;
+import me.theguyhere.villagerdefense.plugin.visuals.inventories.Menu;
 import me.theguyhere.villagerdefense.plugin.visuals.inventories.shop.*;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
@@ -89,17 +90,17 @@ public class Arena implements Comparable<Arena> {
     private final List<VDPlayer> players = new ArrayList<>();
     /** Weapon shop inventory.*/
     @Getter
-    private Inventory weaponShop;
+    private Menu weaponShop;
     /** Armor shop inventory.*/
     @Getter
-    private Inventory armorShop;
+    private Menu armorShop;
     /** Consumables shop inventory.*/
     @Getter
-    private Inventory consumeShop;
+    private Menu consumeShop;
     @Getter
-    private Inventory enchantShop;
+    private Menu enchantShop;
     @Getter
-    private Inventory customShop;
+    private Menu customShop;
     /** Community chest inventory.*/
     private Inventory communityChest;
     /** Time limit bar object.*/
@@ -1171,6 +1172,9 @@ public class Arena implements Comparable<Arena> {
         }
     }
 
+    /**
+     * Whether the weapon shop is enabled on the arena
+     */
     public boolean hasNormal() {
         try {
             return ArenaDataManager.hasNormal(id);
@@ -1183,6 +1187,34 @@ public class Arena implements Comparable<Arena> {
 
     public void setNormal(boolean normal) {
         ArenaDataManager.setNormal(id, normal);
+    }
+
+    public boolean hasArmor() {
+        try {
+            return ArenaDataManager.hasArmor(id);
+        }
+        catch (NoSuchPathException e) {
+            setArmor(hasNormal());
+            return hasNormal();
+        }
+    }
+
+    public void setArmor(boolean armor) {
+        ArenaDataManager.setArmor(id, armor);
+    }
+
+    public boolean hasConsumables() {
+        try {
+            return ArenaDataManager.hasConsumables(id);
+        }
+        catch (NoSuchPathException e) {
+            setConsumables(hasNormal());
+            return hasNormal();
+        }
+    }
+
+    public void setConsumables(boolean consumables) {
+        ArenaDataManager.setConsumables(id, consumables);
     }
 
     public boolean hasEnchants() {
@@ -1200,11 +1232,11 @@ public class Arena implements Comparable<Arena> {
     }
 
     public void updateShops(int level) {
-        weaponShop = new WeaponShopMenu(this, level).getInventory();
-        armorShop = new ArmorShopMenu(this, level).getInventory();
-        consumeShop = new ConsumableShopMenu(this, level).getInventory();
-        enchantShop = new EnchantShopMenu(this).getInventory();
-        customShop = new CustomShopMenu(this).getInventory();
+        weaponShop = new WeaponShopMenu(this, level);
+        armorShop = new ArmorShopMenu(this, level);
+        consumeShop = new ConsumableShopMenu(this, level);
+        enchantShop = new EnchantShopMenu(this);
+        customShop = new CustomShopMenu(this);
     }
 
     public boolean hasCustom() {
@@ -1508,7 +1540,7 @@ public class Arena implements Comparable<Arena> {
         }
 
         // No shops
-        if (!hasCustom() && !hasNormal()) {
+        if (!hasCustom() && !hasNormal() && !hasArmor() && !hasConsumables()) {
             return "Arena cannot open without a shop!";
         }
 
@@ -1790,7 +1822,7 @@ public class Arena implements Comparable<Arena> {
      */
     public void checkClose() {
         if (!GameDataManager.hasLobby() || getPortalLocation() == null || getPlayerSpawn() == null ||
-                getMonsterSpawns().isEmpty() || getVillagerSpawns().isEmpty() || !hasCustom() && !hasNormal() ||
+                getMonsterSpawns().isEmpty() || getVillagerSpawns().isEmpty() || (!hasCustom() && !hasNormal() && !hasArmor() && !hasConsumables()) ||
                 getCorner1() == null || getCorner2() == null ||
                 !Objects.equals(getCorner1().getWorld(), getCorner2().getWorld())) {
             setClosed(true);
@@ -1901,6 +1933,8 @@ public class Arena implements Comparable<Arena> {
         setDifficultyLabel(arenaToCopy.getDifficultyLabel());
         setBannedKits(arenaToCopy.getBannedKits());
         setNormal(arenaToCopy.hasNormal());
+        setArmor(arenaToCopy.hasArmor());
+        setConsumables(arenaToCopy.hasConsumables());
         setEnchants(arenaToCopy.hasEnchants());
         setCustom(arenaToCopy.hasCustom());
         setCommunity(arenaToCopy.hasCommunity());

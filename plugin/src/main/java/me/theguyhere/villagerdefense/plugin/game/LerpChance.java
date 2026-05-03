@@ -53,9 +53,9 @@ public class LerpChance<T> {
             }
             double range = ceiling - floor;
             if (ThreadLocalRandom.current().nextDouble() < (position - floor) / range) {
-                return entries.get(i).value;
-            } else {
                 return entries.get(i + 1).value;
+            } else {
+                return entries.get(i).value;
             }
         }
         // Past the top of the list, return the last option

@@ -159,6 +159,22 @@ public class ArenaDataManager {
         yamlManager.setBoolean("arena." + id + ".normal", normal);
     }
 
+    public static boolean hasArmor(int id) throws NoSuchPathException {
+        return yamlManager.getBoolean("arena." + id + ".armor");
+    }
+
+    public static void setArmor(int id, boolean armor) {
+        yamlManager.setBoolean("arena." + id + ".armor", armor);
+    }
+
+    public static boolean hasConsumables(int id) throws NoSuchPathException {
+        return yamlManager.getBoolean("arena." + id + ".consumables");
+    }
+
+    public static void setConsumables(int id, boolean consumables) {
+        yamlManager.setBoolean("arena." + id + ".consumables", consumables);
+    }
+
     public static boolean hasEnchants(int id) throws NoSuchPathException {
         return yamlManager.getBoolean("arena." + id + ".enchants");
     }

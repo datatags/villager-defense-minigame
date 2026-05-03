@@ -860,31 +860,34 @@ class CommandModifyArenaData {
 
 			if (ToggleArgument.ON.arg.equalsIgnoreCase(value)) {
 				// Check if already on
-				if (arena.hasNormal()) {
-					VDCommandExecutor.notifyFailure(sender, "Default shop is already on!");
+				if (arena.hasNormal() && arena.hasArmor() && arena.hasConsumables()) {
+					VDCommandExecutor.notifyFailure(sender, "Default shops are already on!");
 					return;
 				}
 
 				// Turn on
 				arena.setNormal(true);
+				arena.setArmor(true);
+				arena.setConsumables(true);
 
 				// Notify console and possibly player
-				VDCommandExecutor.notifySuccess(sender, "Default shop is on for " +
+				VDCommandExecutor.notifySuccess(sender, "Default shops are on for " +
 					arena.getName() + ".");
 			}
 			else if (ToggleArgument.OFF.arg.equalsIgnoreCase(value)) {
 				// Check if already off
-				if (!arena.hasNormal()) {
-					VDCommandExecutor.notifyFailure(sender, "Default shop is already off!");
+				if (!arena.hasNormal() && !arena.hasArmor() && !arena.hasConsumables()) {
+					VDCommandExecutor.notifyFailure(sender, "Default shops are already off!");
 					return;
 				}
 
 				// Turn off
 				arena.setNormal(false);
+				arena.setArmor(false);
+				arena.setConsumables(false);
 
 				// Notify console and possibly player
-				VDCommandExecutor.notifySuccess(sender, "Default shop is off for " +
-					arena.getName() + ".");
+				VDCommandExecutor.notifySuccess(sender, "Default shops are off for " + arena.getName() + ".");
 			}
 			else VDCommandExecutor.notifyFailure(sender, "Invalid operation value. Valid values: " +
 					Arrays.toString(Arrays

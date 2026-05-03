@@ -387,7 +387,7 @@ public class Mobs {
 
     private static ItemStack getLeggings(Arena arena) {
         ItemMaterial type = getArmorTypeSelector().choose(arena.getCurrentDifficulty());
-        return getItem(ItemType.CHESTPLATE, type);
+        return getItem(ItemType.LEGGINGS, type);
     }
 
     private static ItemStack getBoots(Arena arena) {

@@ -23,8 +23,10 @@ import java.util.List;
 import java.util.Objects;
 
 public class ShopMenu extends ArenaMenu {
+    private final String name; // override adding arena to menu name
     public ShopMenu(String name, Arena arena) {
-        super(name, arena, new ManualLayout());
+        super("", arena, new ManualLayout());
+        this.name = name;
     }
 
     protected void addItem(int slot, ItemStack item) {
@@ -116,5 +118,10 @@ public class ShopMenu extends ArenaMenu {
             PlayerManager.giveItem(player, buy);
             PlayerManager.notifySuccess(player, LanguageManager.confirms.buy);
         }
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }
