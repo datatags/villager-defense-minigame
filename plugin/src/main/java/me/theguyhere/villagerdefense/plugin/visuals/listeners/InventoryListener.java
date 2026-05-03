@@ -19,12 +19,13 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 
 public class InventoryListener implements Listener {
 	// Prevent losing items by drag clicking in custom inventory
 	@EventHandler
 	public void onDrag(InventoryDragEvent e) {
-        if (e.getInventory().getType() == InventoryType.PLAYER) {
+        if (e.getInventory().getType() == InventoryType.PLAYER || e.getInventory().getHolder() instanceof CommunityChestMeta) {
             return;
         }
 
@@ -43,10 +44,11 @@ public class InventoryListener implements Listener {
 	// All click events in the inventories
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {
-		// Get inventory title
-		String title = e.getView().getTitle();
-
-		if (!(e.getInventory().getHolder() instanceof InventoryMeta)) {
+        InventoryHolder holder = e.getInventory().getHolder();
+        if (holder instanceof CommunityChestMeta) {
+            return; // let player do whatever with community chest
+        }
+		if (!(holder instanceof InventoryMeta)) {
             // Prevent players using inventories other than their own during the game.
             if (e.getInventory().getType() == InventoryType.PLAYER || e.getView().getType() == InventoryType.CRAFTING) {
                 return;
@@ -66,7 +68,7 @@ public class InventoryListener implements Listener {
         CommunicationManager.debugInfo(CommunicationManager.DebugLevel.VERBOSE, "Inventory Item: " + e.getCurrentItem());
         CommunicationManager.debugInfo(CommunicationManager.DebugLevel.VERBOSE, "Cursor Item: " + e.getCursor());
         CommunicationManager.debugInfo(CommunicationManager.DebugLevel.VERBOSE, "Clicked Inventory: " + e.getClickedInventory());
-        CommunicationManager.debugInfo(CommunicationManager.DebugLevel.VERBOSE, "Inventory Name: " + title);
+        CommunicationManager.debugInfo(CommunicationManager.DebugLevel.VERBOSE, "Inventory Name: " + e.getView().getTitle());
 
         InventoryMeta meta = (InventoryMeta) e.getInventory().getHolder();
         Menu menu = meta.getMenu();
