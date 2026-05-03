@@ -27,7 +27,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public abstract class Menu {
-    private static final NamespacedKey ACTION_KEY = new NamespacedKey(Main.plugin, "action");
+    protected static final NamespacedKey ACTION_KEY = new NamespacedKey(Main.plugin, "action");
     protected static final Consumer<Player> NO_OP = p -> {};
     @Getter
     private final String name;

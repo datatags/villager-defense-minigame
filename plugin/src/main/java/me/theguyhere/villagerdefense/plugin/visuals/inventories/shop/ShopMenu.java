@@ -18,6 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +35,16 @@ public class ShopMenu extends ArenaMenu {
         addClickHandler(item, p -> handleBuy(p, item));
     }
 
+    protected ItemStack cleanItem(ItemStack dirty) {
+        ItemStack clean = dirty.clone();
+        ItemMeta meta = clean.getItemMeta();
+        if (meta != null) {
+            meta.getPersistentDataContainer().remove(ACTION_KEY);
+            clean.setItemMeta(meta);
+        }
+        return clean;
+    }
+
     protected void handleBuy(Player player, ItemStack displayItem) {
         VDPlayer gamer;
         try {
@@ -42,7 +53,7 @@ public class ShopMenu extends ArenaMenu {
             return;
         }
 
-        ItemStack buy = displayItem.clone();
+        ItemStack buy = cleanItem(displayItem);
         Material buyType = buy.getType();
         List<String> lore = buy.getItemMeta().getLore();
 
