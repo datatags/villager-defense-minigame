@@ -8,9 +8,11 @@ import java.util.function.Supplier;
 
 public class IncrementMenu extends Menu {
     private final Supplier<Integer> getter;
-    IncrementMenu(String name, Supplier<Integer> getter, Consumer<Integer> setter, boolean simple) {
+    private final String titleSuffix;
+    IncrementMenu(String name, Supplier<Integer> getter, Consumer<Integer> setter, boolean simple, String titleSuffix) {
         super(name, new SingleRowLayout(true));
         this.getter = getter;
+        this.titleSuffix = titleSuffix;
         // we use `safeSetter` when incrementing/decrementing to ensure that we don't go below 1 and that if the value
         // is currently unlimited, it gets set to a real value.
         final Consumer<Integer> safeSetter = val -> setter.accept(Math.max(val, 1));
@@ -25,13 +27,26 @@ public class IncrementMenu extends Menu {
         addButton(Material.LIME_CONCRETE, p -> safeSetter.accept(getter.get() + 1), "&2&lIncrease");
     }
 
+    IncrementMenu(String name, Supplier<Integer> getter, Consumer<Integer> setter, boolean simple) {
+        this(name, getter, setter, simple, null);
+    }
+
     IncrementMenu(String name, Supplier<Integer> getter, Consumer<Integer> setter) {
         this(name, getter, setter, false);
     }
 
     @Override
     public String getName() {
+        StringBuilder builder = new StringBuilder(super.getName()).append(": ");
         int val = getter.get();
-        return super.getName() + ": " + (val == -1 ? "Unlimited" : val);
+        if (val == -1) {
+            builder.append("Unlimited");
+        } else {
+            builder.append(val);
+            if (titleSuffix != null) {
+                builder.append(' ').append(titleSuffix);
+            }
+        }
+        return builder.toString();
     }
 }

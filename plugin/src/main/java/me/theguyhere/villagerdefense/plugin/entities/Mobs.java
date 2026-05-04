@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -91,34 +92,22 @@ public class Mobs {
     }
 
     @SuppressWarnings("UnstableApiUsage")
+    private static void setAttributeModifier(LivingEntity entity, Attribute attribute, NamespacedKey key, double amount) {
+        AttributeInstance attr = entity.getAttribute(attribute);
+        if (attr == null || amount == 0) {
+            return;
+        }
+        attr.addModifier(new AttributeModifier(key, amount, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ANY));
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
     private static void setAttributeModifiers(Arena arena, LivingEntity entity) {
         // Set attribute modifiers
         double difficulty = arena.getCurrentDifficulty();
-        for (int i = 0; i < 3; i++) {
-            double boost;
-            if (difficulty < 5)
-                boost = 0;
-            else boost = difficulty - 5;
-            switch (i) {
-                case 0:
-                    Objects.requireNonNull(entity.getAttribute(Attribute.MAX_HEALTH))
-                            .addModifier(new AttributeModifier(
-                                    HEALTH_BOOST, boost / 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ANY
-                            ));
-                    break;
-                case 1:
-                    Objects.requireNonNull(entity.getAttribute(Attribute.ATTACK_DAMAGE))
-                            .addModifier(new AttributeModifier(
-                                    ATTACK_BOOST, boost / 4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ANY
-                            ));
-                    break;
-                case 2:
-                    Objects.requireNonNull(entity.getAttribute(Attribute.MOVEMENT_SPEED))
-                            .addModifier(new AttributeModifier(
-                                    SPEED_BOOST, boost / 120, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ANY
-                            ));
-            }
-        }
+        double boost = Math.max(0, difficulty - 5);
+        setAttributeModifier(entity, Attribute.MAX_HEALTH, HEALTH_BOOST, boost / 3);
+        setAttributeModifier(entity, Attribute.ATTACK_DAMAGE, ATTACK_BOOST, boost / 4);
+        setAttributeModifier(entity, Attribute.MOVEMENT_SPEED, SPEED_BOOST, boost / 120);
     }
 
     private static void setBaby(Arena arena, Ageable ageable) {

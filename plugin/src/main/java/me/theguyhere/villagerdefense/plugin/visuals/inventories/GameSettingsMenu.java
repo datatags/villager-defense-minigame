@@ -15,7 +15,7 @@ public class GameSettingsMenu extends ArenaMenu {
 
         // Option to wave time limit
         addNavigation(Material.CLOCK,
-                () -> new IncrementMenu("&2&lWave Time Limit", arena::getWaveTimeLimit, arena::setWaveTimeLimit),
+                () -> new IncrementMenu("&2&lWave Time Limit", arena::getWaveTimeLimit, arena::setWaveTimeLimit, false, "minutes"),
                 "&2&lWave Time Limit");
 
         // Option to toggle dynamic wave time limit
