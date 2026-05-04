@@ -28,7 +28,9 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.IronGolem;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
@@ -1811,9 +1813,7 @@ public class Arena implements Comparable<Arena> {
     public void setMonsterGlow() {
         Objects.requireNonNull(getPlayerSpawn().getLocation().getWorld())
                 .getNearbyEntities(getBounds()).stream().filter(Objects::nonNull)
-                .filter(entity -> entity.hasMetadata("VD"))
-                .filter(entity -> entity instanceof Monster || entity instanceof Slime ||
-                        entity instanceof Hoglin || entity instanceof Phantom)
+                .filter(entity -> entity.hasMetadata("VD_Monster"))
                 .forEach(entity -> entity.setGlowing(true));
     }
 
@@ -1871,9 +1871,7 @@ public class Arena implements Comparable<Arena> {
         monsters = (int) Objects.requireNonNull(getPlayerSpawn().getLocation().getWorld())
                 .getNearbyEntities(getBounds()).stream()
                 .filter(Objects::nonNull)
-                .filter(entity -> entity.hasMetadata("VD"))
-                .filter(entity -> entity instanceof Monster || entity instanceof Slime || entity instanceof Hoglin ||
-                        entity instanceof Phantom).count();
+                .filter(entity -> entity.hasMetadata("VD_Monster")).count();
         villagers = (int) getPlayerSpawn().getLocation().getWorld().getNearbyEntities(getBounds()).stream()
                 .filter(Objects::nonNull)
                 .filter(entity -> entity.hasMetadata("VD")).filter(entity -> entity instanceof Villager).count();

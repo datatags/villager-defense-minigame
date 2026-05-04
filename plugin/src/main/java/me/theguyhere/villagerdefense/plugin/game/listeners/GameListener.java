@@ -53,6 +53,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.BoundingBox;
 
 import java.util.*;
@@ -114,6 +115,37 @@ public class GameListener implements Listener {
 
         // Update scoreboard
         GameManager.createBoard(vdPlayer);
+    }
+
+    private Entity dereferenceShooter(Entity damager) {
+        if (damager instanceof Projectile) {
+            ProjectileSource shooter = ((Projectile) damager).getShooter();
+            if (shooter instanceof Entity) {
+                return (Entity) shooter;
+            }
+        }
+        return damager;
+    }
+
+    private void updateHealthBar(Entity ent, double adjustment) {
+        if (!ent.hasMetadata("VD") || adjustment == 0) {
+            return;
+        }
+        // Ignore players and other non-eligible entities
+        if (!(ent instanceof LivingEntity) || ent instanceof Player || ent instanceof Wolf || ent instanceof Wither) {
+            return;
+        }
+
+        LivingEntity n = (LivingEntity) ent;
+        double maxHealth = Objects.requireNonNull(n.getAttribute(Attribute.MAX_HEALTH)).getValue();
+        double modifiedHealth = n.getHealth() + adjustment;
+
+        // Update health bar
+        if (ent instanceof IronGolem || ent instanceof Ravager) {
+            ent.setCustomName(Mobs.healthBar(maxHealth, Math.min(modifiedHealth, maxHealth), 10));
+        } else {
+            ent.setCustomName(Mobs.healthBar(maxHealth, Math.min(modifiedHealth, maxHealth), 5));
+        }
     }
 
     // Keep score and drop gems, exp, and rare loot
@@ -273,137 +305,10 @@ public class GameListener implements Listener {
         }
     }
 
-    // Update health bar when damage is dealt by entity
-    @EventHandler
-    public void onHurt(EntityDamageByEntityEvent e) {
-        Entity ent = e.getEntity();
-
-        // Check for arena enemies
-        if (!ent.hasMetadata("VD")) {
-            return;
-        }
-
-        Entity damager = e.getDamager();
-
-        Player player;
-        VDPlayer gamer;
-
-        // Check for player damager, then get player
-        if (damager instanceof Player) {
-            player = (Player) damager;
-        } else if (damager instanceof Projectile &&
-                ((Projectile) damager).getShooter() instanceof Player) {
-            player = (Player) ((Projectile) damager).getShooter();
-        } else {
-            player = null;
-        }
-
-        // Attempt to get VDplayer
-        if (player != null) {
-            try {
-                gamer = GameManager.getArena(player).getPlayer(player);
-            } catch (ArenaNotFoundException | PlayerNotFoundException err) {
-                return;
-            }
-        } else {
-            gamer = null;
-        }
-
-        // Check for pacifist challenge
-        if (gamer != null) {
-            if (gamer.getChallenges().contains(Challenge.pacifist()))
-            // Ignore if not an enemy of the player and is not a baby slime
-            {
-                if (!gamer
-                        .getEnemies()
-                        .contains(ent.getUniqueId()) &&
-                        !(ent instanceof Slime && !(ent instanceof MagmaCube) && ((Slime) ent).getSize() < 2)) {
-                    return;
-                }
-            }
-        }
-
-        // Ignore wolves
-        if (ent instanceof Wolf) {
-            return;
-        }
-
-        // Ignore phantom damage to villager
-        if ((ent instanceof Villager || ent instanceof IronGolem) && damager instanceof Player) {
-            return;
-        }
-
-        // Ignore phantom damage to monsters
-        if ((ent instanceof Monster || ent instanceof Slime || ent instanceof Hoglin || ent instanceof Phantom) &&
-                (damager instanceof Monster || damager instanceof Hoglin)) {
-            return;
-        }
-
-        // Check for phantom projectile damage
-        if (damager instanceof Projectile) {
-            if ((ent instanceof Villager || ent instanceof IronGolem) &&
-                    ((Projectile) damager).getShooter() instanceof Player) {
-                return;
-            }
-            if ((ent instanceof Monster || ent instanceof Slime || ent instanceof Hoglin || ent instanceof Phantom) &&
-                    ((Projectile) damager).getShooter() instanceof Monster) {
-                return;
-            }
-        }
-
-        // Ignore bosses
-        if (ent instanceof Wither) {
-            return;
-        }
-
-        LivingEntity n = (LivingEntity) ent;
-        double maxHealth = Objects.requireNonNull(n.getAttribute(Attribute.MAX_HEALTH)).getValue();
-
-        // Update health bar
-        if (ent instanceof IronGolem || ent instanceof Ravager) {
-            ent.setCustomName(Mobs.healthBar(maxHealth, n.getHealth() - e.getFinalDamage(), 10));
-        } else {
-            ent.setCustomName(Mobs.healthBar(maxHealth, n.getHealth() - e.getFinalDamage(), 5));
-        }
-    }
-
-    // Update health bar when damage is dealt not by another entity
-    @EventHandler
+    // Update health bar when mob is damaged
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onHurt(EntityDamageEvent e) {
-        Entity ent = e.getEntity();
-
-        // Check for arena enemies
-        if (!ent.hasMetadata("VD")) {
-            return;
-        }
-
-        // Ignore wolves
-        if (ent instanceof Wolf) {
-            return;
-        }
-
-        // Don't handle entity on entity damage
-        if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK ||
-                e.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK ||
-                e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION ||
-                e.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
-            return;
-        }
-
-        // Ignore bosses
-        if (ent instanceof Wither) {
-            return;
-        }
-
-        LivingEntity n = (LivingEntity) ent;
-        double maxHealth = Objects.requireNonNull(n.getAttribute(Attribute.MAX_HEALTH)).getValue();
-
-        // Update health bar
-        if (ent instanceof IronGolem || ent instanceof Ravager) {
-            ent.setCustomName(Mobs.healthBar(maxHealth, n.getHealth() - e.getFinalDamage(), 10));
-        } else {
-            ent.setCustomName(Mobs.healthBar(maxHealth, n.getHealth() - e.getFinalDamage(), 5));
-        }
+        updateHealthBar(e.getEntity(), -e.getFinalDamage());
     }
 
     // Prevent players from going hungry while waiting for an arena to start
@@ -424,35 +329,9 @@ public class GameListener implements Listener {
     }
 
     // Update health bar when healed
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onHeal(EntityRegainHealthEvent e) {
-        Entity ent = e.getEntity();
-
-        // Check for arena enemies
-        if (!ent.hasMetadata("VD")) {
-            return;
-        }
-
-        // Ignore wolves and players
-        if (ent instanceof Wolf || ent instanceof Player) {
-            return;
-        }
-
-        // Ignore bosses
-        if (ent instanceof Wither) {
-            return;
-        }
-
-        LivingEntity n = (LivingEntity) ent;
-        double maxHealth = Objects.requireNonNull(n.getAttribute(Attribute.MAX_HEALTH)).getValue();
-        double modifiedHealth = n.getHealth() + e.getAmount();
-
-        // Update health bar
-        if (ent instanceof IronGolem || ent instanceof Ravager) {
-            ent.setCustomName(Mobs.healthBar(maxHealth, Math.min(modifiedHealth, maxHealth), 10));
-        } else {
-            ent.setCustomName(Mobs.healthBar(maxHealth, Math.min(modifiedHealth, maxHealth), 5));
-        }
+        updateHealthBar(e.getEntity(), e.getAmount());
     }
 
     // Open shop, kit selecting menu, or leave
@@ -544,13 +423,12 @@ public class GameListener implements Listener {
     @EventHandler
     public void onFriendlyFire(EntityDamageByEntityEvent e) {
         Entity ent = e.getEntity();
-        Entity damager = e.getDamager();
+        Entity damager = dereferenceShooter(e.getDamager());
 
         // Cancel damage to each other if they are in a game
-        if (ent instanceof Player && damager instanceof Player) {
-            if (GameManager.checkPlayer((Player) ent)) {
-                e.setCancelled(true);
-            }
+        if (ent instanceof Player && damager instanceof Player && GameManager.checkPlayer((Player) ent)) {
+            e.setCancelled(true);
+            return;
         }
 
         // Check for special mobs
@@ -558,37 +436,14 @@ public class GameListener implements Listener {
             return;
         }
 
-        // Cancel damage to villager
-        if ((ent instanceof Villager || ent instanceof Wolf || ent instanceof IronGolem) && damager instanceof Player) {
+        // Cancel damage to allies
+        if (ent.hasMetadata("VD_Ally") && damager instanceof Player) {
             e.setCancelled(true);
         }
 
         // Cancel monster friendly fire damage
-        else if ((ent instanceof Monster || ent instanceof Slime || ent instanceof Hoglin) &&
-                (damager instanceof Monster || damager instanceof Slime || ent instanceof Hoglin)) {
+        else if (ent.hasMetadata("VD_Monster") && damager.hasMetadata("VD_Monster")) {
             e.setCancelled(true);
-        }
-
-        // Check for projectile damage
-        else if (damager instanceof Projectile) {
-            // Player on player
-            if (ent instanceof Player && ((Projectile) damager).getShooter() instanceof Player) {
-                if (GameManager.checkPlayer((Player) ent)) {
-                    e.setCancelled(true);
-                }
-            }
-
-            // Player on friendly
-            if ((ent instanceof Villager || ent instanceof Wolf || ent instanceof IronGolem) &&
-                    ((Projectile) damager).getShooter() instanceof Player) {
-                e.setCancelled(true);
-            }
-
-            // Monster on monster
-            else if ((ent instanceof Monster || ent instanceof Slime) &&
-                    ((Projectile) damager).getShooter() instanceof Monster) {
-                e.setCancelled(true);
-            }
         }
     }
 

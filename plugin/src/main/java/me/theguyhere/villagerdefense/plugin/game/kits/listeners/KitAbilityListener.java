@@ -89,9 +89,9 @@ public class KitAbilityListener implements Listener {
         Entity damager = e.getDamager();
 
         // Check if damage was done by player to valid monsters
-        if (!(ent instanceof Monster || ent instanceof Slime || ent instanceof Hoglin) ||
-                !(damager instanceof Player))
+        if (!ent.hasMetadata("VD_Monster") || !(damager instanceof Player)) {
             return;
+        }
 
         Player player = (Player) damager;
         Arena arena;
@@ -162,15 +162,11 @@ public class KitAbilityListener implements Listener {
         Entity damager = e.getDamager();
 
         // Check for arena enemies
-        if (!ent.hasMetadata("VD"))
+        if (!ent.hasMetadata("VD_Monster"))
             return;
 
         // Check for player or wolf dealing damage
         if (!(damager instanceof Player || damager instanceof Wolf))
-            return;
-
-        // Check for mob taking damage
-        if (!(ent instanceof Mob))
             return;
 
         Mob mob = (Mob) ent;

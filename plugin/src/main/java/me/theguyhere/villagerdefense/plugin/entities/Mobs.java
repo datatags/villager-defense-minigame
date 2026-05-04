@@ -404,6 +404,7 @@ public class Mobs {
         villager.setCustomName(healthBar(1, 1, 5));
         villager.setCustomNameVisible(true);
         villager.setMetadata("VD", new FixedMetadataValue(Main.plugin, arena.getId()));
+        villager.setMetadata("VD_Ally", new FixedMetadataValue(Main.plugin, true));
         villager.setPersistent(false);
     }
 
@@ -533,8 +534,10 @@ public class Mobs {
         wolf.setOwner(vdPlayer.getPlayer());
         wolf.setBreed(false);
         wolf.setMetadata("VD", new FixedMetadataValue(plugin, arena.getId()));
+        wolf.setMetadata("VD_Ally", new FixedMetadataValue(plugin, true));
         wolf.setCustomName(vdPlayer.getPlayer().getName() + "'s Wolf");
         wolf.setCustomNameVisible(true);
+        wolf.setPersistent(false);
         vdPlayer.incrementWolves();
 
         setAttributeModifiers(arena, wolf);
@@ -542,8 +545,10 @@ public class Mobs {
 
     public static void setGolem(Main plugin, Arena arena, IronGolem ironGolem) {
         ironGolem.setMetadata("VD", new FixedMetadataValue(plugin, arena.getId()));
+        ironGolem.setMetadata("VD_Ally", new FixedMetadataValue(plugin, true));
         ironGolem.setCustomName(healthBar(1, 1, 10));
         ironGolem.setCustomNameVisible(true);
+        ironGolem.setPersistent(false);
         arena.incrementGolems();
 
         setAttributeModifiers(arena, ironGolem);
