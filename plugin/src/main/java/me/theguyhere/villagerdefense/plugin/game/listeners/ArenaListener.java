@@ -26,6 +26,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -510,7 +511,8 @@ public class ArenaListener implements Listener {
         // Return player health, food, exp, and items
         if (Main.plugin.getConfig().getBoolean("keepInv") && player.isOnline()) {
             try {
-                player.setHealth(PlayerDataManager.getAndDeletePlayerHealth(uuid));
+                double maxHealth = player.getAttribute(Attribute.MAX_HEALTH).getValue();
+                player.setHealth(Math.min(PlayerDataManager.getAndDeletePlayerHealth(uuid), maxHealth));
                 player.setAbsorptionAmount(PlayerDataManager.getAndDeletePlayerAbsorption(uuid));
                 player.setFoodLevel(PlayerDataManager.getAndDeletePlayerFood(uuid));
                 player.setSaturation((float) PlayerDataManager.getAndDeletePlayerSaturation(uuid));
