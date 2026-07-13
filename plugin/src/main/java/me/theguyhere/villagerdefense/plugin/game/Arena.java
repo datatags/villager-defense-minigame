@@ -55,7 +55,7 @@ public class Arena implements Comparable<Arena> {
 
     /** Status of the arena.*/
     @Getter
-    private ArenaStatus status;
+    private ArenaStatus status = ArenaStatus.WAITING;
     /** Whether the arena is in the process of spawning monsters.*/
     @Getter
     @Setter
@@ -124,13 +124,30 @@ public class Arena implements Comparable<Arena> {
     @Getter
     private ArenaBoard arenaBoard;
 
+    /**
+     * Load existing data for the given arena
+     * @param arenaID ID of the arena to load
+     */
     public Arena(int arenaID) {
         id = arenaID;
         task = new Tasks(this);
-        currentWave = 0;
-        villagers = 0;
-        enemies = 0;
-        status = ArenaStatus.WAITING;
+        refreshArenaBoard();
+        refreshPlayerSpawn();
+        refreshMonsterSpawns();
+        refreshVillagerSpawns();
+        refreshPortal();
+        checkClosedParticles();
+        checkClose();
+    }
+
+    /**
+     * Initialize a new arena with a new name.
+     * @param name Name of the new arena.
+     */
+    public Arena(String name) throws InvalidNameException {
+        id = GameManager.newArenaID();
+        setName(name);
+        task = new Tasks(this);
         refreshArenaBoard();
         refreshPlayerSpawn();
         refreshMonsterSpawns();
@@ -164,22 +181,15 @@ public class Arena implements Comparable<Arena> {
             throw new InvalidNameException("Empty");
         }
 
-        // Check if name is the same as current
-        else if (name.equals(getName())) {
-            throw new InvalidNameException("Same");
+        // Check for duplicate name
+        try {
+            GameManager.getArena(name);
+            throw new InvalidNameException("Duplicate");
         }
+        catch (ArenaNotFoundException ignored) {}
 
-        else {
-            // Check for duplicate name
-            try {
-                GameManager.getArena(name);
-                throw new InvalidNameException("Duplicate");
-            }
-            catch (ArenaNotFoundException ignored) {}
-
-            // Save name
-            ArenaDataManager.setArenaName(id, name);
-        }
+        // Save name
+        ArenaDataManager.setArenaName(id, name);
 
         // Refresh portal
         if (getPortalLocation() != null)
@@ -590,13 +600,14 @@ public class Arena implements Comparable<Arena> {
         // Try recreating the board
         try {
             // Delete old board if needed
-            if (arenaBoard != null)
+            if (arenaBoard != null) {
                 arenaBoard.remove();
+            }
 
             // Create a new board and display it
-            arenaBoard = new ArenaBoard(Objects.requireNonNull(getArenaBoardLocation()), this);
+            arenaBoard = new ArenaBoard(getArenaBoardLocation(), this);
             arenaBoard.displayForOnline();
-        } catch (Exception e) {
+        } catch (InvalidLocationException e) {
             CommunicationManager.debugError(
                 CommunicationManager.DebugLevel.NORMAL, String.format("Invalid location for %s's arena board ", getName()),
                 !Main.releaseMode,
@@ -1571,7 +1582,9 @@ public class Arena implements Comparable<Arena> {
                 Bukkit.getPluginManager().callEvent(new LeaveArenaEvent(vdPlayer.getPlayer()))));
 
         // Clear the arena
-        WorldManager.clear(getCorner1(), getCorner2());
+        if (getCorner1() != null && getCorner2() != null) {
+            WorldManager.clear(getCorner1(), getCorner2());
+        }
 
         // Set closed and handle particles/holographics
         ArenaDataManager.setArenaClosed(id, closed);
@@ -1967,24 +1980,16 @@ public class Arena implements Comparable<Arena> {
      * Removes all data of this arena from the arena file.
      */
     public void remove() {
+        CommunicationManager.debugInfo(CommunicationManager.DebugLevel.NORMAL, String.format("Removing %s.", getName()));
         wipe();
         ArenaDataManager.removeArena(id);
-        CommunicationManager.debugInfo(CommunicationManager.DebugLevel.NORMAL, String.format("Removing %s.", getName()));
     }
 
     /**
      * Removes all trace of the arena's physical existence.
      */
     public void wipe() {
-        // Kick players
-        getPlayers().forEach(vdPlayer -> Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, () ->
-                Bukkit.getPluginManager().callEvent(new LeaveArenaEvent(vdPlayer.getPlayer()))));
-
-        // Clear the arena
-        WorldManager.clear(getCorner1(), getCorner2());
-
-        // Set closed
-        ArenaDataManager.setArenaClosed(id, true);
+        setClosed(true);
 
         // Remove holographics
         if (getArenaBoard() != null)

@@ -26,19 +26,14 @@ public class ArenaDashboard extends DataStructureDashboard<Arena> {
                 return;
             }
 
-            // Create new arena
-            Arena arena = new Arena(GameManager.newArenaID());
-            GameManager.addArena(GameManager.newArenaID(), arena);
-
             // Try updating name
             try {
-                arena.setName(msg.trim());
+                Arena arena = new Arena(msg.trim());
+                GameManager.addArena(arena.getId(), arena);
                 CommunicationManager.debugInfo(CommunicationManager.DebugLevel.VERBOSE, "Name set for arena %s!",
                         String.valueOf(arena.getId()));
                 open(player, new ArenaEditMenu(arena));
             } catch (InvalidNameException err) {
-                if (arena.getName() == null)
-                    GameManager.removeArena(arena.getId());
                 PlayerManager.notifyFailure(player, "Invalid arena name!");
             }
         };
