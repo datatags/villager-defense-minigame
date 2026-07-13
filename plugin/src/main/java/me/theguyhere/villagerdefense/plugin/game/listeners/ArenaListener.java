@@ -18,6 +18,7 @@ import me.theguyhere.villagerdefense.plugin.game.challenges.Challenge;
 import me.theguyhere.villagerdefense.plugin.game.events.*;
 import me.theguyhere.villagerdefense.plugin.game.exceptions.ArenaNotFoundException;
 import me.theguyhere.villagerdefense.plugin.game.kits.events.EndNinjaNerfEvent;
+import me.theguyhere.villagerdefense.plugin.items.GameItems;
 import me.theguyhere.villagerdefense.plugin.structures.ArenaRecord;
 import me.theguyhere.villagerdefense.plugin.structures.ArenaSpawn;
 import me.theguyhere.villagerdefense.plugin.structures.ArenaSpawnType;
@@ -30,6 +31,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.DisplaySlot;
 
@@ -409,6 +411,13 @@ public class ArenaListener implements Listener {
             if (PlayerDataManager.getPlayerStat(uuid, "topKills") < gamer.getKills()) {
                 PlayerDataManager.setPlayerStat(uuid, "topKills", gamer.getKills());
             }
+
+            for (ItemStack item : player.getInventory().getContents()) {
+                if (item != null && !item.equals(GameItems.shop())) {
+                    player.getWorld().dropItemNaturally(player.getLocation(), item);
+                }
+            }
+            player.getInventory().clear();
 
             // Check for achievements
             AchievementChecker.checkDefaultHighScoreAchievements(player);
