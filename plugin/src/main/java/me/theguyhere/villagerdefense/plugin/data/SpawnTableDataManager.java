@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpawnTableDataManager {
+    private static final String FREEPLAY = "freePlay";
     private final YAMLManager yamlManager;
 
     public SpawnTableDataManager(String name) {
@@ -18,8 +19,8 @@ public class SpawnTableDataManager {
         // Find the right wave to pull data from
         String spawnWave = String.valueOf(wave);
         if (!yamlManager.hasPath(spawnWave)) {
-            if (yamlManager.hasPath("freeplay")) {
-                spawnWave = "freeplay";
+            if (yamlManager.hasPath(FREEPLAY)) {
+                spawnWave = FREEPLAY;
             }
             else {
                 spawnWave = "1";
@@ -34,8 +35,8 @@ public class SpawnTableDataManager {
         // Find the right wave to pull data from
         String spawnWave = String.valueOf(wave);
         if (!yamlManager.hasPath(spawnWave)) {
-            if (yamlManager.hasPath("freeplay")) {
-                spawnWave = "freeplay";
+            if (yamlManager.hasPath(FREEPLAY)) {
+                spawnWave = FREEPLAY;
             }
             else {
                 spawnWave = "1";
@@ -54,8 +55,8 @@ public class SpawnTableDataManager {
         // Find the right wave to pull data from
         String spawnWave = String.valueOf(wave);
         if (!yamlManager.hasPath(spawnWave)) {
-            if (yamlManager.hasPath("freeplay")) {
-                spawnWave = "freeplay";
+            if (yamlManager.hasPath(FREEPLAY)) {
+                spawnWave = FREEPLAY;
             }
             else {
                 spawnWave = "1";
@@ -82,8 +83,8 @@ public class SpawnTableDataManager {
         // Find the right wave to pull data from
         String spawnWave = String.valueOf(wave);
         if (!yamlManager.hasPath(spawnWave)) {
-            if (yamlManager.hasPath("freeplay")) {
-                spawnWave = "freeplay";
+            if (yamlManager.hasPath(FREEPLAY)) {
+                spawnWave = FREEPLAY;
             }
             else {
                 spawnWave = "1";
@@ -98,8 +99,8 @@ public class SpawnTableDataManager {
         // Find the right wave to pull data from
         String spawnWave = String.valueOf(wave);
         if (!yamlManager.hasPath(spawnWave)) {
-            if (yamlManager.hasPath("freeplay")) {
-                spawnWave = "freeplay";
+            if (yamlManager.hasPath(FREEPLAY)) {
+                spawnWave = FREEPLAY;
             }
             else {
                 spawnWave = "1";
