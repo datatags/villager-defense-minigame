@@ -116,6 +116,6 @@ public class PlayerAchievementsMenu extends Menu {
     }
 
     private void add(Achievement achievement) {
-        addButton(achievement.getButton(achievements.contains(achievement.getName())), NO_OP);
+        addButton(achievement.getButton(achievements.contains(achievement.getID())), NO_OP);
     }
 }
