@@ -338,9 +338,6 @@ public class Mobs {
             }
             return null;
         }
-        if (type != ItemType.HELMET && type != ItemType.CHESTPLATE && type != ItemType.LEGGINGS && type != ItemType.BOOTS) {
-            return null;
-        }
         return new ItemStack(Material.valueOf(mat.name() + "_" + type.name()));
     }
 

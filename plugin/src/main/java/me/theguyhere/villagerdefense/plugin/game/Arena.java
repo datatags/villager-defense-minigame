@@ -1577,14 +1577,7 @@ public class Arena implements Comparable<Arena> {
     }
 
     public void setClosed(boolean closed) {
-        // Kick players
-        getPlayers().forEach(vdPlayer -> Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, () ->
-                Bukkit.getPluginManager().callEvent(new LeaveArenaEvent(vdPlayer.getPlayer()))));
-
-        // Clear the arena
-        if (getCorner1() != null && getCorner2() != null) {
-            WorldManager.clear(getCorner1(), getCorner2());
-        }
+        clear();
 
         // Set closed and handle particles/holographics
         ArenaDataManager.setArenaClosed(id, closed);
@@ -1989,7 +1982,7 @@ public class Arena implements Comparable<Arena> {
      * Removes all trace of the arena's physical existence.
      */
     public void wipe() {
-        setClosed(true);
+        clear();
 
         // Remove holographics
         if (getArenaBoard() != null)
@@ -2028,5 +2021,14 @@ public class Arena implements Comparable<Arena> {
             meta.setInventory(communityChest);
         }
         return communityChest;
+    }
+
+    private void clear() {
+        // Kick players
+        getPlayers().forEach(vdPlayer -> Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, () ->
+                Bukkit.getPluginManager().callEvent(new LeaveArenaEvent(vdPlayer.getPlayer()))));
+        if (getCorner1() != null && getCorner2() != null) {
+            WorldManager.clear(getCorner1(), getCorner2());
+        }
     }
 }

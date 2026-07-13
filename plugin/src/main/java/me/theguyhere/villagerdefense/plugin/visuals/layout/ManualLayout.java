@@ -48,7 +48,7 @@ public class ManualLayout implements Layout {
         for (Integer slot : slots.keySet()) {
             max = Math.max(max, slot);
         }
-        return Math.min(54, PagedLayout.ceilDiv(max, 9));
+        return Math.min(54, PagedLayout.ceilDiv(max, 9) * 9);
     }
 
     @Override

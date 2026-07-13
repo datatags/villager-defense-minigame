@@ -32,7 +32,7 @@ public abstract class PagedLayout implements Layout {
     static int ceilDiv(int val, int divisor) {
         // Floating-point math was causing me problems here so we do it the manual way.
         int result = val / divisor;
-        if (val < result * divisor) {
+        if (result * divisor < val) {
             result++;
         }
         return result;
