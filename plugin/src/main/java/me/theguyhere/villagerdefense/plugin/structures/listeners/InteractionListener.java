@@ -11,47 +11,33 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-@SuppressWarnings("CallToPrintStackTrace")
 public class InteractionListener implements Listener {
+    private Arena getArenaByNpcId(int id) {
+        for (Arena arena : GameManager.getArenas().values()) {
+            if (arena.getPortal() != null && arena.getPortal().getNpc().getEntityID() == id) {
+                return arena;
+            }
+        }
+        // Not sure why this happens
+        return null;
+    }
+
 	@EventHandler
 	public void onRightClick(RightClickNPCEvent e) {
-		Arena arena;
-
-		// Try to get arena from npc
-		try {
-			arena = GameManager.getArenas().values().stream().filter(Objects::nonNull)
-					.filter(arena1 -> arena1.getPortal() != null)
-					.filter(arena1 -> arena1.getPortal().getNpc().getEntityID() == e.getNpcId())
-					.collect(Collectors.toList()).get(0);
-		} catch (Exception err) {
-			err.printStackTrace();
-			return;
-		}
-
-		// Send out event of player joining
-		Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), () ->
-				Bukkit.getPluginManager().callEvent(new JoinArenaEvent(e.getPlayer(), arena)));
+        Arena arena = getArenaByNpcId(e.getNpcId());
+        if (arena != null) {
+            // Send out event of player joining
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), () ->
+                    Bukkit.getPluginManager().callEvent(new JoinArenaEvent(e.getPlayer(), arena)));
+        }
 	}
 
 	@EventHandler
 	public void onLeftClick(LeftClickNPCEvent e) {
-		Arena arena;
-
-		// Try to get arena from npc
-		try {
-			arena = GameManager.getArenas().values().stream().filter(Objects::nonNull)
-					.filter(arena1 -> arena1.getPortal() != null)
-					.filter(arena1 -> arena1.getPortal().getNpc().getEntityID() == e.getNpcId())
-					.collect(Collectors.toList()).get(0);
-		} catch (Exception err) {
-			err.printStackTrace();
-			return;
-		}
-
-		// Open inventory
-        new ArenaInfoMenu(arena).open(e.getPlayer());
+		Arena arena = getArenaByNpcId(e.getNpcId());
+        if (arena != null) {
+            // Open inventory
+            new ArenaInfoMenu(arena).open(e.getPlayer());
+        }
 	}
 }
