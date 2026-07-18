@@ -12,6 +12,8 @@ import me.theguyhere.villagerdefense.plugin.visuals.layout.ManualLayout;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.UUID;
 import java.util.function.BiConsumer;
@@ -26,8 +28,15 @@ public class PlayerKitsMenu extends Menu {
 
         BiConsumer<Integer, Kit> buttonBuilder = (slot, kit) -> {
             l.setNextSlot(slot);
-            addButton(kit.getButton(PlayerDataManager.getPlayerKitLevel(uuid, kit), true),
-                    p -> handlePurchase(p, kit));
+            ItemStack item = kit.getButton(PlayerDataManager.getPlayerKitLevel(uuid, kit), true);
+            addButton(item, p -> handlePurchase(p, kit));
+            buttonUpdaters.put(item, i -> {
+                ItemMeta updated = kit.getButton(PlayerDataManager.getPlayerKitLevel(uuid, kit), true).getItemMeta();
+                ItemMeta meta = i.getItemMeta();
+                meta.setDisplayName(updated.getDisplayName());
+                meta.setLore(updated.getLore());
+                i.setItemMeta(meta);
+            });
         };
 
         // Gift kits
@@ -87,7 +96,7 @@ public class PlayerKitsMenu extends Menu {
         if (requestedByOwner) {
             l.setNextSlot(52);
             addButton(Material.DIAMOND, NO_OP,
-                    "&b&l" + LanguageManager.messages.crystalBalance + ": &b" + PlayerDataManager.getPlayerCrystals(uuid));
+                    () -> "&b&l" + LanguageManager.messages.crystalBalance + ": &b" + PlayerDataManager.getPlayerCrystals(uuid));
         }
 
         l.add(53, InventoryButtons.exit());
