@@ -1,21 +1,15 @@
-package me.theguyhere.villagerdefense.nms.v26_1;
+package me.theguyhere.villagerdefense.nms.unobfuscated;
 
 import me.theguyhere.villagerdefense.nms.common.EntityID;
 import me.theguyhere.villagerdefense.nms.common.PacketGroup;
 import me.theguyhere.villagerdefense.nms.common.entities.TextPacketEntity;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.entity.EntityType;
 import org.bukkit.Location;
 
 /**
  * An armor stand entity constructed out of packets.
  */
 class PacketEntityArmorStand implements TextPacketEntity {
-    private final EntityID armorStandID;
-
-    PacketEntityArmorStand(EntityID armorStandID) {
-        this.armorStandID = armorStandID;
-    }
+    private final EntityID armorStandID = new EntityID();
 
     @Override
     public PacketGroup newDestroyPackets() {
@@ -25,7 +19,7 @@ class PacketEntityArmorStand implements TextPacketEntity {
     @Override
     public PacketGroup newSpawnPackets(Location location, String text) {
         return PacketGroup.of(
-            new SpawnEntityPacket(armorStandID, BuiltInRegistries.ENTITY_TYPE.getId(EntityType.ARMOR_STAND), location),
+            new SpawnEntityPacket(armorStandID, VDEntityTypes.ARMOR_STAND, location),
             EntityMetadataPacket.builder(armorStandID)
                 .setArmorStandMarker()
                 .setCustomName(text)

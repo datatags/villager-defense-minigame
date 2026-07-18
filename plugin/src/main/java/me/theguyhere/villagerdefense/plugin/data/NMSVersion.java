@@ -27,7 +27,7 @@ public enum NMSVersion {
     v1_21_R5(new me.theguyhere.villagerdefense.nms.v1_21_r5.VersionNMSManager()),
     v1_21_R6(new me.theguyhere.villagerdefense.nms.v1_21_r6.VersionNMSManager()),
     v1_21_R7(new me.theguyhere.villagerdefense.nms.v1_21_r7.VersionNMSManager()),
-    v26_1(new me.theguyhere.villagerdefense.nms.v26_1.VersionNMSManager()),
+    UNOBFUSCATED(new me.theguyhere.villagerdefense.nms.unobfuscated.VersionNMSManager()),
     ;
 
     private static final NMSVersion CURRENT_VERSION = extractCurrentVersion();
@@ -115,7 +115,7 @@ public enum NMSVersion {
             }
         } else if (majorVer >= 26) {
             // Optimistically assume that all versions 26+ will be NMS-stable
-            return "v26_1";
+            return "UNOBFUSCATED";
         }
 
         Matcher matcher = Pattern.compile("v\\d+_\\d+_R\\d+").matcher(Bukkit.getServer().getClass().getPackage().getName());

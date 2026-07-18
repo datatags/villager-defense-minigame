@@ -1,11 +1,10 @@
-package me.theguyhere.villagerdefense.nms.v26_1;
+package me.theguyhere.villagerdefense.nms.unobfuscated;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelPipeline;
 import me.theguyhere.villagerdefense.common.CommunicationManager;
 import me.theguyhere.villagerdefense.common.Reflections;
-import me.theguyhere.villagerdefense.nms.common.EntityID;
 import me.theguyhere.villagerdefense.nms.common.NMSErrors;
 import me.theguyhere.villagerdefense.nms.common.NMSManager;
 import me.theguyhere.villagerdefense.nms.common.PacketListener;
@@ -24,12 +23,12 @@ import java.util.function.Consumer;
 public class VersionNMSManager implements NMSManager {
     @Override
     public TextPacketEntity newTextPacketEntity() {
-        return new PacketEntityArmorStand(new EntityID());
+        return new PacketEntityArmorStand();
     }
 
     @Override
     public VillagerPacketEntity newVillagerPacketEntity() {
-        return new PacketEntityVillager(new EntityID());
+        return new PacketEntityVillager();
     }
 
     @Override

@@ -223,7 +223,7 @@
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>VillagerDefense-nms-v26_1</artifactId>
+                <artifactId>VillagerDefense-nms-unobfuscated</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

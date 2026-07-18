@@ -87,7 +87,7 @@
 
         <dependency>
             <groupId>me.theguyhere</groupId>
-            <artifactId>VillagerDefense-nms-v26_1</artifactId>
+            <artifactId>VillagerDefense-nms-unobfuscated</artifactId>
         </dependency>
 
         <dependency>

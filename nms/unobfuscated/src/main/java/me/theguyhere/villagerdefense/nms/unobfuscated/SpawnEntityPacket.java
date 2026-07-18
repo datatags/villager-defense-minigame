@@ -1,7 +1,6 @@
-package me.theguyhere.villagerdefense.nms.v26_1;
+package me.theguyhere.villagerdefense.nms.unobfuscated;
 
 import me.theguyhere.villagerdefense.nms.common.EntityID;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.world.phys.Vec3;
@@ -13,15 +12,15 @@ import org.bukkit.Location;
 class SpawnEntityPacket extends VersionNMSPacket {
     private final Packet<?> rawPacket;
 
-    SpawnEntityPacket(EntityID entityID, int entityTypeID, Location location) {
-        this(entityID, entityTypeID, location, 0, 0);
+    SpawnEntityPacket(EntityID entityID, VDEntityTypes entityType, Location location) {
+        this(entityID, entityType, location, 0, 0);
     }
 
-    SpawnEntityPacket(EntityID entityID, int entityTypeID, Location location, float headPitch) {
-        this(entityID, entityTypeID, location, headPitch, 0);
+    SpawnEntityPacket(EntityID entityID, VDEntityTypes entityType, Location location, float headPitch) {
+        this(entityID, entityType, location, headPitch, 0);
     }
 
-    SpawnEntityPacket(EntityID entityID, int entityTypeID, Location location, float headPitch, int objectData) {
+    SpawnEntityPacket(EntityID entityID, VDEntityTypes entityType, Location location, float headPitch, int objectData) {
         rawPacket = new ClientboundAddEntityPacket(
                 entityID.getNumericID(),
                 entityID.getUUID(),
@@ -30,7 +29,7 @@ class SpawnEntityPacket extends VersionNMSPacket {
                 location.getZ(),
                 location.getPitch(),
                 location.getYaw(),
-                BuiltInRegistries.ENTITY_TYPE.byId(entityTypeID),
+                entityType.get(),
                 objectData,
                 Vec3.ZERO,
                 headPitch

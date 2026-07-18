@@ -2,8 +2,8 @@ package me.theguyhere.villagerdefense.nms.common;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class EntityID {
 
@@ -13,7 +13,7 @@ public class EntityID {
 
     public int getNumericID() {
         if (numericID == null) {
-            numericID = new Random().nextInt();
+            numericID = ThreadLocalRandom.current().nextInt();
         }
         return numericID;
     }

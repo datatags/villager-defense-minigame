@@ -1,4 +1,4 @@
-package me.theguyhere.villagerdefense.nms.v26_1;
+package me.theguyhere.villagerdefense.nms.unobfuscated;
 
 import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.util.Strings;

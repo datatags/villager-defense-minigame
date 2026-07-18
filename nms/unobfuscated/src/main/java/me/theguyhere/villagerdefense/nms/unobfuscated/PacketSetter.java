@@ -1,4 +1,4 @@
-package me.theguyhere.villagerdefense.nms.v26_1;
+package me.theguyhere.villagerdefense.nms.unobfuscated;
 
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;

@@ -10,12 +10,12 @@
         <version>dev</version>
     </parent>
 
-    <artifactId>VillagerDefense-nms-v26_1</artifactId>
+    <artifactId>VillagerDefense-nms-unobfuscated</artifactId>
 
-    <name>VillagerDefense NMS v26_1</name>
+    <name>VillagerDefense NMS Unobfuscated (26+)</name>
 
     <properties>
-        <spigot-api.version>26.1-R0.1-SNAPSHOT</spigot-api.version>
+        <spigot-api.version>26.2-R0.1-SNAPSHOT</spigot-api.version>
     </properties>
 
     <dependencies>

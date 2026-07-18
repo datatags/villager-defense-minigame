@@ -1,4 +1,4 @@
-package me.theguyhere.villagerdefense.nms.v26_1;
+package me.theguyhere.villagerdefense.nms.unobfuscated;
 
 import io.netty.handler.codec.EncoderException;
 import net.minecraft.network.chat.Component;

@@ -1,4 +1,4 @@
-package me.theguyhere.villagerdefense.nms.v26_1;
+package me.theguyhere.villagerdefense.nms.unobfuscated;
 
 import me.theguyhere.villagerdefense.nms.common.EntityID;
 import net.minecraft.network.RegistryFriendlyByteBuf;
