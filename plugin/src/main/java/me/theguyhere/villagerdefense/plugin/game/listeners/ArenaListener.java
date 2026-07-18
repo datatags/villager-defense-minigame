@@ -412,12 +412,14 @@ public class ArenaListener implements Listener {
                 PlayerDataManager.setPlayerStat(uuid, "topKills", gamer.getKills());
             }
 
-            for (ItemStack item : player.getInventory().getContents()) {
-                if (item != null && !item.equals(GameItems.shop())) {
-                    player.getWorld().dropItemNaturally(player.getLocation(), item);
+            if (arena.getCurrentWave() != 0 && arena.getStatus() == ArenaStatus.ACTIVE) {
+                for (ItemStack item : player.getInventory().getContents()) {
+                    if (item != null && !item.equals(GameItems.shop())) {
+                        player.getWorld().dropItemNaturally(player.getLocation(), item);
+                    }
                 }
+                player.getInventory().clear();
             }
-            player.getInventory().clear();
 
             // Check for achievements
             AchievementChecker.checkDefaultHighScoreAchievements(player);
