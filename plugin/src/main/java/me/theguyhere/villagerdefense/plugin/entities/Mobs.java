@@ -184,7 +184,7 @@ public class Mobs {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         double difficulty = arena.getCurrentDifficulty();
 
-        ItemStack item = getItem(ItemType.AXE, getToolTypeSelector().choose(difficulty));
+        ItemStack item = getItem(ItemType.SWORD, getToolTypeSelector().choose(difficulty));
         if (item == null) {
             return null;
         }
